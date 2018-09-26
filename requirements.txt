@@ -1,0 +1,7 @@
+-i https://pypi.org/simple
+django-js-asset==1.1.0
+django-mptt==0.9.0
+django==2.0.7
+future==0.16.0
+pycatalog==1.2.0
+pytz==2018.5
