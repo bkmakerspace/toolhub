@@ -1,0 +1,69 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/..
+
+source $script_base/tools
+
+no_input=
+docker=
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -d|--docker)
+            docker=1
+            ;;
+        -y|--no-input)
+            no_input=1
+            ;;
+        -h|--help|?)
+            echo "Clean up build files, caches and excess Docker artifacts."
+            echo
+            cecho "Usage: $(basename $0) <options>" default bold
+            echo
+            echo "Services:"
+            echo "$(docker-compose config --services)"
+            echo
+            echo "Options:"
+            echo "  -y  --no-input      Assume yes for all user input"
+            echo "  -h  --help          This help message"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+if [ ! "$no_input" ]; then
+    cecho "This will stop you running services and delete cache, build files and docker volumes." yellow bold
+    read -n1 -r -p "Press 'Y' to continue or any other key to cancel..." key
+    echo
+    if [ ! "$key" ] || [[ "yY" != *"$key"* ]]; then
+        echo
+        cecho "Aborting." red
+        exit 0
+    fi
+fi
+
+echo
+cecho "Stopping running services..." default bold
+$script_base/stop
+
+echo
+cecho "Deleting python cache files..." default bold
+find . \( -type f -name "*.pyc" -o -type d -name __pycache__ \) -delete
+
+if [ "$(which docker)" ]; then
+    echo
+    cecho "Deleting stopped Docker images, cache and dangling images..." default bold
+    docker system prune -f
+
+    echo
+    cecho "Dropping static file and Redis volumes..." default bold
+    docker volume rm -f toolhub_python-packages
+fi

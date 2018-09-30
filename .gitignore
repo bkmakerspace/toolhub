@@ -35,6 +35,9 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
+# Editor files
+*.swp
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -94,6 +97,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.dockerenv
 
 # Spyder project settings
 .spyderproject

@@ -1,0 +1,68 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/..
+
+source $script_base/tools
+
+skip_install=
+skip_db=
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        --skip-install)
+            skip_install=1
+            ;;
+        --skip-db)
+            skip_db=1
+            ;;
+        -h|--help|?)
+            echo "Install Docker and build service containers."
+            echo
+            cecho "Usage: $(basename $0) <options> [SERVICE...]" default bold
+            echo
+            echo "Options:"
+            echo "      --skip-install  Skip Docker install, just rebuild"
+            echo "      --skip-db       Skip databse restore"
+            echo "  -h  --help          This help message"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+if [ ! "$skip_install" ]; then
+    case $(detect_platform) in
+        OSX|OSX_BREW)
+            if [ ! "$(which docker)" ]; then
+                echo
+                cecho "Docker for Mac requires user interaction that cannot be detected from an" yellow bold
+                cecho "automated script. Please run the 'setup_docker' script first. Once you see" yellow bold
+                cecho "the Docker icon in your menu bar click it and wait for the menu to say" yellow bold
+                cecho "\"Docker is running\" before running this script again." yellow bold
+                exit 0
+            fi
+            ;;
+        *)
+            echo
+            cecho "Installing Docker..." blue bold
+            $script_base/setup_docker --use-existing
+            ;;
+    esac
+fi
+
+echo
+cecho "Building images..." blue bold
+docker-compose build
+
+if [ ! "$skip_db" ]; then
+    echo
+    cecho "Populating database..." blue bold
+    $script_base/restore_db -y
+fi

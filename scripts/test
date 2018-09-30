@@ -1,0 +1,39 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/..
+
+source $script_base/tools
+
+watch=
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -w|--watch)
+            watch=1
+            ;;
+        -h|--help)
+            echo "Run unit tests."
+            echo
+            cecho "Usage: $(basename $0) <options> [<TEST TYPE>]" default bold
+            echo
+            echo "Options:"
+            echo "  -w  --watch         Rerun tests when changes are made"
+            echo "  -h  --help          This help message"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+if [ "$watch" ]; then
+    docker-compose exec web ./manage.py test --settings=toolhub.settings.test -- --looponfail --nomigrations $@
+else
+    docker-compose exec web ./manage.py test --settings=toolhub.settings.test -- --nomigrations $@
+fi

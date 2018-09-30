@@ -1,0 +1,78 @@
+#!/bin/bash
+
+# cecho "Some text" [ FG [ STYLE [ BG ]]]
+# echos in color
+cecho(){
+    # colors
+    black=0
+    red=1
+    green=2
+    yellow=3
+    blue=4
+    magenta=5
+    cyan=6
+    white=7
+    default=9
+
+    # styles
+    normal=0
+    bold=1
+    dim=2
+    ul=4
+    invert=7
+
+    text=$1
+    fg="3${!2:-$default}"
+    bg="4${!4:-$default}"
+    style="${!3:-$normal}"
+
+    echo -e "\x1b[""$style;$fg;$bg""m$text\x1b[m"
+}
+
+
+# detect_platform
+# detects Debian, OS X and OS X + brew
+detect_platform() {
+    if [ "$(which apt-get)" ]; then
+        echo "Debian"
+    elif [[ "$(uname -s)" = "Darwin" ]]; then
+        if [ "$(which brew)" ]; then
+            echo "OSX_BREW"
+        else
+            echo "OSX"
+        fi
+    fi
+}
+
+# resolve_path "<path>"
+# accepts a relative path and returns an absolute path
+resolve_path(){
+    cd "$1" 2> /dev/null || return $?
+    echo `pwd -P`
+}
+
+# wait_for_cycle "<cmd>"
+# waits for command to return a truthy result, then waits for it to return a falsey result
+# note: be sure to quote the command
+wait_for_cycle(){
+    wait_until_true "$1"
+    wait_until_false "$1"
+}
+
+# wait_until_true "<cmd>"
+# waits for command to return a truthy result
+# note: be sure to quote the command
+wait_until_true(){
+    while [[ ! $(eval $1) ]]; do
+        sleep 1
+    done
+}
+
+# wait_until_true "<cmd>"
+# waits for command to return a falsey result
+# note: be sure to quote the command
+wait_until_false(){
+    while [[ $(eval $@) ]]; do
+        sleep 1
+    done
+}
