@@ -22,6 +22,7 @@ services:
             ALLOWED_HOSTS: '*'
             DATABASE_URL: postgres://postgres:postgres@toolhub-db/toolhub
             MEDIA_ROOT: /var/www/media
+            PYTHONUNBUFFERED: 1
         depends_on:
             - db
         env_file: .dockerenv
