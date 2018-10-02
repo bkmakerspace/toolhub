@@ -1,5 +1,7 @@
 FROM python:3.7
 
+RUN adduser --uid 1000 --gecos --quiet --disabled-password toolhub
+
 RUN mkdir -p /srv/app
 WORKDIR /srv/app
 
@@ -12,6 +14,7 @@ RUN apt-get update && apt-get -y install \
     && rm -rf /var/lib/apt/lists/*
 
 COPY *requirements.txt ./
+COPY *requirements-dev.txt ./
 ARG PIP_ARGS
 RUN pip install --upgrade pip \
     && pip install -r requirements.txt $PIP_ARGS \

@@ -5,7 +5,6 @@ cd $script_base/..
 
 source $script_base/tools
 
-
 POSITIONAL=()
 while [[ $# -gt 0 ]]; do
     key="$1"
