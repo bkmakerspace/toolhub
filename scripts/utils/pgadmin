@@ -1,0 +1,59 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/../..
+
+source $script_base/../tools
+
+detach=
+port=2345
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -d|--detach)
+            detach=-d
+            ;;
+        -p|--port)
+            port=$2
+            shift
+            ;;
+        -h|--help|?)
+            if [ "$2" != "quiet" ]; then
+                echo "A web-based administration tool for PostgreSQL."
+                echo
+                cecho "Usage: run_util $(basename $0) <options>" default bold
+                echo
+            else
+                echo "pgadmin"
+                echo "-------"
+                echo "pgAdmin 4 - A web-based administration tool for PostgreSQL."
+            fi
+            echo "Options:"
+            echo "  -d  --detach        Run utility in the background"
+            echo "  -p  --port          Specify port pgAdmin will be exposed on"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+cecho "Starting pgAdmin 4..." default bold
+cecho "http://localhost:$port" green bold
+cecho "Email: admin" green bold
+cecho "Password: admin" green bold
+cecho "You will need to add the connection on first run." yellow bold
+cecho "Hostname (alias) and credentials for postgres instance can be found in docker-compose file" yellow bold
+docker run --rm \
+    --name toolhub-pgadmin \
+    -p $port:80 \
+    -v toolhub_pgadmin:/var/lib/pgadmin \
+    -e "PGADMIN_DEFAULT_EMAIL=admin" \
+    -e "PGADMIN_DEFAULT_PASSWORD=admin" \
+    $detach \
+    dpage/pgadmin4

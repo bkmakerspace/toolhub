@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+    web:
+        build:
+            context: .
+            dockerfile: docker/dockerfiles/web
+            args:
+                - PIP_ARGS=-r dev-requirements.txt
+        working_dir: /srv/app
+        command: ./manage.py runserver_plus 0.0.0.0:8000
+        user: ${UID:-1000}  # user id or default
+        restart: unless-stopped
+        volumes:
+            - ".:/srv/app"
+            - "python-packages:/usr/local/lib/python3.6/site-packages:z"
+            - "upload-volume:/var/www/media"
+        ports:
+            - '8001:8000'
+        environment:
+            DEBUG: 'true'
+            ALLOWED_HOSTS: '*'
+            DATABASE_URL: postgres://postgres:postgres@toolhub-db/toolhub
+            MEDIA_ROOT: /var/www/media
+        depends_on:
+            - db
+        env_file: .dockerenv
+    db:
+        image: postgres:latest
+        ports:
+            - "${DB_PORT-0}:5432"
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: toolhub
+            PGDATA: /var/lib/postgresql/data/pgdata
+        volumes:
+            - "db-volume:/var/lib/postgresql/data/pgdata"
+            - "./docker/init/db:/docker-entrypoint-initdb.d"
+
+volumes:
+    db-volume:
+        name: toolhub_db-volume
+    python-packages:
+        name: toolhub_python-packages
+    upload-volume:
+        name: toolhub_upload-volume

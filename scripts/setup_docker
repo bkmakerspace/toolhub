@@ -1,0 +1,144 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/..
+
+source $script_base/tools
+
+force=
+use_existing=
+no_input=
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -f|--force)
+            force=1
+            ;;
+        -e|--use-existing)
+            use_existing=1
+            ;;
+        -y|--no-input)
+            no_input=1
+            ;;
+        -h|--help|?)
+
+            echo "Installs Docker and docker-compose using the appropriate setup process "
+            echo "for your system."
+            echo
+            cecho "Usage: $(basename $0) <options>" default bold
+            echo
+            echo "Options:"
+            echo "  -f  --force         Force install/reinstall"
+            echo "  -e  --use-existing  Don't fail when Docker is already installed"
+            echo "  -y  --no-input      Assume yes on all user input"
+            echo "  -h  --help          This help message"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+
+if [ $(which docker) ]; then
+    cecho "Docker found on system." yellow bold
+    if [ "$force" ]; then
+        cecho "Forcing reinstall" yellow bold
+    elif [ "$use_existing" ]; then
+        cecho "Continuing" green
+        exit 0
+    else
+        cecho "Docker is already installed. If you are attempting to reinstall Docker, " red bold
+        cecho "you must remove the existing installation before running this script." red bold
+        cecho "Please see the Docker documentation for more info: " red bold
+        cecho "https://docs.docker.com/engine/installation/" red bold
+        exit 1
+    fi
+fi
+
+PLATFORM="$(detect_platform)"
+
+case "$PLATFORM" in
+    "Debian")
+        if [[ "$PATH" != *"$HOME/.local/bin"* ]]; then
+            cecho "It is recommended that you install docker-compose at the user level. This requires adding" yellow bold
+            cecho "$HOME/.local/bin to your PATH in your .profile, .zprofile or equivalent. " yellow bold
+            if [ ! "$VIRTUAL_ENV" ]; then
+                cecho "You must either install docker-compose at the user level or in a Python virtualenv. Please" red bold
+                cecho "either modify your PATH to include $HOME/.local/bin or activate a virtualenv to continue" red bold
+                exit 3
+            fi
+            if [ ! "$no_input" ]; then
+                cecho "Press Ctrl+C to stop and edit your PATH, press any other key to continue..." green bold
+                read -n1 -r -p ""
+            fi
+            cecho "After adding $HOME/.local/bin to your path, you should run 'pip install --user docker-compose' " yellow bold
+            cecho "to complete the recommended setup." yellow bold
+        fi
+        if ! apt-cache policy | grep -q download.docker.com; then
+            echo
+            cecho "Docker repository not found. Adding..." default bold
+            echo
+            distro=$(. /etc/os-release; echo "$ID")
+            rel=$(lsb_release -cs)
+            if [ "$rel" = "yakkety" ]; then
+                rel="xenial"
+            fi
+            curl -fsSL https://download.docker.com/linux/$distro/gpg | sudo apt-key add -
+            sudo add-apt-repository  "deb [arch=amd64] https://download.docker.com/linux/$distro $rel stable"
+
+        fi
+
+        echo
+        cecho "Installing Docker CE..." default bold
+        echo
+        sudo apt-get update
+        sudo apt-get install -y docker-ce
+
+        echo
+        cecho "Installing Docker Compose..." default bold
+        echo
+        sudo apt-get install -y python-pip
+        if [[ "$PATH" == *"$HOME/.local/bin"* ]]; then
+            if [ $VIRTUAL_ENV ]; then
+                . $VIRTUAL_ENV/bin/activate
+                deactivate
+            fi
+            pip install --user docker-compose
+        else
+            pip install docker-compose
+        fi
+
+        if [ ! "$(groups | grep docker)" ]; then
+            sudo adduser `whoami` docker
+            echo
+            cecho "Added user to `docker` group. You will need to log out of your session then continue setup..." blue bold
+            echo
+            exit 4
+        fi
+
+        ;;
+
+    "OSX" | "OSX_BREW")
+        echo
+        cecho "Downloading Docker for Mac installer..." default bold
+        echo
+        curl --progress-bar -o /tmp/Docker.dmg https://download.docker.com/mac/stable/Docker.dmg
+        hdiutil mount -mountpoint /Volumes/Docker /tmp/Docker.dmg
+        sudo cp -R /Volumes/Docker/Docker.app /Applications/
+        hdiutil unmount /Volumes/Docker
+        open -g -a /Applications/Docker.app
+        echo
+        cecho "Please complete Docker setup in the dialogs that popup. Setup is complete when" blue bold
+        cecho "the Docker icon appears on your menu bar and the top menu item indicates \"Docker is running\"." blue bold
+        ;;
+    *)
+        cecho "I don't know how to setup your platform." red bold
+        exit 2
+        ;;
+esac

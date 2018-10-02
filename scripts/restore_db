@@ -1,0 +1,79 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/..
+
+source $script_base/tools
+
+no_input=
+no_migrate=
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -y|--no-input)
+            no_input=1
+            ;;
+        --no-migrate)
+            no_migrate=1
+            ;;
+        -h|--help|?)
+            echo "Drop existing database service and restore from database backups"
+            echo
+            cecho "Usage: $(basename $0) <options> [SERVICE...]" default bold
+            echo
+            echo "Options:"
+            echo "      --no-migrate    Skip running migrations"
+            echo "  -y  --no-input      Assume yes on all user input"
+            echo "  -h  --help          This help message"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+shopt -s nullglob
+dump_files=( docker/init/db/*.sql.gz docker/init/db/*.sql )
+if (( ! ${#dump_files[@]} )); then
+    cecho "No database dumps were found to restore from. Please retrieve a database dump file" red bold
+    cecho "and place is in $(resolve_path "$script_base/../docker/init/db")." red bold
+    exit 1
+fi
+
+if [ ! "$no_input" ]; then
+    cecho "Warning this will delete all data in your existing database service and replace" yellow bold
+    cecho "it with data from any database dumps located in '$(resolve_path "$script_base/../docker/init/db")'." yellow bold
+    read -n1 -r -p "Press 'Y' to continue or any other key to cancel..." key
+
+    if [ ! "$key" ] || [[ "yY" != *"$key"* ]]; then
+        echo
+        cecho "Aborting." red
+        exit 0
+    fi
+fi
+
+echo
+cecho "Deleting old data..." default bold
+$script_base/stop
+docker-compose rm -svf db web
+docker volume rm -f toolhub_db-volume toolhub_upload-volume
+
+echo
+cecho "Restoring data..." default bold
+$script_base/start -d db
+wait_for_cycle "docker-compose top db | grep docker-entrypoint.sh"
+
+if [ ! "$no_migrate" ]; then
+    $script_base/start -d web
+    echo
+    cecho "Running migrations..." default bold
+    $script_base/migrate
+fi
+
+echo
+cecho "Data Restore complete!" green bold

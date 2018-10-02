@@ -1,0 +1,20 @@
+FROM python:3.7
+
+RUN mkdir -p /srv/app
+WORKDIR /srv/app
+
+ENV DJANGO_SETTINGS_MODULE=toolhub.settings.env \
+    DEBUG=false
+
+RUN apt-get update && apt-get -y install \
+    python-dev \
+    # cleanup
+    && rm -rf /var/lib/apt/lists/*
+
+COPY *requirements.txt ./
+ARG PIP_ARGS
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt $PIP_ARGS \
+    && rm -rf ~/.cache
+
+COPY . .

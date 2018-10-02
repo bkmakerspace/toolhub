@@ -1,0 +1,56 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/..
+
+source $script_base/tools
+
+force=
+no_input=
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -f|--force)
+            force=1
+            ;;
+        -y|--no-input)
+            no_input=1
+            ;;
+        -h|--help|?)
+            echo "Shutdowns all instances of this repository and deletes all related containers,"
+            echo "images, volumes and networks."
+            echo
+            cecho "Usage: $(basename $0) <options>" default bold
+            echo
+            echo "Options:"
+            echo "  -f  --force         Force teardown"
+            echo "  -y  --no-input      Assume yes on all user input"
+            echo "  -h  --help          This help message"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+if [ ! "$force" ] && [ ! "$no_input" ]; then
+    cecho "Are you sure you want to teardown this Docker environment?" red bold
+    cecho "Continuing will result in the complete destruction and loss of data in all containers," red
+    cecho "images and volumes related to this environment." red
+    read -n1 -r -p "Press 'Y' to continue and any other key to cancel..." key
+    if [ ! "$key" ] || [[ "Yy" != *"$key"* ]]; then
+        echo
+        cecho "Aborting" red
+        exit 0
+    fi
+    echo
+fi
+
+cecho "Tearing down Docker environment..." yellow bold
+docker-compose down -v --rmi local --remove-orphans
+docker system prune -f

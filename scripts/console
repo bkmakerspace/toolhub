@@ -1,0 +1,71 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/..
+
+source $script_base/tools
+
+target=web
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -t|--target)
+            target=$2
+            shift
+            ;;
+        -h|--help|?)
+            echo "Launch an interactive console on the appropriate service."
+            echo
+            cecho "Usage: $(basename $0) [<CONSOLE TYPE>]" default bold
+            echo
+            echo "Console Types:"
+            echo "  bash         - Bash (Default)"
+            echo "  sudo         - Bash as sudo"
+            echo "  py  | python - Django Shell Plus w/ IPython"
+            echo "  sql | psql   - PostgreSQL as root"
+            echo
+            echo "Options:"
+            echo "  -h  --help          This help message"
+            echo "  -t  --target        Choose which service to connect to for `bash` or `sudo` consoles (default: web)"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+if [ "$1" ]; then
+    shell=$1
+else
+    shell="bash"
+fi
+
+case $shell in
+    bash)
+        cmd="$target bash"
+        ;;
+    sudo)
+        cmd="-u root $target bash"
+        ;;
+    py|python)
+        cmd="web ./manage.py shell_plus"
+        ;;
+    sql|psql)
+        cmd="-u root db psql -U postgres"
+        ;;
+    #redis)
+        #cmd="redis redis-cli"
+        #;;
+    *)
+        cecho "You must provide a valid shell type. Please see '$(basename $0) --help' for more information." red bold
+        exit 1
+        ;;
+esac
+
+
+docker-compose exec -e COLUMNS="`tput cols`" -e LINES="`tput lines`" $cmd
