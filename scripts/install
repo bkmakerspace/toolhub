@@ -1,0 +1,85 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/..
+
+source $script_base/tools
+
+no_save=
+no_input=
+dev=
+install_type=
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -y|--no-input)
+            no_input=1
+            ;;
+        --no-save)
+            no_save=1
+            ;;
+        --dev)
+            dev=1
+            ;;
+        -h|--help|?)
+            echo "Install a package."
+            echo
+            cecho "Usage: $(basename $0) <options> <PKG TYPE> <PKG NAME>..." default bold
+            echo
+            echo "Package Types:"
+            echo "  py  | python"
+            echo "  apt | linux"
+            echo
+            echo "Options:"
+            echo "      --dev           Install package for development only (JS and Python only)"
+            echo "      --no-save       Do not save packages, install only (JS and Python only)"
+            echo "  -y  --no-input      Assume yes for all user input"
+            echo "  -h  --help          This help message"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+install_type=$1
+shift
+args=$@
+
+if [ ! "$args" ]; then
+    cecho "You must provide at least one package name to install." red bold
+    exit 2
+fi
+
+case $install_type in
+    py|python)
+        docker-compose exec -u root web pip install $args
+        cecho "This script does not currently update the requirements file as it has in" yellow bold
+        cecho "the past. You MUST modify the appropriate requirement file manually." yellow bold
+        read -n1 -r -p "Press any key to continue..."
+        #if [ ! "$no_save" ]; then
+            #if [ "$dev" ]; then
+                ## TODO write to requirements-dev.txt
+            #else
+                ## TODO write to requirements.txt
+            #fi
+        #fi
+        ;;
+    apt|linux)
+        if [ ! "$no_input" ]; then
+            cecho "Linux packages are not saved upon install. If these packages are needed " yellow bold
+            cecho "permenantly, please make sure to update '$(resolve_path "$script_base/..")/Dockerfile' accordingly." yellow bold
+            read -n1 -r -p "Press any key to continue..."
+        fi
+        docker-compose exec -u root web apt-get update
+        docker-compose exec -u root web apt-get install -y $args
+        ;;
+    *)
+        cecho "You must provide a valid package type to install. Use '$(basename $0) --help' for most information." yellow bold
+        exit 1
+esac

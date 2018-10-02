@@ -1,0 +1,98 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/..
+
+source $script_base/tools
+
+cmd=
+case $1 in
+    run|make|show)
+        cmd=$1
+        shift
+        ;;
+    *)
+        cmd="run"
+        ;;
+esac
+
+fake=
+merge=
+empty=
+name=
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        --fake)
+            fake=1
+            ;;
+        --merge)
+            merge=1
+            ;;
+        --empty)
+            empty=1
+            ;;
+        -n|--name)
+            name=$2
+            shift
+            ;;
+        -h|--help|?)
+            echo "Update database schema and data."
+            echo
+            cecho "Usage: $(basename $0) [COMMAND] <options> [args...]" default bold
+            echo
+            echo "Commands:"
+            echo "  run [<app> [<target>]]  Run migrations (default)"
+            echo "                          migrations, also provide target migration (0002) to"
+            echo "                          migrate to a specific migration."
+            echo "  make [<app>...]         Generate migrations."
+            echo "  show [<app>...]         List all migrations and their run status."
+            echo
+            echo "Options:"
+            echo "  run:"
+            echo "      --fake              Mark migrations as run without actually executing them"
+            echo
+            echo "  make:"
+            echo "              --merge      Enable fixing of migration conflicts."
+            echo "              --empty      Create an empty migration."
+            echo "  -n NAME     --name NAME  Use this name for migration file(s)."
+            echo
+            echo "  all:"
+            echo "  -h  --help          This help message"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+case $cmd in
+    run)
+        opts=
+        if [ "$fake" ]; then
+            opts+="--fake "
+        fi
+        docker-compose exec web ./manage.py migrate --noinput $opts $@
+        ;;
+    make)
+        opts=
+        if [ "$merge" ]; then
+            opts+="--merge "
+        fi
+        if [ "$empty" ]; then
+            opts+="--empty "
+        fi
+        if [ "$name" ]; then
+            opts+="--name $name "
+        fi
+        docker-compose exec -u $UID web ./manage.py makemigrations $opts $@
+        ;;
+    show)
+        docker-compose exec web ./manage.py showmigrations $@
+        ;;
+esac

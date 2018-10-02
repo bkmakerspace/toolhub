@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/..
+
+source $script_base/tools
+
+util=$1
+shift
+
+case $util in
+    -h|--help|?)
+        echo "Launch a utility."
+        echo
+        cecho "Usage: $(basename $0) <UTIL NAME> <options>" default bold
+        echo
+        echo "Global Options:"
+        echo "  -h  --help          This help message"
+        echo
+        echo "Utilities:"
+        for cmd in $script_base/utils/*; do
+            echo
+            $cmd -h quiet | sed "s/^/  /"
+        done
+        exit 0
+        ;;
+    *)
+        ;;
+esac
+
+$script_base/utils/$util $@

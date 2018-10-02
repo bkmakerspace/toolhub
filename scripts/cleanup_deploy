@@ -1,0 +1,3 @@
+#!/bin/bash -ex
+
+find . -depth \( -type f -name "*.pyc" -o -type d -name __pycache__ \) -exec rm -r '{}' \;

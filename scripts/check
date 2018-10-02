@@ -1,0 +1,38 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/..
+
+source $script_base/tools
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -h|--help|?)
+            echo "Run system and linting checks against repository."
+            echo
+            cecho "Usage: $(basename $0) <options>" default bold
+            echo
+            echo "Options:"
+            echo "  -h  --help          This help message"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+args=$@
+
+
+echo
+cecho "Running Django System Checks..." blue bold
+docker-compose exec web ./manage.py check --settings=toolhub.settings.test
+
+echo
+cecho "Running Linting..." blue bold
+docker-compose exec web flake8

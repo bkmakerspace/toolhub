@@ -1,0 +1,33 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/..
+
+source $script_base/tools
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -h|--help|?)
+            echo "Attach to a running service."
+            echo
+            cecho "Usage: $(basename $0) <options> <SERVICE>" default bold
+            echo
+            echo "Services:"
+            echo "$(docker-compose config --services)"
+            echo
+            echo "Options:"
+            echo "  -h  --help          This help message"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+container=$(docker-compose ps -q $1)
+docker attach --sig-proxy=false $container

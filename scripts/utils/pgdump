@@ -1,0 +1,80 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+cd $script_base/../..
+
+source $script_base/../tools
+
+database=toolhub
+output=
+nozip=
+dump_all=
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -d|--database)
+            database=$2
+            shift
+            ;;
+        -a|--all)
+            dump_all=1
+            ;;
+        -o|--output)
+            output=$2
+            shift
+            ;;
+        -n|--nozip)
+            nozip=1
+            ;;
+        -h|--help|?)
+            if [ "$2" != "quiet" ]; then
+                echo "Dump contents of the database to a file"
+                echo
+                cecho "Usage: run_util $(basename $0) <options>" default bold
+                echo
+            else
+                echo "pgdump"
+                echo "------"
+                echo "pg_dump - Dump contents of the database to a file"
+            fi
+            echo "Options:"
+            echo "  -d  --database      Database name to dump"
+            echo "  -a  --all           Dump all databases, ignores --database"
+            echo "  -o  --output        File to write output"
+            echo "  -n  --nozip         Don't gzip output"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+if [ ! "$output" ]; then
+    if [ "$dump_all" ]; then
+        database=full_database
+    fi
+    if [ "$nozip" ]; then
+        output=$database.sql
+    else
+        output=$database.sql.gz
+    fi
+fi
+
+if [ "$nozip" ]; then
+    if [ "$dump_all" ]; then
+        docker-compose exec -u postgres db sh -c "pg_dumpall" > $output
+    else
+        docker-compose exec -u postgres db sh -c "pg_dump $database" > $output
+    fi
+else
+    if [ "$dump_all" ]; then
+        docker-compose exec -u postgres db sh -c "pg_dumpall" | gzip > $output
+    else
+        docker-compose exec -u postgres db sh -c "pg_dump $database" | gzip > $output
+    fi
+fi
