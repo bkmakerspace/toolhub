@@ -59,6 +59,7 @@ class UserTool(TitleDescriptionModel, TimeStampedModel):
 
     clearance = models.PositiveSmallIntegerField(
         _("Clearance"),
+        null=True,
         choices=Clearance._zip("value", "label"),
         default=Clearance.private.value,
     )

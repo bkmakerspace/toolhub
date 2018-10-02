@@ -13,8 +13,7 @@ RUN apt-get update && apt-get -y install \
     # cleanup
     && rm -rf /var/lib/apt/lists/*
 
-COPY *requirements.txt ./
-COPY *requirements-dev.txt ./
+COPY requirements*.txt ./
 ARG PIP_ARGS
 RUN pip install --upgrade pip \
     && pip install -r requirements.txt $PIP_ARGS \

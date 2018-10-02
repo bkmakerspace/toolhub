@@ -27,7 +27,6 @@ services:
         env_file: .dockerenv
         networks:
             app_net:
-                ipv4_address: 172.18.1.1
                 aliases:
                     - toolhub-web
     db:
@@ -44,7 +43,6 @@ services:
             - "./docker/init/db:/docker-entrypoint-initdb.d"
         networks:
             app_net:
-                ipv4_address: 172.18.1.2
                 aliases:
                     - toolhub-db
 
@@ -60,6 +58,3 @@ networks:
     app_net:
         name: toolhub-net
         driver: bridge
-        ipam:
-            config:
-                - subnet: 172.18.0.0/16
