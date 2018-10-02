@@ -11,8 +11,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'toolhub_auth',
     'django_extensions',
+    'toolhub_auth',
+    'tools',
 ]
 
 MIDDLEWARE = [
