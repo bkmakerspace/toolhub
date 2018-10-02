@@ -1,4 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 class UserManager(BaseUserManager):
@@ -37,6 +39,9 @@ class User(AbstractUser):
     """
     Custom user
     """
+    username = None  # unset username field from AbstractUser
+    email = models.EmailField(_('email address'), unique=True)
     USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ('first_name', 'last_name',)
 
     objects = UserManager()
