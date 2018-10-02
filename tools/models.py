@@ -10,67 +10,87 @@ Viewpoint
 """
 from catalog import Catalog
 from django.db import models
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from model_utils import Choices
-
-# from model_utils.models import StatusModel, StatusField
-from mptt.models import MPTTModel, TreeManager, TreeForeignKey
-
-
-# SoftDeletableManager
-class ToolTaxonomyManager(TreeManager):
-    def published(self):
-        return self.get_queryset().filter(status=ToolClassification.PUBLISHED)
+from django_extensions.db.models import TitleDescriptionModel, TimeStampedModel
+from django_extensions.db.fields import AutoSlugField
+from tagulous.models import TagTreeModel, TagField
 
 
-# , StatusModel
-class ToolTaxonomy(MPTTModel):
-    name = models.CharField(max_length=255, unique=True, blank=False)
-    slug = AutoSlugField(populate_from="name", max_length=255)
+class ToolTaxonomy(TagTreeModel):
+    """A generic way of describing a tool, the top level is the base taxonomy"""
 
-    # MPTT fields
-    parent = TreeForeignKey("self", null=True, blank=True, related_name="children")
-    order = models.IntegerField(blank=False, default=0)
+    # order = models.IntegerField(blank=False, default=0)
 
-    # publishing status. Allows users to submit new taxonomies,
-    # that are evaluated and approved
+    # Published state
+    # Allows users to submit new taxonomies that are evaluated and approved
     class State(Catalog):
         _attrs = "value", "label"
         in_review = 0, _("in review")
-        published = 1, _("published")
+        approved = 1, _("approved")
         rejected = 2, _("rejected")
 
     state = models.PositiveSmallIntegerField(
         _("State"), choices=State._zip("value", "label"), default=State.in_review.value
     )
-    locked = models.BooleanField(
-        _("Locked"),
-        help_text=_("locked taxonomoies can't be moved or edited."),
-        default=False,
-    )
-
-    objects = ToolTaxonomyManager()
-
-    class MPTTMeta:
-        order_insertion_by = ["order"]
 
     class Meta:
         verbose_name = _("Tool Taxonomy")
         verbose_name_plural = _("Tool Taxonomies")
-        unique_together = ("slug", "parent")
 
-    def __str__(self):
-        return self.name
-
-
-class GenericTool(models.Model):
-    pass
-    """A Generic tool is a scaffold or cookie cutter instance of any combination of"""
+    # class TagMeta:
+    #     force_lowercase = True
 
 
-class UserTool(models.Model):
-    owner
-    description
+class UserTool(TitleDescriptionModel, TimeStampedModel):
+    """A tool owned by a User"""
 
-    pass
-    """Owned by a user"""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    description = models.TextField(blank=True)
+
+    taxonomoies = TagField(to=ToolTaxonomy, blank=True, related_name="tools")
+
+    class Clearance(Catalog):
+        _attrs = "value", "label"
+        none = None, _("No clearance")
+        private = 0, _("Private tool")
+        public = 1, _("Public tool")
+        owner_approved = 2, _("Owner approved")
+
+    clearance = models.PositiveSmallIntegerField(
+        _("Clearance"),
+        null=True,
+        choices=Clearance._zip("value", "label"),
+        default=Clearance.private.value,
+    )
+
+
+# class ToolHistory(TimeStampedModel):
+#     # Actions Catalog
+#     class Actions(Catalog):
+#         _attrs = "value", "label"
+#     tool = models.ForeignKey(UserTool, on_delete=models.CASCADE)
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+
+
+class ClearancePermission(TimeStampedModel):
+    tool = models.ForeignKey(UserTool, on_delete=models.CASCADE)
+    cleared_by_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="given_tool_permissions",
+    )
+    cleared_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="tool_permissions",
+    )
+
+
+class ToolPhoto(TimeStampedModel):
+    tool = models.ForeignKey(UserTool, on_delete=models.CASCADE)
+    uploading_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT
+    )
+    file = models.FileField()
+    title = models.CharField(max_length=255, blank=True)

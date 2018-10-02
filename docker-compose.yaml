@@ -6,7 +6,7 @@ services:
             context: .
             dockerfile: docker/dockerfiles/web
             args:
-                - PIP_ARGS=-r dev-requirements.txt
+                - PIP_ARGS=-r requirements-dev.txt
         working_dir: /srv/app
         command: ./manage.py runserver_plus 0.0.0.0:8000
         user: ${UID:-1000}  # user id or default
@@ -25,6 +25,10 @@ services:
         depends_on:
             - db
         env_file: .dockerenv
+        networks:
+            app_net:
+                aliases:
+                    - toolhub-web
     db:
         image: postgres:latest
         ports:
@@ -37,6 +41,10 @@ services:
         volumes:
             - "db-volume:/var/lib/postgresql/data/pgdata"
             - "./docker/init/db:/docker-entrypoint-initdb.d"
+        networks:
+            app_net:
+                aliases:
+                    - toolhub-db
 
 volumes:
     db-volume:
@@ -45,3 +53,8 @@ volumes:
         name: toolhub_python-packages
     upload-volume:
         name: toolhub_upload-volume
+
+networks:
+    app_net:
+        name: toolhub-net
+        driver: bridge
