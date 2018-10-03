@@ -3,6 +3,7 @@
 
 Werkzeug==0.14.1
 ipython
+ipdb
 isort
 flake8
 
