@@ -2,7 +2,8 @@ FROM python:3.7
 
 RUN adduser --uid 1000 --gecos --quiet --disabled-password toolhub
 
-RUN mkdir -p /srv/app
+RUN mkdir -p /srv/app /var/www/media /var/www/static \
+    && chown toolhub.toolhub /srv/app /var/www/media /var/www/static
 WORKDIR /srv/app
 
 ENV DJANGO_SETTINGS_MODULE=toolhub.settings.env \
