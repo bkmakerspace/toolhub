@@ -1,0 +1,5 @@
+let g:ycm_server_python_interpreter = '/home/jsatt/.virtualenvs/toolhub/bin/python'
+let $PYTHONPATH = '/home/jsatt/.virtualenvs/toolhub/lib/python3.6/site-packages'
+let $PATH = '/home/jsatt/.virtualenvs/toolhub/bin:' . $PATH
+
+" vim: set ft=vim :
