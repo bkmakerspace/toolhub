@@ -13,7 +13,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'tagulous',
-    'toolhub_auth',
+    'toolhub_auth.apps.ToolhubAuthConfig',
     'tools',
 ]
 
