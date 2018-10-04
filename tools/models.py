@@ -9,12 +9,11 @@ Approach,
 Viewpoint
 """
 from catalog import Catalog
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django_extensions.db.models import TitleDescriptionModel, TimeStampedModel
-from django_extensions.db.fields import AutoSlugField
-from tagulous.models import TagTreeModel, TagField
+from django_extensions.db.models import TimeStampedModel, TitleDescriptionModel
+from tagulous.models import TagField, TagTreeModel
 
 
 class ToolTaxonomy(TagTreeModel):
@@ -50,27 +49,43 @@ class UserTool(TitleDescriptionModel, TimeStampedModel):
 
     taxonomoies = TagField(to=ToolTaxonomy, blank=True, related_name="tools")
 
+    class VisibilityChoices(Catalog):
+        _attrs = "value", "label"
+        private = 0, _("Visible to owner")
+        cleared = 1, _('Visible to cleared')
+        public = 2, _("Visbile to everyone")
+
+    visibility = models.PositiveSmallIntegerField(
+        _('Visibility'),
+        choices=VisibilityChoices._zip('value', 'label'),
+        default=VisibilityChoices.public.value,
+    )
+
     class Clearance(Catalog):
         _attrs = "value", "label"
-        none = None, _("No clearance")
-        private = 0, _("Private tool")
-        public = 1, _("Public tool")
-        owner_approved = 2, _("Owner approved")
+        none = 0, _("No clearance")
+        owner = 1, _("Owner approved")
+        cleared = 2, _("Cleared-user approved")
 
     clearance = models.PositiveSmallIntegerField(
         _("Clearance"),
-        null=True,
         choices=Clearance._zip("value", "label"),
-        default=Clearance.private.value,
+        default=Clearance.none.value,
     )
 
 
-# class ToolHistory(TimeStampedModel):
-#     # Actions Catalog
-#     class Actions(Catalog):
-#         _attrs = "value", "label"
-#     tool = models.ForeignKey(UserTool, on_delete=models.CASCADE)
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+class ToolHistory(TimeStampedModel):
+    class Actions(Catalog):
+        _attrs = "value", "label"
+        create = 0, 'Create'
+        borrow = 1, 'Borrow'
+        return_ = 2, 'Return'
+        decommission = 3, 'Decommission'
+        reinstate = 4, 'Reinstate'
+
+    tool = models.ForeignKey(UserTool, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    action = models.PositiveSmallIntegerField(choices=Actions._zip('value', 'label'))
 
 
 class ClearancePermission(TimeStampedModel):
