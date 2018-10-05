@@ -1,0 +1,13 @@
+{% extends "layouts/base.jinja" %}
+
+{% block page_title %}
+    Tools
+{% endblock %}
+
+{% block content %}
+
+{% for tool in tools %}
+<h2>{{ tool.title }}</h2>
+{% endfor %}
+
+{% endblock %}
