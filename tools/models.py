@@ -15,6 +15,8 @@ from django.utils.translation import ugettext_lazy as _
 from django_extensions.db.models import TimeStampedModel, TitleDescriptionModel
 from tagulous.models import TagField, TagTreeModel
 
+from tools.querysets import UserToolQuerySet
+
 
 class ToolTaxonomy(TagTreeModel):
     """A generic way of describing a tool, the top level is the base taxonomy"""
@@ -70,6 +72,11 @@ class UserTool(TitleDescriptionModel, TimeStampedModel):
         choices=Clearance._zip("value", "label"),
         default=Clearance.none.value,
     )
+
+    objects = UserToolQuerySet.as_manager()
+
+    def __str__(self):
+        return self.title
 
 
 class ToolHistory(TimeStampedModel):
