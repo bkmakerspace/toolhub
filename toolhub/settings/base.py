@@ -13,9 +13,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "tagulous",
+    "crispy_forms",
     "toolhub",
     "toolhub_auth.apps.ToolhubAuthConfig",
     "tools",
+    'utils',
 ]
 
 MIDDLEWARE = [
@@ -32,23 +34,10 @@ ROOT_URLCONF = "toolhub.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-            ]
-        },
-    },
-    {
         "BACKEND": "django_jinja.backend.Jinja2",
-        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
+            "match_extension": ".jinja",
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
@@ -68,10 +57,24 @@ TEMPLATES = [
                 "django_jinja.builtins.extensions.StaticFilesExtension",
                 "django_jinja.builtins.extensions.DjangoFiltersExtension",
             ],
+            "auto_reload": True,
             "autoescape": True,
             "keep_trailing_newline": True,
             "lstrip_blocks": True,
             "trim_blocks": True,
+        },
+    },
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ]
         },
     },
 ]
@@ -93,3 +96,5 @@ AUTH_PASSWORD_VALIDATORS = [
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
