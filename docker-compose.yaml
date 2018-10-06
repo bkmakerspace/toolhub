@@ -6,7 +6,9 @@ services:
             context: .
             dockerfile: docker/dockerfiles/web
             args:
-                - PIP_ARGS=-r requirements-dev.txt
+                - POETRY_ARGS=
+                # production install
+                # - POETRY_ARGS=--no-dev
         working_dir: /srv/app
         command: ./manage.py runserver_plus 0.0.0.0:8000
         user: ${UID:-1000}  # user id or default

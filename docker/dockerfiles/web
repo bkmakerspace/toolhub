@@ -14,11 +14,13 @@ ENV DJANGO_SETTINGS_MODULE=toolhub.settings.env \
     ## cleanup
     #&& rm -rf /var/lib/apt/lists/*
 
-COPY --chown=toolhub:toolhub requirements*.txt ./
-ARG PIP_ARGS
-RUN pip install --upgrade pip \
-    && pip install -r requirements.txt $PIP_ARGS \
-    && rm -rf ~/.cache
+RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+
+COPY --chown=toolhub:toolhub pyproject.* ./
+RUN poetry config settings.virtualenvs.create false
+
+ARG POETRY_ARGS
+RUN poetry install $POETRY_ARGS
 
 COPY --chown=toolhub:toolhub . .
 
