@@ -1,5 +1,7 @@
 import os
 
+from django.urls import reverse_lazy
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 SECRET_KEY = "wataboutthechildren"
@@ -31,6 +33,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "toolhub.urls"
+
+LOGIN_URL = reverse_lazy('login')
+LOGIN_REDIRECT_URL = reverse_lazy('tools:home')
+LOGOUT_REDIRECT_URL = reverse_lazy('home')
 
 TEMPLATES = [
     {
@@ -98,3 +104,5 @@ USE_L10N = True
 USE_TZ = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

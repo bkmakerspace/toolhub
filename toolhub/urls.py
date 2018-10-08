@@ -3,9 +3,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
+from django.views.generic import TemplateView
 
 
 urlpatterns = [
+    path("", TemplateView.as_view(template_name='home.jinja'), name='home'),
+    path("", include("toolhub_auth.urls"), name="auth"),
     path("admin/", admin.site.urls),
     path("tools/", include("tools.urls"), name="tools"),
 ]

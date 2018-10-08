@@ -1,0 +1,47 @@
+<nav role="navigation" class="navbar navbar-expand-md navbar-light bg-light">
+    <a class="navbar-brand" href="{{ url('home') }}">{{ _("Toolhub") }}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        {# main nav #}
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('home') }}">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('tools:home') }}">Tools</a>
+            </li>
+        </ul>
+        {# auth nav #}
+        <ul class="navbar-nav">
+        {% if request.user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('home') }}">{{ _("Profile") }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('home') }}">{{ _("Your Tools") }}</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="user-menu">
+                  {{ user.name|default(user.email, True) }}
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="user-menu">
+                  <a class="dropdown-item" tabindex="-1" href="{{ url('home') }}">{{ _("Your Account") }}</a>
+                  <h6 class="dropdown-header">{{ _("Profile Custommizations") }}</h6>
+                  <a class="dropdown-item" tabindex="-1" href="{{ url('home') }}">{{ _("My Info") }}</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" tabindex="-1" href="{{ url('logout') }}">{{ _("Logout") }}</a></li>
+              </div>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('signup') }}">{{ _("Sign Up") }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('login') }}">{{ _("Login") }}</a>
+            </li>
+            {% endif %}
+      </ul>
+  </div>
+</nav>
