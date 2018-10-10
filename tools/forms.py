@@ -8,7 +8,7 @@ from utils.forms import CrispyFormMixin
 
 class CreateUserToolForm(CrispyFormMixin, forms.ModelForm):
     class Meta:
-        fields = ("title", "description", "taxonomoies", "visibility", "clearance")
+        fields = ("title", "description", "taxonomies", "visibility", "clearance")
         model = UserTool
 
     def __init__(self, *args, **kwargs):
@@ -22,7 +22,7 @@ class CreateUserToolForm(CrispyFormMixin, forms.ModelForm):
                 _("Add a tool"),
                 Field("title"),
                 Field("description"),
-                Field("taxonomoies"),
+                Field("taxonomies"),
                 Field("visibility"),
                 Field("clearance"),
             ),

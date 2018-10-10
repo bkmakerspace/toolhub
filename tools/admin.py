@@ -19,7 +19,7 @@ tag_forms.TagWidgetBase.render = replaced_render
 
 
 class UserToolAdmin(admin.ModelAdmin):
-    list_display = ("title", "taxonomoies", "clearance")
+    list_display = ("title", "taxonomies", "clearance")
     raw_id_fields = ("user",)
 
 

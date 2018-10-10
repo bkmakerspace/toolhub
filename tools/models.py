@@ -87,7 +87,7 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
         default=ToolStates.none.value,
         editable=False,
     )
-    taxonomoies = TagField(to=ToolTaxonomy, blank=True, related_name="tools")
+    taxonomies = TagField(to=ToolTaxonomy, blank=True, related_name="tools")
     visibility = models.PositiveSmallIntegerField(
         _("Visibility"),
         choices=Visibility._zip("value", "label"),
