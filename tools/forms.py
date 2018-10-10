@@ -1,4 +1,4 @@
-from crispy_forms.layout import Layout, Fieldset, Submit, Field, Div
+from crispy_forms.layout import Button, Layout, Fieldset, Submit, Field, Div
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
@@ -33,4 +33,16 @@ class CreateUserToolForm(CrispyFormMixin, forms.ModelForm):
                 ),
                 css_class="form-group",
             ),
+        )
+
+
+class UserToolFilterForm(CrispyFormMixin, forms.Form):
+    has_columns = False
+
+    def layout_args(self, helper):
+        helper.form_method = 'GET'
+        return (
+            Field("name"),
+            Field("taxonomies"),
+            Submit('action', _("Filter")),
         )

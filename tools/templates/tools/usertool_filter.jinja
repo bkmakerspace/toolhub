@@ -1,0 +1,36 @@
+{% extends "layouts/base.jinja" %}
+{% from "macros/taxonomies.jinja" import taxonomy_list %}
+
+{% block page_title %}
+    {{ _("Tools") }}
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-3">
+        <h3>Filters</h3>
+        {{ crispy(filter.form) }}
+    </div>
+    <div class="col-md-9">
+        <div class="row">
+        {% for tool in tools %}
+        <div class="col-sm-6 col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {{ tool.title }}
+                </div>
+                <div class="card-body">
+                    {{ taxonomy_list(tool.taxonomies.all()) }}
+                    <div>
+                    {{ tool.description|truncate(80) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

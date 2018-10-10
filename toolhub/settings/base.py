@@ -16,10 +16,11 @@ INSTALLED_APPS = [
     "django_extensions",
     "tagulous",
     "crispy_forms",
+    "django_filters",
     "toolhub",
     "toolhub_auth.apps.ToolhubAuthConfig",
     "tools",
-    'utils',
+    "utils",
 ]
 
 MIDDLEWARE = [
@@ -34,9 +35,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "toolhub.urls"
 
-LOGIN_URL = reverse_lazy('login')
-LOGIN_REDIRECT_URL = reverse_lazy('tools:home')
-LOGOUT_REDIRECT_URL = reverse_lazy('home')
+LOGIN_URL = reverse_lazy("login")
+LOGIN_REDIRECT_URL = reverse_lazy("tools:home")
+LOGOUT_REDIRECT_URL = reverse_lazy("home")
 
 TEMPLATES = [
     {
@@ -103,6 +104,6 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

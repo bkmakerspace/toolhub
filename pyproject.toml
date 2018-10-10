@@ -17,6 +17,7 @@ django-tagulous = "=0.13.2"
 django-jinja = "=2.4.1"
 django-crispy-forms = "=1.7.2"
 transitions = "=0.6.8"
+django-filter = "^2.0"
 
 [tool.poetry.dev-dependencies]
 ipdb = "^0.11.0"

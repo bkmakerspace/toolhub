@@ -1,18 +1,21 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView
+from django_filters.views import FilterView
 
 
-from tools.models import UserTool
+from tools.filters import UserToolFilterSet
 from tools.forms import CreateUserToolForm
+from tools.models import UserTool
+from utils.views import ContextMixin
 
 
-class UserToolList(LoginRequiredMixin, ListView):
+class UserToolFilter(LoginRequiredMixin, ContextMixin, FilterView):
     model = UserTool
-    queryset = UserTool.objects
-    template_name = "tools/usertool_list.jinja"
+    template_name = "tools/usertool_filter.jinja"
     context_object_name = "tools"
+    filterset_class = UserToolFilterSet
 
     def get_queryset(self):
         return self.model.objects.visible_to_user(self.request.user)
