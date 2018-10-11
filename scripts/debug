@@ -34,12 +34,7 @@ if [[ ! $service ]]; then
     exit 1;
 fi
 
-teardown() {
-    echo "shutting down debug $@"
-}
-trap "teardown $service" INT
-
-cecho "Restarting '$1' in interactive debug mode. Kill the process to return to normal." yellow bold
+cecho "Restarting '$service' in interactive debug mode. Kill the process to return to normal." yellow bold
 docker-compose stop $service
-docker-compose run --name toolhub_debug-$service --rm --service-ports $service
-docker-compose up -d $service
+docker-compose run --name toolhub_debug-$service --rm --service-ports $service \
+    && docker-compose up -d $service

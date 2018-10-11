@@ -38,6 +38,7 @@ pip-delete-this-directory.txt
 # Editor files
 *.swp
 tags
+.vimlocal
 
 # Unit test / coverage reports
 htmlcov/
