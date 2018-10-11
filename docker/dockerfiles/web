@@ -19,7 +19,7 @@ RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poet
 COPY --chown=toolhub:toolhub pyproject.* ./
 RUN poetry config settings.virtualenvs.create false
 
-ARG POETRY_ARGS
+ARG POETRY_ARGS=--no-dev
 RUN poetry install $POETRY_ARGS
 
 COPY --chown=toolhub:toolhub . .
