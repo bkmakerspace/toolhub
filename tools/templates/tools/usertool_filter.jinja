@@ -28,6 +28,14 @@
                 </div>
             </div>
         </div>
+        {% else %}
+        <div class="col-sm-12">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title mb-0">{{ _("No Tools found") }}</h5>
+                </div>
+            </div>
+        </div>
         {% endfor %}
         </div>
     </div>

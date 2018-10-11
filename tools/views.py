@@ -16,6 +16,7 @@ class UserToolFilter(LoginRequiredMixin, ContextMixin, FilterView):
     template_name = "tools/usertool_filter.jinja"
     context_object_name = "tools"
     filterset_class = UserToolFilterSet
+    strict = False
 
     def get_queryset(self):
         return self.model.objects.visible_to_user(self.request.user)
