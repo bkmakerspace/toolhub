@@ -53,9 +53,9 @@ install
 -------
 
 This is intended to abstract away a large number of complexities when working with the project. You
-should specify whether you installing a Python, NPM or System (apt) package and this script will
+should specify whether you installing a Python or System (apt) package and this script will
 take the appropriate steps to make sure the package is installed and added to the correct
-requirements file (requirements.txt or package.json). You can provide the `--dev` and `--no-save`
+requirements file (pyproject.toml or package.json). You can provide the `--dev` and `--no-save`
 flags to modify this functionality as needed.
 
 migrate

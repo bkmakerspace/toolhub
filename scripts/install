@@ -58,17 +58,11 @@ fi
 
 case $install_type in
     py|python)
-        docker-compose exec -u root web pip install $args
-        cecho "This script does not currently update the requirements file as it has in" yellow bold
-        cecho "the past. You MUST modify the appropriate requirement file manually." yellow bold
-        read -n1 -r -p "Press any key to continue..."
-        #if [ ! "$no_save" ]; then
-            #if [ "$dev" ]; then
-                ## TODO write to requirements-dev.txt
-            #else
-                ## TODO write to requirements.txt
-            #fi
-        #fi
+        if [ "$dev" ]; then
+            docker-compose exec -u root web python -m poetry add --dev $args
+        else
+            docker-compose exec -u root web python -m poetry add $args
+        fi
         ;;
     apt|linux)
         if [ ! "$no_input" ]; then
