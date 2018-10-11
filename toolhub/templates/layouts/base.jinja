@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="{% block viewport %}width=device-width, initial-scale=1, shrink-to-fit=no{% endblock %}" />
+        <meta name="description" content="{% block page_description %}{% endblock %}">
+        <meta name="author" content="{% block page_author %}{% endblock %}">
+        <title>Toolhub - {% block head_title %}{% endblock %}</title>
+        <!-- BS4 CDN for now. -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+{% block body %}
+    {% block header %}{% endblock %}
+
+    {% block container %}
+    {# If extending container make sure you call {{ super() }} at the top if messages need displayed on that page #}
+    <section class="container py-4">
+      {% if messages %}
+          {% for message in messages %}
+              <div class="alert {% if message.tags %} {{ message.tags }}"{% endif %}>{{ message }}</div>
+          {% endfor %}
+      {% endif %}
+
+      {% block content %}
+      {% endblock content %}
+    </section> <!-- /container -->
+    {% endblock %}
+
+{% endblock %}
+    </body>
+</html>
+

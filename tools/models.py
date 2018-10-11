@@ -15,6 +15,8 @@ from django.utils.translation import ugettext_lazy as _
 from django_extensions.db.models import TimeStampedModel, TitleDescriptionModel
 from tagulous.models import TagField, TagTreeModel
 
+from tools.querysets import UserToolQuerySet
+
 
 class ToolTaxonomy(TagTreeModel):
     """A generic way of describing a tool, the top level is the base taxonomy"""
@@ -44,12 +46,10 @@ class ToolTaxonomy(TagTreeModel):
 class UserTool(TitleDescriptionModel, TimeStampedModel):
     """A tool owned by a User"""
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    description = models.TextField(blank=True)
-
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='tools')
     taxonomoies = TagField(to=ToolTaxonomy, blank=True, related_name="tools")
 
-    class VisibilityChoices(Catalog):
+    class Visibility(Catalog):
         _attrs = "value", "label"
         private = 0, _("Visible to owner")
         cleared = 1, _('Visible to cleared')
@@ -57,8 +57,8 @@ class UserTool(TitleDescriptionModel, TimeStampedModel):
 
     visibility = models.PositiveSmallIntegerField(
         _('Visibility'),
-        choices=VisibilityChoices._zip('value', 'label'),
-        default=VisibilityChoices.public.value,
+        choices=Visibility._zip('value', 'label'),
+        default=Visibility.public.value,
     )
 
     class Clearance(Catalog):
@@ -73,6 +73,11 @@ class UserTool(TitleDescriptionModel, TimeStampedModel):
         default=Clearance.none.value,
     )
 
+    objects = UserToolQuerySet.as_manager()
+
+    def __str__(self):
+        return self.title
+
 
 class ToolHistory(TimeStampedModel):
     class Actions(Catalog):
@@ -83,13 +88,13 @@ class ToolHistory(TimeStampedModel):
         decommission = 3, 'Decommission'
         reinstate = 4, 'Reinstate'
 
-    tool = models.ForeignKey(UserTool, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    tool = models.ForeignKey(UserTool, on_delete=models.CASCADE, related_name='history')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='tool_history')
     action = models.PositiveSmallIntegerField(choices=Actions._zip('value', 'label'))
 
 
 class ClearancePermission(TimeStampedModel):
-    tool = models.ForeignKey(UserTool, on_delete=models.CASCADE)
+    tool = models.ForeignKey(UserTool, on_delete=models.CASCADE, related_name='permissions')
     cleared_by_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
@@ -103,9 +108,9 @@ class ClearancePermission(TimeStampedModel):
 
 
 class ToolPhoto(TimeStampedModel):
-    tool = models.ForeignKey(UserTool, on_delete=models.CASCADE)
+    tool = models.ForeignKey(UserTool, on_delete=models.CASCADE, related_name='photos')
     uploading_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.PROTECT
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='uploaded_photos'
     )
     file = models.FileField()
     title = models.CharField(max_length=255, blank=True)
