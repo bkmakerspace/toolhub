@@ -15,7 +15,9 @@ from django.utils.translation import ugettext_lazy as _
 from django_extensions.db.models import TimeStampedModel, TitleDescriptionModel
 from tagulous.models import TagField, TagTreeModel
 
-from tools.querysets import UserToolQuerySet
+from utils.models import StateMachineMixin
+
+from .querysets import UserToolQuerySet
 
 
 class ToolTaxonomy(TagTreeModel):
@@ -43,11 +45,25 @@ class ToolTaxonomy(TagTreeModel):
     #     force_lowercase = True
 
 
-class UserTool(TitleDescriptionModel, TimeStampedModel):
-    """A tool owned by a User"""
+class ToolStates(Catalog):
+    _attrs = 'value', 'label'
+    none = 'none', 'None'
+    unused = 'unused', 'Unused'
+    loaned = 'loaned', 'Loaned'
+    disabled = 'disabled', 'Decommissioned'
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='tools')
-    taxonomoies = TagField(to=ToolTaxonomy, blank=True, related_name="tools")
+
+class ToolTransitions(Catalog):
+    _attrs = 'value', 'label', 'source', 'dest'
+    create = 0, 'Create', ToolStates.none.value, ToolStates.unused.value
+    borrow = 1, 'Borrow', ToolStates.unused.value, ToolStates.loaned.value
+    return_ = 2, 'Return', ToolStates.loaned.value, ToolStates.unused.value
+    decommission = 3, 'Decommission', '*', ToolStates.disabled.value
+    reinstate = 4, 'Reinstate', ToolStates.disabled.value, ToolStates.unused.value
+
+
+class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
+    """A tool owned by a User"""
 
     class Visibility(Catalog):
         _attrs = "value", "label"
@@ -55,18 +71,24 @@ class UserTool(TitleDescriptionModel, TimeStampedModel):
         cleared = 1, _('Visible to cleared')
         public = 2, _("Visbile to everyone")
 
-    visibility = models.PositiveSmallIntegerField(
-        _('Visibility'),
-        choices=Visibility._zip('value', 'label'),
-        default=Visibility.public.value,
-    )
-
     class Clearance(Catalog):
         _attrs = "value", "label"
         none = 0, _("No clearance")
         owner = 1, _("Owner approved")
         cleared = 2, _("Cleared-user approved")
 
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='tools')
+    description = models.TextField(blank=True)
+    state = models.CharField(
+        max_length=10, choices=ToolStates._zip('value', 'label'),
+        default=ToolStates.none.value, editable=False)
+    taxonomoies = TagField(to=ToolTaxonomy, blank=True, related_name="tools")
+    visibility = models.PositiveSmallIntegerField(
+        _('Visibility'),
+        choices=Visibility._zip('value', 'label'),
+        default=Visibility.public.value,
+    )
     clearance = models.PositiveSmallIntegerField(
         _("Clearance"),
         choices=Clearance._zip("value", "label"),
@@ -75,22 +97,33 @@ class UserTool(TitleDescriptionModel, TimeStampedModel):
 
     objects = UserToolQuerySet.as_manager()
 
+    class StateMachine:
+        auto_transitions = False
+        send_event = True
+        states = [{'name': state.value} for state in ToolStates]
+        transitions = [
+            {'trigger': trigger, 'source': source, 'dest': dest}
+            for trigger, source, dest in ToolTransitions._zip('name', 'source', 'dest')
+        ]
+        after_state_change = 'record_transition'
+
     def __str__(self):
         return self.title
 
+    def record_transition(self, event):
+        if not event.kwargs.get('skip_save', False):
+            self.save()
+        self.history.create(
+            user=event.kwargs.get('user'),
+            action=ToolTransitions(event.event.name, 'name').value)
+
 
 class ToolHistory(TimeStampedModel):
-    class Actions(Catalog):
-        _attrs = "value", "label"
-        create = 0, 'Create'
-        borrow = 1, 'Borrow'
-        return_ = 2, 'Return'
-        decommission = 3, 'Decommission'
-        reinstate = 4, 'Reinstate'
-
     tool = models.ForeignKey(UserTool, on_delete=models.CASCADE, related_name='history')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='tool_history')
-    action = models.PositiveSmallIntegerField(choices=Actions._zip('value', 'label'))
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, blank=True, null=True,
+        related_name='tool_history')
+    action = models.PositiveSmallIntegerField(choices=ToolTransitions._zip('value', 'label'))
 
 
 class ClearancePermission(TimeStampedModel):
