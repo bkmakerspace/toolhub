@@ -2,7 +2,7 @@
 name = "toolhub"
 version = "0.1.0"
 description = "Makerspace tool management"
-authors = ["Patrick Forringer <patrick@forringer.com>", "Jeremy Satterfield <jsatt@jsatt.org>"]
+authors = ["Patrick Forringer <patrick@forringer.com>", "Jeremy Satterfield <jsatt@jsatt.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
