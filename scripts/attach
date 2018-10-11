@@ -29,5 +29,4 @@ while [[ $# -gt 0 ]]; do
 done
 set -- "${POSITIONAL[@]}"
 
-container=$(docker-compose ps -q $1)
-docker attach --sig-proxy=false $container
+docker-compose logs -f $1

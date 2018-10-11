@@ -29,8 +29,17 @@ while [[ $# -gt 0 ]]; do
 done
 set -- "${POSITIONAL[@]}"
 
-docker-compose up $@
+args=$@
+
+teardown() {
+    $script_base/stop $args
+}
+trap "teardown" INT
+
+docker-compose up -d $args
 
 if [ "$1" == "-d" ]; then
     cecho "Starting in detached mode. Use '$script_base/attach <service>' to view output." blue bold
+else
+    docker-compose logs -f $args || teardown
 fi
