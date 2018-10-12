@@ -11,6 +11,7 @@ Viewpoint
 from catalog import Catalog
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django_extensions.db.models import TimeStampedModel, TitleDescriptionModel
 from tagulous.models import TagField, TagTreeModel
@@ -48,9 +49,9 @@ class ToolTaxonomy(TagTreeModel):
 class ToolStates(Catalog):
     _attrs = "value", "label", "availability_label", "badge_type"
     none = "none", _("None"), None, None
-    unused = "unused", _("Unused"), _("Available"), 'success'
-    loaned = "loaned", _("Loaned"), _("In Use"), 'warning'
-    disabled = "disabled", _("Decommissioned"), _("Retired"), 'danger'
+    unused = "unused", _("Unused"), _("Available"), "success"
+    loaned = "loaned", _("Loaned"), _("In Use"), "warning"
+    disabled = "disabled", _("Decommissioned"), _("Retired"), "danger"
 
 
 class ToolTransitions(Catalog):
@@ -115,6 +116,9 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('tools:detail', kwargs={'pk': self.pk})
 
     def record_transition(self, event):
         if not event.kwargs.get("skip_save", False):

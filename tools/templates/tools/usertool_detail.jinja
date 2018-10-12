@@ -1,0 +1,28 @@
+{% extends "layouts/base.jinja" %}
+{% from "macros/badges.jinja" import taxonomy_list, availability_badge %}
+
+{% block head_title %}{{ tool }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-9">
+        <h1>{{ tool }} {{ availability_badge(tool) }}</h1>
+        <p>{{ taxonomy_list(tool.taxonomies.all()) }}</p>
+        <p>{{ tool.user }}</p>
+        <section>
+            {{ tool.description }}
+        </section>
+    </div>
+    <div class="col-md-3">
+        <h3>{{ _("History") }}</h3>
+        <ul class="list-group">
+        {% for item in tool.history.all() %}
+            <li class="list-group-item">
+                {{ item.get_action_display() }} by {{ item.user }}<br>
+                <span class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }}</span>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

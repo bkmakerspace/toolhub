@@ -16,6 +16,7 @@
     <div class="col-md-9">
         <div class="row">
         {% for tool in tools %}
+        {% set tool_link = tool.get_absolute_url() %}
         <div class="col-sm-6 col-md-4 mb-4">
             <div class="card">
                 {% if tool.photos.exists() %}
@@ -23,7 +24,7 @@
                     <img class="card-img-top" src="{{ photo.file.file }}" alt="{{ photo.title|default('tool photo') }}">
                 {% endif %}
                 <div class="card-body">
-                    <h5 class="card-title">{{ tool.title }} {{ availability_badge(tool) }}</h5>
+                    <h5 class="card-title"><a href="{{ tool_link }}">{{ tool.title }}</a> {{ availability_badge(tool) }}</h5>
                     <p class="card-text">{{ tool.description|truncate(80) }}</p>
                     <p class="card-text">{{ tool.user }}</p>
                     <p class="card-text">{{ taxonomy_list(tool.taxonomies.all()) }}</p>
