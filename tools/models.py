@@ -18,7 +18,7 @@ from tagulous.models import TagField, TagTreeModel
 
 from utils.models import StateMachineMixin
 
-from .querysets import UserToolQuerySet
+from .querysets import ToolHistoryQuerySet, UserToolQuerySet
 
 
 class ToolTaxonomy(TagTreeModel):
@@ -128,6 +128,12 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
             action=ToolTransitions(event.event.name, "name").value,
         )
 
+    class Meta:
+        ordering = ("-created",)
+        get_latest_by = "created"
+        verbose_name = _("Tool")
+        verbose_name_plural = _("Tools")
+
 
 class ToolHistory(TimeStampedModel):
     tool = models.ForeignKey(UserTool, on_delete=models.CASCADE, related_name="history")
@@ -141,6 +147,8 @@ class ToolHistory(TimeStampedModel):
     action = models.PositiveSmallIntegerField(
         choices=ToolTransitions._zip("value", "label")
     )
+
+    objects = ToolHistoryQuerySet.as_manager()
 
     def __str__(self):
         action = ToolTransitions(self.action).label
@@ -181,3 +189,7 @@ class ToolPhoto(TimeStampedModel):
     )
     file = models.FileField()
     title = models.CharField(max_length=255, blank=True)
+
+    class Meta:
+        ordering = ("-created",)
+        get_latest_by = "created"

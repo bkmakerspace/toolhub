@@ -31,3 +31,9 @@ class UserToolQuerySet(QuerySet):
             own_tools = Q()
 
         return self.filter(cleared_tools | open_tools | own_tools)
+
+
+class ToolHistoryQuerySet(QuerySet):
+    def latest_loan(self):
+        from tools.models import ToolTransitions
+        return self.filter(action=ToolTransitions.borrow.value).latest()

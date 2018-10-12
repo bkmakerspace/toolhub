@@ -6,7 +6,12 @@
 {% block content %}
 <div class="row">
     <div class="col-md-9">
-        <h1>{{ tool }} {{ availability_badge(tool) }}</h1>
+        <div class="d-flex justify-content-between align-items-end border-bottom pb-2 mb-2">
+            <h1>{{ tool }} {{ availability_badge(tool) }}</h1>
+            {% if tool.is_loaned() %}
+                <span>{{ _("Currently checked out by:") }} <strong>{{ tool.history.latest_loan().user }}</strong></span>
+            {% endif %}
+        </div>
         <p>{{ taxonomy_list(tool.taxonomies.all()) }}</p>
         <p>{{ tool.user }}</p>
         <section>
@@ -19,7 +24,7 @@
         {% for item in tool.history.all() %}
             <li class="list-group-item">
                 {{ item.get_action_display() }} by {{ item.user }}<br>
-                <span class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }}</span>
+                <small class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }}</small>
             </li>
         {% endfor %}
         </ul>
