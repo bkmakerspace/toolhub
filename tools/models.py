@@ -46,11 +46,11 @@ class ToolTaxonomy(TagTreeModel):
 
 
 class ToolStates(Catalog):
-    _attrs = "value", "label"
-    none = "none", _("None")
-    unused = "unused", _("Unused")
-    loaned = "loaned", _("Loaned")
-    disabled = "disabled", _("Decommissioned")
+    _attrs = "value", "label", "availability_label", "badge_type"
+    none = "none", _("None"), None, None
+    unused = "unused", _("Unused"), _("Available"), 'success'
+    loaned = "loaned", _("Loaned"), _("In Use"), 'warning'
+    disabled = "disabled", _("Decommissioned"), _("Retired"), 'danger'
 
 
 class ToolTransitions(Catalog):
@@ -62,20 +62,22 @@ class ToolTransitions(Catalog):
     reinstate = 4, _("Reinstate"), ToolStates.disabled.value, ToolStates.unused.value
 
 
+class ToolVisibility(Catalog):
+    _attrs = "value", "label"
+    private = 0, _("Visible to owner")
+    cleared = 1, _("Visible to cleared")
+    public = 2, _("Visbile to everyone")
+
+
+class ToolClearance(Catalog):
+    _attrs = "value", "label"
+    none = 0, _("No clearance")
+    owner = 1, _("Owner approved")
+    cleared = 2, _("Cleared-user approved")
+
+
 class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
     """A tool owned by a User"""
-
-    class Visibility(Catalog):
-        _attrs = "value", "label"
-        private = 0, _("Visible to owner")
-        cleared = 1, _("Visible to cleared")
-        public = 2, _("Visbile to everyone")
-
-    class Clearance(Catalog):
-        _attrs = "value", "label"
-        none = 0, _("No clearance")
-        owner = 1, _("Owner approved")
-        cleared = 2, _("Cleared-user approved")
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="tools"
@@ -90,13 +92,13 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
     taxonomies = TagField(to=ToolTaxonomy, blank=True, related_name="tools")
     visibility = models.PositiveSmallIntegerField(
         _("Visibility"),
-        choices=Visibility._zip("value", "label"),
-        default=Visibility.public.value,
+        choices=ToolVisibility._zip("value", "label"),
+        default=ToolVisibility.public.value,
     )
     clearance = models.PositiveSmallIntegerField(
         _("Clearance"),
-        choices=Clearance._zip("value", "label"),
-        default=Clearance.none.value,
+        choices=ToolClearance._zip("value", "label"),
+        default=ToolClearance.none.value,
     )
 
     objects = UserToolQuerySet.as_manager()

@@ -63,6 +63,7 @@ TEMPLATES = [
                 "django_jinja.builtins.extensions.UrlsExtension",
                 "django_jinja.builtins.extensions.StaticFilesExtension",
                 "django_jinja.builtins.extensions.DjangoFiltersExtension",
+                "tools.extensions.ToolConstantsExtension",
             ],
             "auto_reload": True,
             "autoescape": True,
