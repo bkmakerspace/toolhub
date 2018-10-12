@@ -13,10 +13,7 @@ class StateMachineMixin:
         machine_args = {
             arg: getattr(self.StateMachine, arg)
             for arg in dir(self.StateMachine)
-            if not arg.startswith('_')
+            if not arg.startswith("_")
         }
-        machine_args.update({
-            'model': self,
-            'initial': self.state,
-        })
+        machine_args.update({"model": self, "initial": self.state})
         self.machine = Machine(**machine_args)
