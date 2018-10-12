@@ -4,7 +4,7 @@ from django.contrib import admin
 import tagulous.admin
 from tagulous import forms as tag_forms
 
-from .models import ClearancePermission, ToolTaxonomy, ToolPhoto, UserTool
+from .models import ClearancePermission, ToolHistory, ToolTaxonomy, ToolPhoto, UserTool
 
 
 logger = logging.getLogger(__name__)
@@ -32,7 +32,14 @@ class ToolTaxonomyAdmin(admin.ModelAdmin):
 
 @admin.register(ClearancePermission)
 class ClearancePermissionAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("__str__", "created")
+    raw_id_fields = ("tool", "cleared_by_user", "cleared_user")
+
+
+@admin.register(ToolHistory)
+class ToolHistoryAdmin(admin.ModelAdmin):
+    list_display = ("tool", "user", "action", "created")
+    raw_id_fields = ("user",)
 
 
 @admin.register(ToolPhoto)
