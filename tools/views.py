@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -17,6 +18,7 @@ class UserToolFilter(LoginRequiredMixin, ContextMixin, FilterView):
     context_object_name = "tools"
     filterset_class = UserToolFilterSet
     strict = False
+    paginate_by = settings.DEFAULT_PAGINATE_BY
 
     def get_queryset(self):
         return self.model.objects.visible_to_user(self.request.user)

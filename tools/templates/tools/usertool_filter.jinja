@@ -1,5 +1,6 @@
 {% extends "layouts/base.jinja" %}
 {% from "macros/taxonomies.jinja" import taxonomy_list %}
+{% from "partials/pagination.jinja" import pagination %}
 
 {% block page_title %}
     {{ _("Tools") }}
@@ -38,6 +39,7 @@
         </div>
         {% endfor %}
         </div>
+        {{ pagination(is_paginated, paginator, page_obj, _("Tool page navigation")) }}
     </div>
 </div>
 

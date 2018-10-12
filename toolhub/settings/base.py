@@ -107,3 +107,5 @@ USE_TZ = True
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+DEFAULT_PAGINATE_BY = 18
