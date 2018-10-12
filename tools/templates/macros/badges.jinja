@@ -1,0 +1,22 @@
+{% macro taxonomy_list(taxonomies) %}
+    {% for tax in taxonomies %}
+        {{ render_taxonomy_badge(tax) }}
+    {% endfor %}
+{% endmacro %}
+
+{% macro render_taxonomy_badge(tax) %}
+    <span class="badge badge-primary">
+        {{ tax }}
+    </span>
+{% endmacro %}
+
+{% macro availability_badge(tool) %}
+    {% set state = ToolStates(tool.state) %}
+    {% set label = state.availability_label %}
+    {% set type = state.badge_type %}
+{% if label %}
+<span class="badge badge-{{ type }}">
+    {{ label }}
+</span>
+{% endif %}
+{% endmacro %}

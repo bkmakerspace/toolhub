@@ -1,8 +1,8 @@
 {% extends "layouts/base.jinja" %}
-{% from "macros/taxonomies.jinja" import taxonomy_list %}
+{% from "macros/badges.jinja" import taxonomy_list, availability_badge %}
 {% from "partials/pagination.jinja" import pagination %}
 
-{% block page_title %}
+{% block head_title %}
     {{ _("Tools") }}
 {% endblock %}
 
@@ -18,14 +18,15 @@
         {% for tool in tools %}
         <div class="col-sm-6 col-md-4 mb-4">
             <div class="card">
-                <div class="card-header">
-                    {{ tool.title }}
-                </div>
+                {% if tool.photos.exists() %}
+                    {% set photo = tool.photos.latest() %}
+                    <img class="card-img-top" src="{{ photo.file.file }}" alt="{{ photo.title|default('tool photo') }}">
+                {% endif %}
                 <div class="card-body">
-                    {{ taxonomy_list(tool.taxonomies.all()) }}
-                    <div>
-                    {{ tool.description|truncate(80) }}
-                    </div>
+                    <h5 class="card-title">{{ tool.title }} {{ availability_badge(tool) }}</h5>
+                    <p class="card-text">{{ tool.description|truncate(80) }}</p>
+                    <p class="card-text">{{ tool.user }}</p>
+                    <p class="card-text">{{ taxonomy_list(tool.taxonomies.all()) }}</p>
                 </div>
             </div>
         </div>
