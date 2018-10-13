@@ -49,6 +49,13 @@ class ToolTaxonomy(TagTreeModel):
         force_lowercase = False
         space_delimiter = False
 
+    def get_color(self):
+        if not self.color and self.parent:
+            # try to get color from parent (this can cascade)
+            return self.parent.get_color()
+        else:
+            return self.color
+
 
 class ToolStates(Catalog):
     _attrs = "value", "label", "badge_type"
