@@ -67,22 +67,24 @@ class ToolTransitions(Catalog):
     reinstate = 4, _("Reinstate"), ToolStates.disabled.value, ToolStates.available.value
 
 
-class ToolVisibility(Catalog):
-    _attrs = "value", "label"
-    private = 0, _("Private")
-    cleared = 1, _("Cleared Users")
-    public = 2, _("Public")
-
-
-class ToolClearance(Catalog):
-    _attrs = "value", "label"
-    none = 0, _("Available to all")
-    owner = 1, _("Owner cleared users only")
-    cleared = 2, _("Cleared users can approve anyone")
-
-
 class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
     """A tool owned by a User"""
+
+    States = ToolStates
+
+    Transitions = ToolTransitions
+
+    class ToolVisibility(Catalog):
+        _attrs = "value", "label"
+        private = 0, _("Private")
+        cleared = 1, _("Cleared Users")
+        public = 2, _("Public")
+
+    class Clearance(Catalog):
+        _attrs = "value", "label"
+        none = 0, _("Available to all")
+        owner = 1, _("Owner cleared users only")
+        cleared = 2, _("Cleared users can approve anyone")
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="tools"
@@ -90,21 +92,21 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
     description = models.TextField(blank=True)
     state = models.CharField(
         max_length=10,
-        choices=ToolStates._zip("value", "label"),
-        default=ToolStates.none.value,
+        choices=States._zip("value", "label"),
+        default=States.none.value,
         editable=False,
     )
     taxonomies = TagField(to=ToolTaxonomy, blank=True, related_name="tools")
     visibility = models.PositiveSmallIntegerField(
         _("Visibility"),
-        choices=ToolVisibility._zip("value", "label"),
-        default=ToolVisibility.public.value,
+        choices=Visibility._zip("value", "label"),
+        default=Visibility.public.value,
         help_text=_("The level of user visibility for this tool"),
     )
     clearance = models.PositiveSmallIntegerField(
         _("Clearance"),
-        choices=ToolClearance._zip("value", "label"),
-        default=ToolClearance.none.value,
+        choices=Clearance._zip("value", "label"),
+        default=Clearance.none.value,
         help_text=_("Who is allowed to use this tool"),
     )
 
@@ -131,7 +133,7 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
             self.save()
         self.history.create(
             user=event.kwargs.get("user"),
-            action=ToolTransitions(event.event.name, "name").value,
+            action=self.Transitions(event.event.name, "name").value,
         )
 
     class Meta:
@@ -151,13 +153,13 @@ class ToolHistory(TimeStampedModel):
         related_name="tool_history",
     )
     action = models.PositiveSmallIntegerField(
-        choices=ToolTransitions._zip("value", "label")
+        choices=UserTool.Transitions._zip("value", "label")
     )
 
     objects = ToolHistoryQuerySet.as_manager()
 
     def __str__(self):
-        action = ToolTransitions(self.action).label
+        action = UserTool.Transitions(self.action).label
         return f"{self.tool} - {action}"
 
     class Meta:
