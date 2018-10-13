@@ -9,6 +9,7 @@ Approach,
 Viewpoint
 """
 from catalog import Catalog
+from colorful.fields import RGBColorField
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
@@ -37,6 +38,8 @@ class ToolTaxonomy(TagTreeModel):
     state = models.PositiveSmallIntegerField(
         _("State"), choices=State._zip("value", "label"), default=State.in_review.value
     )
+
+    color = RGBColorField(null=True)
 
     class Meta:
         verbose_name = _("Tool Taxonomy")

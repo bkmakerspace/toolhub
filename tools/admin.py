@@ -23,11 +23,11 @@ class UserToolAdmin(admin.ModelAdmin):
     raw_id_fields = ("user",)
 
 
-class ToolTaxonomyAdmin(admin.ModelAdmin):
-    list_display = ["name", "count", "protected", "state"]
-    list_filter = ["protected"]
-    exclude = ["count"]
-    actions = ["merge_tags"]
+class ToolTaxonomyAdmin(tagulous.admin.TagModelAdmin):
+    list_display = ("name", "count", "protected", "state", "color")
+    list_filter = ("protected", "state")
+    exclude = ("count",)
+    actions = ("merge_tags",)
 
 
 @admin.register(ClearancePermission)

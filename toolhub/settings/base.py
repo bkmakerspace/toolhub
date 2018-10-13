@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     "tagulous",
     "crispy_forms",
     "django_filters",
+    "colorful",
     "toolhub",
     "toolhub_auth.apps.ToolhubAuthConfig",
     "tools",
