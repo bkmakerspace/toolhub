@@ -1,8 +1,10 @@
-{% extends "layouts/base.jinja" %}
+{% extends "layouts/sub_header_base.jinja" %}
 
 {% block head_title %}
     {{ _("Create a tool") }}
 {% endblock %}
+
+{% block sub_header %}{{ _("Register a tool") }}{% endblock %}
 
 {% block content %}
     {{ crispy(form) }}

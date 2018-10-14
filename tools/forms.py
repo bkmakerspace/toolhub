@@ -18,7 +18,7 @@ class CreateUserToolForm(CrispyFormMixin, forms.ModelForm):
         helper.form_action = "tools:create"
         return (
             Fieldset(
-                _("Add a tool"),
+                None,
                 Field("title"),
                 Field("description"),
                 Field("taxonomies"),
