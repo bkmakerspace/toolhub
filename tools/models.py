@@ -15,6 +15,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django_extensions.db.models import TimeStampedModel, TitleDescriptionModel
+from markdownx.models import MarkdownxField
 from tagulous.models import TagField, TagTreeModel
 
 from utils.models import StateMachineMixin
@@ -96,7 +97,7 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="tools"
     )
-    description = models.TextField(blank=True)
+    description = MarkdownxField(blank=True)
     state = models.CharField(
         max_length=10,
         choices=States._zip("value", "label"),

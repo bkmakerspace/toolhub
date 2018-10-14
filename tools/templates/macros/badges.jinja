@@ -11,13 +11,13 @@
     </span>
 {% endmacro %}
 
-{% macro availability_badge(tool) %}
+{% macro availability_badge(tool, extra_classes) %}
     {% set state = ToolStates(tool.state) %}
     {% set label = state.label %}
     {% set type = state.badge_type %}
-{% if label %}
-<span class="badge badge-{{ type }}">
-    {{ label }}
-</span>
-{% endif %}
+    {% if label %}
+    <span class="badge badge-{{ type }} {{ extra_classes }}">
+        {{ label }}
+    </span>
+    {% endif %}
 {% endmacro %}

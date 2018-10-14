@@ -5,19 +5,31 @@
 
 {% block content %}
 <div class="row">
+    {# left column #}
     <div class="col-md-9">
-        <div class="d-flex justify-content-between align-items-end border-bottom pb-2 mb-2">
-            <h1>{{ tool }} {{ availability_badge(tool) }}</h1>
-            {% if tool.is_loaned() %}
-                <span>{{ _("Currently checked out by:") }} <strong>{{ tool.history.latest_loan().user }}</strong></span>
-            {% endif %}
+        <div class="card">
+            <div class="card-body">
+                {# at a glance Tool info #}
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <h1 class="d-inline">{{ tool }}</h1>
+                        {{ availability_badge(tool, extra_classes="sup small align-top") }}
+                        <h6><span class="text-uppercase text-muted small">owner:</span> {{ tool.user }}</h6>
+                    </div>
+                    <div class="col-lg-4">
+                        <p>{{ taxonomy_list(tool.taxonomies.all()) }}</p>
+                        {% if tool.is_loaned() %}
+                            <span>{{ _("Currently checked out by:") }} <strong>{{ tool.history.latest_loan().user }}</strong></span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
-        <p>{{ taxonomy_list(tool.taxonomies.all()) }}</p>
-        <p>{{ tool.user }}</p>
-        <section>
-            {{ tool.description }}
+        <section class="py-4">
+            {% markdown %}{{ tool.description }}{% endmarkdown %}
         </section>
     </div>
+    {# right column #}
     <div class="col-md-3">
         <h3>{{ _("History") }}</h3>
         <ul class="list-group">

@@ -44,25 +44,22 @@ class SignupForm(CrispyFormMixin, forms.ModelForm):
         model = get_user_model()
         fields = ("email", "first_name", "last_name", "password")
 
-    def __init__(self, *args, **kwargs):
-        super(SignupForm, self).__init__(*args, **kwargs)
-        self.helper.layout = Layout(
-            Div(
-                Fieldset(
-                    _("New account details"),
-                    Field("email"),
-                    Field("password"),
-                    css_class="col-md-6",
-                ),
-                Fieldset(
-                    _("Extra Information"),
-                    Field("first_name"),
-                    Field("last_name"),
-                    css_class="col-md-6",
-                ),
-                FormActions(Submit("signup", _("Sign up")), css_class="col-12 mb-0"),
-                css_class="row",
-            )
+    def layout_args(self, helper):
+        return Div(
+            Fieldset(
+                _("New account details"),
+                Field("email"),
+                Field("password1"),
+                css_class="col-md-6",
+            ),
+            Fieldset(
+                _("Extra Information"),
+                Field("first_name"),
+                Field("last_name"),
+                css_class="col-md-6",
+            ),
+            FormActions(Submit("signup", _("Sign up")), css_class="col-12 mb-0"),
+            css_class="row",
         )
 
     def clean_email(self):

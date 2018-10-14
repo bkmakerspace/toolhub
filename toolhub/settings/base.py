@@ -13,6 +13,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.forms",
     "django_extensions",
     "tagulous",
     "crispy_forms",
@@ -22,6 +23,7 @@ INSTALLED_APPS = [
     "toolhub_auth.apps.ToolhubAuthConfig",
     "tools",
     "utils",
+    "markdownx",  # placed below all so templates can be overwritten
 ]
 
 MIDDLEWARE = [
@@ -64,6 +66,7 @@ TEMPLATES = [
                 "django_jinja.builtins.extensions.UrlsExtension",
                 "django_jinja.builtins.extensions.StaticFilesExtension",
                 "django_jinja.builtins.extensions.DjangoFiltersExtension",
+                "django_jinja_markdown.extensions.MarkdownExtension",
                 "tools.extensions.ToolConstantsExtension",
             ],
             "auto_reload": True,
@@ -88,14 +91,15 @@ TEMPLATES = [
     },
 ]
 
+# Use above template engines when choosing form renderer
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
+
 AUTH_USER_MODEL = "toolhub_auth.User"
 
 WSGI_APPLICATION = "toolhub.wsgi.application"
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},

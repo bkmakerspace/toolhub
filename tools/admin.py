@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib import admin
+from markdownx.admin import MarkdownxModelAdmin
 import tagulous.admin
 from tagulous import forms as tag_forms
 
@@ -18,7 +19,7 @@ def replaced_render(self, name, value, attrs={}, renderer=None):
 tag_forms.TagWidgetBase.render = replaced_render
 
 
-class UserToolAdmin(admin.ModelAdmin):
+class UserToolAdmin(MarkdownxModelAdmin):
     list_display = ("title", "taxonomies", "clearance")
     raw_id_fields = ("user",)
 
