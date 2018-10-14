@@ -16,6 +16,7 @@ urlpatterns = [
 
 
 if settings.DEBUG:
+    import debug_toolbar
     from django_jinja import views as jinja_views
 
     handler400 = jinja_views.BadRequest.as_view()
@@ -32,3 +33,5 @@ if settings.DEBUG:
     ]
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    urlpatterns += [path("__debug__/", include(debug_toolbar.urls))]

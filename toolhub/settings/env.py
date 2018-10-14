@@ -9,6 +9,7 @@ SECRET_KEY = env.str('SECRET_KEY', default='keepitsecret')
 DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
+INTERNAL_IPS = env.list('INTERNAL_IPS', default=['172.20.0.1'])
 DATABASES = {
     'default': env.db(default='sqlite:///db.sqlite'),
 }

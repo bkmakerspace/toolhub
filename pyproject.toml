@@ -28,9 +28,10 @@ Werkzeug = "=0.14.1"
 ipython = "^7.0"
 isort = "^4.3"
 flake8 = "^3.5"
+django-debug-toolbar = "^1.10"
 
 [tool.black]
-line-length = 88
+line-length = 99
 py37 = true
 include = '\.pyi?$'
 exclude = '''
