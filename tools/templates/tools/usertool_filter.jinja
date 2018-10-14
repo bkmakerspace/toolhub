@@ -1,9 +1,17 @@
-{% extends "layouts/base.jinja" %}
+{% extends "layouts/sub_header_base.jinja" %}
 {% from "macros/badges.jinja" import taxonomy_list, availability_badge %}
 {% from "partials/pagination.jinja" import pagination %}
 
-{% block head_title %}
-    {{ _("Tools") }}
+{% block head_title %}{{ _("Tools") }}{% endblock %}
+
+{% block sub_header %}{{ _("Filter Tools") }}{% endblock %}
+
+{% block sub_actions %}
+<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group">
+        <a href="{{ url('tools:create') }}" class="btn btn-success">{{ _('Register a Tool') }}</a>
+    </div>
+</div>
 {% endblock %}
 
 {% block content %}
