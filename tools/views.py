@@ -1,18 +1,18 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.transaction import atomic
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic.detail import SingleObjectMixin
 from django_filters.views import FilterView
-
 
 from tools.filters import UserToolFilterSet
 from tools.forms import CreateUserToolForm
-from tools.models import UserTool
-from utils.views import ContextMixin
+from tools.models import ToolHistory, UserTool
 
 
-class UserToolFilter(LoginRequiredMixin, ContextMixin, FilterView):
+class UserToolFilter(LoginRequiredMixin, FilterView):
     model = UserTool
     template_name = "tools/usertool_filter.jinja"
     context_object_name = "tools"
@@ -21,7 +21,9 @@ class UserToolFilter(LoginRequiredMixin, ContextMixin, FilterView):
     paginate_by = settings.DEFAULT_PAGINATE_BY
 
     def get_queryset(self):
-        return self.model.objects.visible_to_user(self.request.user)
+        return self.model.objects.visible_to_user(self.request.user).select_related(
+            "user"
+        )
 
 
 class CreateUserTool(LoginRequiredMixin, CreateView):
@@ -32,23 +34,41 @@ class CreateUserTool(LoginRequiredMixin, CreateView):
     model = UserTool
     form_class = CreateUserToolForm
     template_name = "tools/usertool_create.jinja"
-    form_valid_message = _("Succefully added tool to your library.")
-
-    # fields = ('title', 'description', 'clearance')
+    # form_valid_message = _("Succefully added tool to your library.")
 
     def get_success_url(self):
         return reverse("tools:home")
 
+    @atomic
     def form_valid(self, form):
+        user = self.request.user
         self.object = form.save(commit=False)
-        self.object.user = self.request.user
-        return super(CreateUserTool, self).form_valid(form)
+        self.object.user = user
+        response = super(CreateUserTool, self).form_valid(form)
+        self.object.create(user=user, skip_save=True)
+        return response
 
 
-class UserToolDetail(LoginRequiredMixin, ContextMixin, DetailView):
+class UserToolDetail(LoginRequiredMixin, DetailView):
     model = UserTool
     template_name = "tools/usertool_detail.jinja"
     context_object_name = "tool"
 
     def get_queryset(self):
         return self.model.objects.visible_to_user(self.request.user)
+
+
+class UserToolHistory(LoginRequiredMixin, ListView, SingleObjectMixin):
+    model = ToolHistory
+    template_name = "tools/toolhistory_list.jinja"
+    context_object_name = 'history_items'
+    pk_url_kwarg = 'pk'
+    paginate_by = settings.DEFAULT_PAGINATE_BY
+
+    def get_queryset(self):
+        # TODO make sure this doesn't allow people w/o permissions to view
+        tool = self.get_object(UserTool.objects.visible_to_user(self.request.user))
+        self.object = tool
+        self.extra_context = {"tool": self.object}
+        queryset = super().get_queryset().filter(tool=tool)
+        return queryset

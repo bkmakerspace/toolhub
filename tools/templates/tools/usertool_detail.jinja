@@ -32,14 +32,19 @@
     {# right column #}
     <div class="col-md-3">
         <h3>{{ _("History") }}</h3>
-        <ul class="list-group">
-        {% for item in tool.history.all() %}
-            <li class="list-group-item">
+        <div class="list-group">
+        {% set history_count = tool.history.count() %}
+        {% set history_display_count = 6 %}
+        {% for item in tool.history.all()[:history_display_count] %}
+            <div class="list-group-item">
                 {{ item.get_action_display() }} by {{ item.user }}<br>
                 <small class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }}</small>
-            </li>
+            </div>
+            {% if loop.last and history_count > history_display_count %}
+                <a class="list-group-item list-group-item-action list-group-item-primary" href={{ url('tools:history', pk=tool.pk) }}>View all history</a>
+            {% endif %}
         {% endfor %}
-        </ul>
+        </div>
     </div>
 </div>
 {% endblock %}

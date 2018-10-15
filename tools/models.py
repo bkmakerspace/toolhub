@@ -120,9 +120,13 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
 
     objects = UserToolQuerySet.as_manager()
 
-    class StateMachine:
-        auto_transitions = False
-        send_event = True
+    class Meta:
+        ordering = ("-created",)
+        get_latest_by = "created"
+        verbose_name = _("Tool")
+        verbose_name_plural = _("Tools")
+
+    class StateMachine(StateMachineMixin.StateMachine):
         states = [{"name": state.value} for state in ToolStates]
         transitions = [
             {"trigger": trigger, "source": source, "dest": dest}
@@ -144,11 +148,6 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
             action=self.Transitions(event.event.name, "name").value,
         )
 
-    class Meta:
-        ordering = ("-created",)
-        get_latest_by = "created"
-        verbose_name = _("Tool")
-        verbose_name_plural = _("Tools")
 
 
 class ToolHistory(TimeStampedModel):
@@ -166,15 +165,15 @@ class ToolHistory(TimeStampedModel):
 
     objects = ToolHistoryQuerySet.as_manager()
 
-    def __str__(self):
-        action = UserTool.Transitions(self.action).label
-        return f"{self.tool} - {action}"
-
     class Meta:
         ordering = ("-created",)
         get_latest_by = "created"
         verbose_name = _("Tool History")
         verbose_name_plural = _("Tool Histories")
+
+    def __str__(self):
+        action = UserTool.Transitions(self.action).label
+        return f"{self.tool} - {action}"
 
 
 class ClearancePermission(TimeStampedModel):

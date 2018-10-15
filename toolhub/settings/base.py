@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.forms",
     "django_extensions",
+    'django_jinja.contrib._humanize',
     "tagulous",
     "crispy_forms",
     "django_filters",
