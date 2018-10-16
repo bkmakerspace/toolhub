@@ -42,8 +42,9 @@ class ToolTaxonomy(TagTreeModel):
         verbose_name = _("Tool Taxonomy")
         verbose_name_plural = _("Tool Taxonomies")
 
-    # class TagMeta:
-    #     force_lowercase = True
+    class TagMeta:
+        force_lowercase = False
+        space_delimiter = False
 
 
 class ToolStates(Catalog):
