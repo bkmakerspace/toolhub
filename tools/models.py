@@ -66,16 +66,16 @@ class ToolTransitions(Catalog):
 
 class ToolVisibility(Catalog):
     _attrs = "value", "label"
-    private = 0, _("Visible to owner")
-    cleared = 1, _("Visible to cleared")
-    public = 2, _("Visbile to everyone")
+    private = 0, _("Private")
+    cleared = 1, _("Cleared Users")
+    public = 2, _("Public")
 
 
 class ToolClearance(Catalog):
     _attrs = "value", "label"
-    none = 0, _("No clearance")
-    owner = 1, _("Owner approved")
-    cleared = 2, _("Cleared-user approved")
+    none = 0, _("Available to all")
+    owner = 1, _("Owner cleared users only")
+    cleared = 2, _("Cleared users can approve anyone")
 
 
 class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
@@ -96,11 +96,13 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
         _("Visibility"),
         choices=ToolVisibility._zip("value", "label"),
         default=ToolVisibility.public.value,
+        help_text=_("The level of user visibility for this tool"),
     )
     clearance = models.PositiveSmallIntegerField(
         _("Clearance"),
         choices=ToolClearance._zip("value", "label"),
         default=ToolClearance.none.value,
+        help_text=_("Who is allowed to use this tool"),
     )
 
     objects = UserToolQuerySet.as_manager()
@@ -119,7 +121,7 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('tools:detail', kwargs={'pk': self.pk})
+        return reverse("tools:detail", kwargs={"pk": self.pk})
 
     def record_transition(self, event):
         if not event.kwargs.get("skip_save", False):
