@@ -24,7 +24,7 @@
             </li>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="user-menu">
-                  {{ user.name|default(user.email, True) }}
+                  {{ user.get_full_name()|default(user.email, True) }}
               </a>
               <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="user-menu">
                   <a class="dropdown-item" tabindex="-1" href="{{ url('home') }}">{{ _("Your Account") }}</a>
