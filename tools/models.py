@@ -48,11 +48,11 @@ class ToolTaxonomy(TagTreeModel):
 
 
 class ToolStates(Catalog):
-    _attrs = "value", "label", "availability_label", "badge_type"
-    none = "none", _("None"), None, None
-    unused = "unused", _("Unused"), _("Available"), "success"
-    loaned = "loaned", _("Loaned"), _("In Use"), "warning"
-    disabled = "disabled", _("Decommissioned"), _("Retired"), "danger"
+    _attrs = "value", "label", "badge_type"
+    none = "none", _("None"), None
+    unused = "unused", _("Available"), "success"
+    loaned = "loaned", _("In Use"), "warning"
+    disabled = "disabled", _("Retired"), "danger"
 
 
 class ToolTransitions(Catalog):
