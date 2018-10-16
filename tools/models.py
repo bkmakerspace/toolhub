@@ -82,7 +82,7 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
 
     Transitions = ToolTransitions
 
-    class ToolVisibility(Catalog):
+    class Visibility(Catalog):
         _attrs = "value", "label"
         private = 0, _("Private")
         cleared = 1, _("Cleared Users")
