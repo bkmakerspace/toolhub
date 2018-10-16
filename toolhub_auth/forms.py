@@ -16,8 +16,11 @@ class AuthenticationForm(CrispyFormMixin, DjangoAuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(AuthenticationForm, self).__init__(*args, **kwargs)
         self.helper.layout = Layout(
-            Field("username"),
-            Field("password"),
+            Fieldset(
+                _("Login"),
+                Field("username"),
+                Field("password"),
+            ),
             Div(
                 Div(
                     Submit(None, "Login"),
@@ -32,27 +35,27 @@ class AuthenticationForm(CrispyFormMixin, DjangoAuthenticationForm):
 
 
 class SignupForm(CrispyFormMixin, forms.ModelForm):
-    first_name = forms.CharField(required=True)
-    last_name = forms.CharField(required=True)
+    first_name = forms.CharField(required=False)
+    last_name = forms.CharField(required=False)
 
     has_columns = False
 
     class Meta:
         model = get_user_model()
-        fields = ("email", "first_name", "last_name")
+        fields = ("email", "first_name", "last_name", "password")
 
     def __init__(self, *args, **kwargs):
         super(SignupForm, self).__init__(*args, **kwargs)
         self.helper.layout = Layout(
             Div(
                 Fieldset(
-                    "Account details",
+                    _("New account details"),
                     Field("email"),
-                    Field("password1"),
+                    Field("password"),
                     css_class="col-md-6",
                 ),
                 Fieldset(
-                    "Extra Information",
+                    _("Extra Information"),
                     Field("first_name"),
                     Field("last_name"),
                     css_class="col-md-6",
