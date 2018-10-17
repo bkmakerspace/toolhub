@@ -10,10 +10,10 @@ from django_filters.views import FilterView
 from tools.filters import UserToolFilterSet
 from tools.forms import UserToolCreateForm, UserToolUpdateForm
 from tools.models import ToolHistory, UserTool
-from utils.mixins import RestrictToUserMixin
+from utils.mixins import RestrictToUserMixin, VisibleToUserMixin
 
 
-class UserToolFilterView(LoginRequiredMixin, FilterView):
+class UserToolBaseFilterView(FilterView):
     model = UserTool
     template_name = "tools/usertool_filter.jinja"
     context_object_name = "tools"
@@ -22,9 +22,11 @@ class UserToolFilterView(LoginRequiredMixin, FilterView):
     paginate_by = settings.DEFAULT_PAGINATE_BY
 
     def get_queryset(self):
-        return self.model.objects.visible_to_user(self.request.user).select_related(
-            "user"
-        ).prefetch_related("taxonomies")
+        return super().get_queryset().select_related("user").prefetch_related("taxonomies")
+
+
+class UserToolFilterView(VisibleToUserMixin, UserToolBaseFilterView):
+    pass
 
 
 class UserToolCreateView(LoginRequiredMixin, CreateView):
@@ -59,13 +61,10 @@ class UserToolUpdateView(RestrictToUserMixin, UpdateView):
         return self.object.get_absolute_url()
 
 
-class UserToolDetailView(LoginRequiredMixin, DetailView):
+class UserToolDetailView(VisibleToUserMixin, DetailView):
     model = UserTool
     template_name = "tools/usertool_detail.jinja"
     context_object_name = "tool"
-
-    def get_queryset(self):
-        return self.model.objects.visible_to_user(self.request.user)
 
 
 class UserToolHistoryView(LoginRequiredMixin, ListView, SingleObjectMixin):
@@ -82,3 +81,7 @@ class UserToolHistoryView(LoginRequiredMixin, ListView, SingleObjectMixin):
         self.extra_context = {"tool": self.object}
         queryset = super().get_queryset().filter(tool=tool)
         return queryset
+
+
+class OwnerUserToolFilterView(RestrictToUserMixin, UserToolBaseFilterView):
+    template_name = "tools/owner_usertool_filter.jinja"

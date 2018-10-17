@@ -8,10 +8,13 @@ class RestrictToUserMixin(LoginRequiredMixin):
 
     specify the model foreign key field with property: restrict_user_field
     """
-    restrict_user_field = 'user'
+
+    restrict_user_field = "user"
 
     def get_queryset(self):
-        self.queryset = super(
-            RestrictToUserMixin, self).get_queryset().filter(**{
-                self.restrict_user_field: self.request.user})
-        return self.queryset
+        return super().get_queryset().filter(**{self.restrict_user_field: self.request.user})
+
+
+class VisibleToUserMixin(LoginRequiredMixin):
+    def get_queryset(self):
+        return super().get_queryset().visible_to_user(self.request.user)
