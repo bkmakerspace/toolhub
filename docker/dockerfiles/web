@@ -1,5 +1,8 @@
 FROM python:3.7
 
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE
+
 RUN adduser --uid 1000 --gecos --quiet --disabled-password toolhub
 
 RUN mkdir -p /srv/app /var/www/media /var/www/static \

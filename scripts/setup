@@ -64,5 +64,5 @@ docker-compose build
 if [ ! "$skip_db" ]; then
     echo
     cecho "Populating database..." blue bold
-    $script_base/restore_db -y
+    $script_base/restore_db -y --skip-check
 fi
