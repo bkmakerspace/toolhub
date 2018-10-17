@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django_filters import FilterSet, filters
 
-from .forms import UserToolFilterForm
+from .forms import UserToolFilterViewForm
 from .models import UserTool
 
 
@@ -17,5 +17,5 @@ class UserToolFilterSet(FilterSet):
         default_class = super().get_form_class()
         fields = default_class.base_fields
         return type(
-            str("%sForm" % self.__class__.__name__), (UserToolFilterForm,), fields
+            str("%sForm" % self.__class__.__name__), (UserToolFilterViewForm,), fields
         )

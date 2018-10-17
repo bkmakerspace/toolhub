@@ -6,33 +6,41 @@ from tools.models import UserTool
 from utils.forms import CrispyFormMixin
 
 
-class CreateUserToolForm(CrispyFormMixin, forms.ModelForm):
-    class Meta:
-        fields = ("title", "description", "taxonomies", "visibility", "clearance")
-        model = UserTool
+class UserToolCreateForm(CrispyFormMixin, forms.ModelForm):
+    action_button_label = _("Add tool")
+    form_action = "tools:create"
 
     def __init__(self, *args, **kwargs):
-        super(CreateUserToolForm, self).__init__(cols=(2, 10), *args, **kwargs)
+        super(UserToolCreateForm, self).__init__(cols=(2, 10), *args, **kwargs)
 
     def layout_args(self, helper):
-        helper.form_action = "tools:create"
         return (
             Fieldset(
                 None,
                 Field("title"),
-                Field("description"),
+                Field("description", css_class="h-100", label_class="", field_class=""),
                 Field("taxonomies"),
                 Field("visibility"),
                 Field("clearance"),
             ),
             Div(
-                Div(Submit("create", _("add tool")), css_class="offset-md-2"),
+                Div(Submit("action", self.action_button_label), css_class="offset-md-2"),
                 css_class="form-group",
             ),
         )
 
+    class Meta:
+        fields = ("title", "description", "taxonomies", "visibility", "clearance")
+        model = UserTool
 
-class UserToolFilterForm(CrispyFormMixin, forms.Form):
+
+class UserToolUpdateForm(UserToolCreateForm):
+    action_button_label = _("Update tool")
+    form_action = "tools:edit"
+    pk_field = "pk"
+
+
+class UserToolFilterViewForm(CrispyFormMixin, forms.Form):
     has_columns = False
 
     def layout_args(self, helper):
