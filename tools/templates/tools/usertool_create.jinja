@@ -1,12 +1,9 @@
 {% extends "layouts/base.jinja" %}
 
-{% block page_title %}
-    Create a tool
+{% block head_title %}
+    {{ _("Create a tool") }}
 {% endblock %}
 
 {% block content %}
     {{ crispy(form) }}
-    <script>
-        $.fn.select2.defaults.set( "theme", "bootstrap" );
-    </script>
 {% endblock %}

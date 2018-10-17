@@ -1,0 +1,20 @@
+{% extends "layouts/base.jinja" %}
+
+{% block head_title %}{{ _("Signup") }}{% endblock %}
+
+{# no page header yet #}
+{% block page_header %}
+  <h2 class="mb-0">{{ _("Signup") }}</h2>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="offset-md-1 col-md-10">
+        <div class="card border-success">
+            <div class="card-body">
+                {{ crispy(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -84,6 +84,18 @@ six = ">=1.2"
 
 [[package]]
 category = "main"
+description = "Django-filter is a reusable Django application for allowing users to filter querysets dynamically."
+name = "django-filter"
+optional = false
+platform = "*"
+python-versions = "*"
+version = "2.0.0"
+
+[package.dependencies]
+Django = ">=1.11"
+
+[[package]]
+category = "main"
 description = "Jinja2 templating language integrated in Django."
 name = "django-jinja"
 optional = false
@@ -413,7 +425,7 @@ python-versions = "*"
 version = "0.14.1"
 
 [metadata]
-content-hash = "f1e3e3e6636f0eaabbd66b2bb303e6e772cddc7bf0402d26e41da3acabf29591"
+content-hash = "eb0fed6d2a19769c30a7ce4850ae228154c4ed381f903845487e4446a84ccdbc"
 platform = "*"
 python-versions = "3.7"
 
@@ -426,6 +438,7 @@ django = ["04f2e423f2e60943c02bd2959174b844f7d1bcd19eabb7f8e4282999958021fd", "e
 django-crispy-forms = ["5952bab971110d0b86c278132dae0aa095beee8f723e625c3d3fa28888f1675f", "705ededc554ad8736157c666681165fe22ead2dec0d5446d65fc9dd976a5a876"]
 django-environ = ["6c9d87660142608f63ec7d5ce5564c49b603ea8ff25da595fd6098f6dc82afde", "c57b3c11ec1f319d9474e3e5a79134f40174b17c7cc024bbb2fad84646b120c4"]
 django-extensions = ["30cb6a8c7d6f75a55edf0c0c4491bd98f8264ae1616ce105f9cecac4387edd07", "4ad86a7a5e84f1c77db030761ae87a600647250c652030a2b71a16e87f3a3d62"]
+django-filter = ["6f4e4bc1a11151178520567b50320e5c32f8edb552139d93ea3e30613b886f56", "86c3925020c27d072cdae7b828aaa5d165c2032a629abbe3c3a1be1edae61c58"]
 django-jinja = ["8a49d73de616a12075eee14c6d3bbab936261a463457d40348d8b8e2995cfbed", "ceaa0eeebc4d91a5800967e50f4f087f0b6457503e3c2af85dc199bed8732a9a"]
 django-tagulous = ["593cf09f2f8b7f752388f1ee8cf4e7b8d33dfab56d23438b8dcd338f59922a76"]
 flake8 = ["7253265f7abd8b313e3892944044a365e3f4ac3fcdcfb4298f55ee9ddf188ba0", "c7841163e2b576d435799169b78703ad6ac1bbb0f199994fc05f700b2a90ea37"]

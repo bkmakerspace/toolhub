@@ -46,3 +46,8 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ('first_name', 'last_name',)
 
     objects = UserManager()
+
+    def __str__(self):
+        if self.get_full_name():
+            return self.get_full_name()
+        return self.email

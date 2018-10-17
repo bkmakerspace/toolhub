@@ -1,18 +1,24 @@
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView
+from django_filters.views import FilterView
 
 
-from tools.models import UserTool
+from tools.filters import UserToolFilterSet
 from tools.forms import CreateUserToolForm
+from tools.models import UserTool
+from utils.views import ContextMixin
 
 
-class UserToolList(LoginRequiredMixin, ListView):
+class UserToolFilter(LoginRequiredMixin, ContextMixin, FilterView):
     model = UserTool
-    queryset = UserTool.objects
-    template_name = "tools/usertool_list.jinja"
+    template_name = "tools/usertool_filter.jinja"
     context_object_name = "tools"
+    filterset_class = UserToolFilterSet
+    strict = False
+    paginate_by = settings.DEFAULT_PAGINATE_BY
 
     def get_queryset(self):
         return self.model.objects.visible_to_user(self.request.user)
@@ -37,3 +43,12 @@ class CreateUserTool(LoginRequiredMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         return super(CreateUserTool, self).form_valid(form)
+
+
+class UserToolDetail(LoginRequiredMixin, ContextMixin, DetailView):
+    model = UserTool
+    template_name = "tools/usertool_detail.jinja"
+    context_object_name = "tool"
+
+    def get_queryset(self):
+        return self.model.objects.visible_to_user(self.request.user)

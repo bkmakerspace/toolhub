@@ -1,0 +1,48 @@
+{% extends "layouts/base.jinja" %}
+{% from "macros/badges.jinja" import taxonomy_list, availability_badge %}
+{% from "partials/pagination.jinja" import pagination %}
+
+{% block head_title %}
+    {{ _("Tools") }}
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-3">
+        <h3>Filters</h3>
+        {{ crispy(filter.form) }}
+    </div>
+    <div class="col-md-9">
+        <div class="row">
+        {% for tool in tools %}
+        {% set tool_link = tool.get_absolute_url() %}
+        <div class="col-sm-6 col-md-4 mb-4">
+            <div class="card">
+                {% if tool.photos.exists() %}
+                    {% set photo = tool.photos.latest() %}
+                    <img class="card-img-top" src="{{ photo.file.file }}" alt="{{ photo.title|default('tool photo') }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ tool_link }}">{{ tool.title }}</a> {{ availability_badge(tool) }}</h5>
+                    <p class="card-text">{{ tool.description|truncate(80) }}</p>
+                    <p class="card-text">{{ tool.user }}</p>
+                    <p class="card-text">{{ taxonomy_list(tool.taxonomies.all()) }}</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-sm-12">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title mb-0">{{ _("No Tools found") }}</h5>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+        {{ pagination(is_paginated, paginator, page_obj, _("Tool page navigation")) }}
+    </div>
+</div>
+
+{% endblock %}

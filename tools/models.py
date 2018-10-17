@@ -11,13 +11,14 @@ Viewpoint
 from catalog import Catalog
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django_extensions.db.models import TimeStampedModel, TitleDescriptionModel
 from tagulous.models import TagField, TagTreeModel
 
 from utils.models import StateMachineMixin
 
-from .querysets import UserToolQuerySet
+from .querysets import ToolHistoryQuerySet, UserToolQuerySet
 
 
 class ToolTaxonomy(TagTreeModel):
@@ -41,41 +42,44 @@ class ToolTaxonomy(TagTreeModel):
         verbose_name = _("Tool Taxonomy")
         verbose_name_plural = _("Tool Taxonomies")
 
-    # class TagMeta:
-    #     force_lowercase = True
+    class TagMeta:
+        force_lowercase = False
+        space_delimiter = False
 
 
 class ToolStates(Catalog):
-    _attrs = "value", "label"
-    none = "none", _("None")
-    unused = "unused", _("Unused")
-    loaned = "loaned", _("Loaned")
-    disabled = "disabled", _("Decommissioned")
+    _attrs = "value", "label", "badge_type"
+    none = "none", _("None"), None
+    available = "available", _("Available"), "success"
+    in_use = "in_use", _("In Use"), "warning"
+    disabled = "disabled", _("Disabled"), "danger"
 
 
 class ToolTransitions(Catalog):
     _attrs = "value", "label", "source", "dest"
-    create = 0, _("Create"), ToolStates.none.value, ToolStates.unused.value
-    borrow = 1, _("Borrow"), ToolStates.unused.value, ToolStates.loaned.value
-    return_ = 2, _("Return"), ToolStates.loaned.value, ToolStates.unused.value
+    create = 0, _("Create"), ToolStates.none.value, ToolStates.available.value
+    borrow = 1, _("Borrow"), ToolStates.available.value, ToolStates.in_use.value
+    return_ = 2, _("Return"), ToolStates.in_use.value, ToolStates.available.value
     decommission = 3, _("Decommission"), "*", ToolStates.disabled.value
-    reinstate = 4, _("Reinstate"), ToolStates.disabled.value, ToolStates.unused.value
+    reinstate = 4, _("Reinstate"), ToolStates.disabled.value, ToolStates.available.value
+
+
+class ToolVisibility(Catalog):
+    _attrs = "value", "label"
+    private = 0, _("Private")
+    cleared = 1, _("Cleared Users")
+    public = 2, _("Public")
+
+
+class ToolClearance(Catalog):
+    _attrs = "value", "label"
+    none = 0, _("Available to all")
+    owner = 1, _("Owner cleared users only")
+    cleared = 2, _("Cleared users can approve anyone")
 
 
 class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
     """A tool owned by a User"""
-
-    class Visibility(Catalog):
-        _attrs = "value", "label"
-        private = 0, _("Visible to owner")
-        cleared = 1, _("Visible to cleared")
-        public = 2, _("Visbile to everyone")
-
-    class Clearance(Catalog):
-        _attrs = "value", "label"
-        none = 0, _("No clearance")
-        owner = 1, _("Owner approved")
-        cleared = 2, _("Cleared-user approved")
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="tools"
@@ -87,16 +91,18 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
         default=ToolStates.none.value,
         editable=False,
     )
-    taxonomoies = TagField(to=ToolTaxonomy, blank=True, related_name="tools")
+    taxonomies = TagField(to=ToolTaxonomy, blank=True, related_name="tools")
     visibility = models.PositiveSmallIntegerField(
         _("Visibility"),
-        choices=Visibility._zip("value", "label"),
-        default=Visibility.public.value,
+        choices=ToolVisibility._zip("value", "label"),
+        default=ToolVisibility.public.value,
+        help_text=_("The level of user visibility for this tool"),
     )
     clearance = models.PositiveSmallIntegerField(
         _("Clearance"),
-        choices=Clearance._zip("value", "label"),
-        default=Clearance.none.value,
+        choices=ToolClearance._zip("value", "label"),
+        default=ToolClearance.none.value,
+        help_text=_("Who is allowed to use this tool"),
     )
 
     objects = UserToolQuerySet.as_manager()
@@ -114,6 +120,9 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse("tools:detail", kwargs={"pk": self.pk})
+
     def record_transition(self, event):
         if not event.kwargs.get("skip_save", False):
             self.save()
@@ -121,6 +130,12 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
             user=event.kwargs.get("user"),
             action=ToolTransitions(event.event.name, "name").value,
         )
+
+    class Meta:
+        ordering = ("-created",)
+        get_latest_by = "created"
+        verbose_name = _("Tool")
+        verbose_name_plural = _("Tools")
 
 
 class ToolHistory(TimeStampedModel):
@@ -135,6 +150,8 @@ class ToolHistory(TimeStampedModel):
     action = models.PositiveSmallIntegerField(
         choices=ToolTransitions._zip("value", "label")
     )
+
+    objects = ToolHistoryQuerySet.as_manager()
 
     def __str__(self):
         action = ToolTransitions(self.action).label
@@ -175,3 +192,7 @@ class ToolPhoto(TimeStampedModel):
     )
     file = models.FileField()
     title = models.CharField(max_length=255, blank=True)
+
+    class Meta:
+        ordering = ("-created",)
+        get_latest_by = "created"
