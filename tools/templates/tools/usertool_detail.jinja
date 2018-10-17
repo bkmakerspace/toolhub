@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-lg-4">
                         <p>{{ taxonomy_list(tool.taxonomies.all()) }}</p>
-                        {% if tool.is_loaned() %}
+                        {% if tool.is_in_use() %}
                             <span>{{ _("Currently checked out by:") }} <strong>{{ tool.history.latest_loan().user }}</strong></span>
                         {% endif %}
                     </div>
