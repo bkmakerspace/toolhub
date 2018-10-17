@@ -50,18 +50,18 @@ class ToolTaxonomy(TagTreeModel):
 class ToolStates(Catalog):
     _attrs = "value", "label", "badge_type"
     none = "none", _("None"), None
-    unused = "unused", _("Available"), "success"
-    loaned = "loaned", _("In Use"), "warning"
-    disabled = "disabled", _("Retired"), "danger"
+    available = "available", _("Available"), "success"
+    in_use = "in_use", _("In Use"), "warning"
+    disabled = "disabled", _("Disabled"), "danger"
 
 
 class ToolTransitions(Catalog):
     _attrs = "value", "label", "source", "dest"
-    create = 0, _("Create"), ToolStates.none.value, ToolStates.unused.value
-    borrow = 1, _("Borrow"), ToolStates.unused.value, ToolStates.loaned.value
-    return_ = 2, _("Return"), ToolStates.loaned.value, ToolStates.unused.value
+    create = 0, _("Create"), ToolStates.none.value, ToolStates.available.value
+    borrow = 1, _("Borrow"), ToolStates.available.value, ToolStates.in_use.value
+    return_ = 2, _("Return"), ToolStates.in_use.value, ToolStates.available.value
     decommission = 3, _("Decommission"), "*", ToolStates.disabled.value
-    reinstate = 4, _("Reinstate"), ToolStates.disabled.value, ToolStates.unused.value
+    reinstate = 4, _("Reinstate"), ToolStates.disabled.value, ToolStates.available.value
 
 
 class ToolVisibility(Catalog):
