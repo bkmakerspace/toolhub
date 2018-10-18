@@ -7,6 +7,7 @@ source $script_base/tools
 
 no_input=
 no_migrate=
+skip_check=
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]; do
@@ -18,6 +19,9 @@ while [[ $# -gt 0 ]]; do
         --no-migrate)
             no_migrate=1
             ;;
+        --skip-check)
+            skip_check=1
+            ;;
         -h|--help|?)
             echo "Drop existing database service and restore from database backups"
             echo
@@ -26,6 +30,7 @@ while [[ $# -gt 0 ]]; do
             echo "Options:"
             echo "      --no-migrate    Skip running migrations"
             echo "  -y  --no-input      Assume yes on all user input"
+            echo "      --skip-check    Don't check or fail if dump file missing"
             echo "  -h  --help          This help message"
             exit 0
             ;;
@@ -39,11 +44,13 @@ set -- "${POSITIONAL[@]}"
 
 shopt -s nullglob
 dump_files=( docker/init/db/*.sql.gz docker/init/db/*.sql )
-if (( ! ${#dump_files[@]} )); then
-    cecho "No database dumps were found to restore from. Please retrieve a database dump file" red bold
-    cecho "and place is in $(resolve_path "$script_base/../docker/init/db")." red bold
-    exit 1
-fi
+if [ ! "$skip_check" ]; then
+    if (( ! ${#dump_files[@]} )); then
+        cecho "No database dumps were found to restore from. Please retrieve a database dump file" red bold
+        cecho "and place is in $(resolve_path "$script_base/../docker/init/db")." red bold
+        exit 1
+    fi
+fi 
 
 if [ ! "$no_input" ]; then
     cecho "Warning this will delete all data in your existing database service and replace" yellow bold
