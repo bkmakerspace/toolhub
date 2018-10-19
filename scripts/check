@@ -35,4 +35,5 @@ docker-compose exec web ./manage.py check --settings=toolhub.settings.test
 
 echo
 cecho "Running Linting..." blue bold
+docker-compose exec web black --check .
 docker-compose exec web flake8

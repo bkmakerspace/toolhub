@@ -1,6 +1,6 @@
 # Toolhub
 
-[![CodeFactor](https://www.codefactor.io/repository/github/bkmakerspace/toolhub/badge)](https://www.codefactor.io/repository/github/bkmakerspace/toolhub) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![CodeFactor](https://www.codefactor.io/repository/github/bkmakerspace/toolhub/badge)](https://www.codefactor.io/repository/github/bkmakerspace/toolhub) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black) [![Build Status](https://travis-ci.com/bkmakerspace/toolhub.svg?branch=master)](https://travis-ci.com/bkmakerspace/toolhub)
 
 A service for tool awareness and organization.
 
