@@ -5,10 +5,15 @@ cd $script_base/..
 
 source $script_base/tools
 
+fix=
+
 POSITIONAL=()
 while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
+        -f|--fix)
+            fix=1
+            ;;
         -h|--help|?)
             echo "Run system and linting checks against repository."
             echo
@@ -35,5 +40,9 @@ docker-compose exec web ./manage.py check --settings=toolhub.settings.test
 
 echo
 cecho "Running Linting..." blue bold
-docker-compose exec web black --check .
+if [[ "$fix" ]]; then
+    docker-compose exec web black .
+else
+    docker-compose exec web black --check .
+fi
 docker-compose exec web flake8
