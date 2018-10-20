@@ -1,10 +1,7 @@
 from crispy_forms.layout import Layout, Fieldset, Submit, Field, Div, HTML
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import (
-    AuthenticationForm as DjangoAuthenticationForm,
-    # UserCreationForm as DjangoUserCreationForm,
-)
+from django.contrib.auth.forms import AuthenticationForm as DjangoAuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from utils.forms import CrispyFormMixin, FormActions
 
@@ -24,7 +21,8 @@ class AuthenticationForm(CrispyFormMixin, DjangoAuthenticationForm):
                 Div(
                     Submit(None, "Login"),
                     HTML(
-                        '<a class="btn btn-secondary ml-auto" href="{% url \'password_reset\' %}">Forgot Password?</a>'
+                        '<a class="btn btn-secondary ml-auto" '
+                        "href=\"{% url 'password_reset' %}\">Forgot Password?</a>"
                     ),
                     css_class="d-flex",
                 ),

@@ -1,4 +1,4 @@
-from crispy_forms.layout import Button, Layout, Fieldset, Submit, Field, Div
+from crispy_forms.layout import Layout, Fieldset, Submit, Field, Div
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 

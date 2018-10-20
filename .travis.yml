@@ -1,0 +1,16 @@
+sudo: required
+language: python
+services: docker
+before_install:
+    - docker build -t toolhub_web --build-arg POETRY_ARGS="" -f docker/dockerfiles/web .
+install: true
+jobs:
+  include:
+    - stage: test
+      script:
+        - docker run toolhub_web ./manage.py test --settings=toolhub.settings.test -- --nomigrations
+        - docker run toolhub_web ./manage.py check --settings=toolhub.settings.test
+    - stage: linting
+      script:
+        - docker run toolhub_web flake8
+        - docker run toolhub_web black --check .

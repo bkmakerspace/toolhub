@@ -29,6 +29,13 @@ ipython = "^7.0"
 isort = "^4.3"
 flake8 = "^3.5"
 django-debug-toolbar = "^1.10"
+pytest = "^3.9"
+pytest-sugar = "^0.9.1"
+pytest-django = "^3.4"
+pytest-xdist = "^1.23"
+black = "^18.3-alpha.0"
+pre-commit = "^1.11"
+model-mommy = "^1.6"
 
 [tool.black]
 line-length = 99
@@ -37,16 +44,9 @@ include = '\.pyi?$'
 exclude = '''
 /(
     \.git
-  | \.hg
-  | \.mypy_cache
   | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-
-  # The following are specific to Black, you probably don't want those.
-  | blib2to3
-  | tests/data
+  | /static
+  | /docker
+  | /scripts
+  | migrations
 )/'''

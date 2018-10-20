@@ -1,5 +1,8 @@
 FROM python:3.7
 
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
 RUN adduser --uid 1000 --gecos --quiet --disabled-password toolhub
 
 RUN mkdir -p /srv/app /var/www/media /var/www/static \
@@ -14,9 +17,8 @@ ENV DJANGO_SETTINGS_MODULE=toolhub.settings.env \
     ## cleanup
     #&& rm -rf /var/lib/apt/lists/*
 
-RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
-
 COPY --chown=toolhub:toolhub pyproject.* ./
+RUN pip install poetry
 RUN poetry config settings.virtualenvs.create false
 
 ARG POETRY_ARGS=--no-dev

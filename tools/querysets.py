@@ -34,4 +34,5 @@ class UserToolQuerySet(QuerySet):
 class ToolHistoryQuerySet(QuerySet):
     def latest_loan(self):
         from tools.models import UserTool
+
         return self.filter(action=UserTool.Transitions.borrow.value).latest()

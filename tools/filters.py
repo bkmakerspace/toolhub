@@ -1,4 +1,3 @@
-from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django_filters import FilterSet, filters
 
@@ -7,7 +6,9 @@ from .models import UserTool
 
 
 class UserToolFilterSet(FilterSet):
-    name = filters.CharFilter(field_name='title', lookup_expr='icontains', label=_('Tool name'))
+    name = filters.CharFilter(
+        field_name="title", lookup_expr="icontains", label=_("Tool name")
+    )
 
     class Meta:
         model = UserTool
