@@ -1,5 +1,6 @@
 class ContextMixin:
     """Simple api for adding aditional context to a CBV"""
+
     def __init__(self, *args, **kwargs):
         self.context = {}
         super(*args, **kwargs)

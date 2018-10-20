@@ -15,7 +15,7 @@ class UserToolQuerySetTests(TestCase):
 
         # tools
         tool1 = mommy.make(UserTool, title="tool1", user=user)
-        tool2 = mommy.make(UserTool, title="tool2", user__first_name="tommy")
+        mommy.make(UserTool, title="tool2", user__first_name="tommy")
 
         qs = self.qs.for_user(user)
         self.assertSequenceEqual(qs.all(), [tool1])

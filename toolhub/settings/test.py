@@ -8,7 +8,7 @@ DEBUG = False
 
 SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="!!!SET DJANGO_SECRET_KEY!!!")
 
-TEST_RUNNER = 'utils.test_runner.PytestTestRunner'
+TEST_RUNNER = "utils.test_runner.PytestTestRunner"
 
 CACHES = {
     "default": {
@@ -17,12 +17,7 @@ CACHES = {
     }
 }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'test.sql',
-    }
-}
+DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": "test.sql"}}
 
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 
