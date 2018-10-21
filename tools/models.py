@@ -83,10 +83,10 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
     Transitions = ToolTransitions
 
     class Visibility(Catalog):
-        _attrs = "value", "label"
-        private = 0, _("Private")
-        cleared = 1, _("Cleared Users")
-        public = 2, _("Public")
+        _attrs = "value", "label", "card_class"
+        private = 0, _("Private"), "border-warning"
+        cleared = 1, _("Cleared Users"), "border-success"
+        public = 2, _("Public"), None
 
     class Clearance(Catalog):
         _attrs = "value", "label"

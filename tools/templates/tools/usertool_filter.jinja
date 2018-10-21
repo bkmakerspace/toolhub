@@ -24,9 +24,10 @@
     <div class="col-md-9">
         <div class="row">
         {% for tool in tools %}
+        {% set classes = classlist(['card', ToolVisibility(tool.visibility).card_class] ) %}
         {% set tool_link = tool.get_absolute_url() %}
         <div class="col-sm-6 col-md-4 mb-4">
-            <div class="card">
+            <div {{ classes }}>
                 {% if tool.photos.exists() %}
                     {% set photo = tool.photos.latest() %}
                     <img class="card-img-top" src="{{ photo.file.file }}" alt="{{ photo.title|default('tool photo') }}">
