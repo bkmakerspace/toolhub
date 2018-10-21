@@ -5,12 +5,11 @@ class UserToolQuerySet(QuerySet):
     def for_user(self, user):
         return self.filter(user=user)
 
-    def visible_to_user(self, user, own_tools=True):
+    def visible_to_user(self, user, include_users_tools=True):
         """Filter to the UserTools a user is allowed to view"""
         # user is on clearance list for tools marked as public or cleared
         cleared_tools = Q(
             permissions__cleared_user=user,
-            clearance=self.model.Clearance.cleared.value,
             visibility__in=[
                 self.model.Visibility.public.value,
                 self.model.Visibility.cleared.value,
@@ -21,9 +20,13 @@ class UserToolQuerySet(QuerySet):
         open_tools = Q(visibility=self.model.Visibility.public.value)
 
         # Show the user's own tools
-        if not own_tools:
-            own_tools = Q(user=user) | Q(
-                visibility=self.model.Visibility.private.value, user=user
+        if include_users_tools:
+            own_tools = Q(
+                visibility__in=[
+                    self.model.Visibility.private.value,
+                    self.model.Visibility.cleared.value
+                ],
+                user=user
             )
         else:
             own_tools = Q()
