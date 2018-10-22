@@ -1,15 +1,17 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.db.transaction import atomic
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
-from django.views.generic.detail import SingleObjectMixin
-from django_filters.views import FilterView
+from django.views.generic.detail import BaseDetailView, SingleObjectMixin
+from django_filters.views import FilterView, View
 
 from tools.filters import UserToolFilterSet
-from tools.forms import UserToolCreateForm, UserToolUpdateForm
-from tools.models import ToolHistory, UserTool
+from tools.forms import ClearancePermissionForm, UserToolCreateForm, UserToolUpdateForm
+from tools.mixins import SingleToolObjectMixin, FilteredByToolObjectMixin
+from tools.models import ClearancePermission, ToolHistory, UserTool
 from utils.mixins import RestrictToUserMixin, VisibleToUserMixin
 
 
@@ -33,6 +35,7 @@ class UserToolCreateView(LoginRequiredMixin, CreateView):
     """
     Allows user to create a new user tool
     """
+
     model = UserTool
     form_class = UserToolCreateForm
     template_name = "tools/usertool_create.jinja"
@@ -67,21 +70,52 @@ class UserToolDetailView(VisibleToUserMixin, DetailView):
     context_object_name = "tool"
 
 
-class UserToolHistoryView(LoginRequiredMixin, ListView, SingleObjectMixin):
+class UserToolHistoryView(LoginRequiredMixin, FilteredByToolObjectMixin, ListView):
     model = ToolHistory
+    tool_model = UserTool
     template_name = "tools/toolhistory_list.jinja"
-    context_object_name = 'history_items'
-    pk_url_kwarg = 'pk'
+    context_object_name = "history_items"
     paginate_by = settings.DEFAULT_PAGINATE_BY
-
-    def get_queryset(self):
-        # TODO make sure this doesn't allow people w/o permissions to view
-        tool = self.get_object(UserTool.objects.visible_to_user(self.request.user))
-        self.object = tool
-        self.extra_context = {"tool": self.object}
-        queryset = super().get_queryset().filter(tool=tool)
-        return queryset
 
 
 class OwnerUserToolFilterView(RestrictToUserMixin, UserToolBaseFilterView):
     template_name = "tools/owner_usertool_filter.jinja"
+
+
+# TOOD: swap out restrict to user mixin to a new mixin that checks clearance.
+class ClearUserView(SingleToolObjectMixin, CreateView):
+    """Clear a user to use a particular tool"""
+
+    model = ClearancePermission
+    tool_model = UserTool
+    template_name = "tools/clearancepermission_form.jinja"
+    form_class = ClearancePermissionForm
+
+    def check_grant_perms(self, tool):
+        if not self.tool.user_can_grant_clearance(self.request.user):
+            raise PermissionDenied(_("You aren't allowed to give people access to this tool."))
+
+    def get_initial(self):
+        # Pass tool into initial arguments for form so it can be used for validation.
+        return {
+            "tool": self.tool
+        }
+
+    def get(self, request, *args, **kwargs):
+        self.tool = self.get_tool()
+        self.check_grant_perms(self.tool)
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.tool = self.get_tool()
+        self.check_grant_perms(self.tool)
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        # attach data to form model instance so we don't have to send it in request.
+        form.instance.cleared_by_user = self.request.user
+        form.instance.tool = self.tool
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.tool.get_absolute_url()

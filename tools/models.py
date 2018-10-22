@@ -115,7 +115,7 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
         _("Clearance"),
         choices=Clearance._zip("value", "label"),
         default=Clearance.none.value,
-        help_text=_("Who is allowed to use this tool"),
+        help_text=_("Who is allowed to clear a user to use this tool"),
     )
 
     objects = UserToolQuerySet.as_manager()
@@ -148,6 +148,18 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
             action=self.Transitions(event.event.name, "name").value,
         )
 
+    def check_clearance(self, user):
+        return self.permissions.filter(cleared_user=user).exists()
+
+    def user_can_grant_clearance(self, user):
+        """See if we're allowed to grant clearance"""
+        level = self.Clearance(self.clearance)
+        if level == self.Clearance.none:
+            return True
+        if level == self.Clearance.owner:
+            return self.user == user
+        if level == self.Clearance.cleared:
+            return self.user == user or self.check_clearance(user)
 
 
 class ToolHistory(TimeStampedModel):
@@ -190,6 +202,15 @@ class ClearancePermission(TimeStampedModel):
         on_delete=models.PROTECT,
         related_name="tool_permissions",
     )
+
+    class Meta:
+        ordering = ("-created",)
+        get_latest_by = "created"
+        unique_together = (
+            ('tool', 'cleared_user'),
+        )
+        verbose_name = _("Clearance")
+        verbose_name_plural = _("Clearances")
 
     def __str__(self):
         return f"{self.cleared_by_user} cleared {self.cleared_user} ({self.tool})"

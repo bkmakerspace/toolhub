@@ -1,8 +1,8 @@
-from crispy_forms.layout import Layout, Fieldset, Submit, Field, Div
+from crispy_forms.layout import Layout, Fieldset, Submit, Field, Div, Hidden
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from tools.models import UserTool
+from tools.models import ClearancePermission, UserTool
 from utils.forms import CrispyFormMixin
 
 
@@ -51,3 +51,25 @@ class UserToolFilterViewForm(CrispyFormMixin, forms.Form):
             Submit("action", _("Filter")),
             # Button('clear', _("Clear Filter"), type="reset")
         )
+
+
+class ClearancePermissionForm(CrispyFormMixin, forms.ModelForm):
+    class Meta:
+        fields = ("cleared_user", "tool",)
+        model = ClearancePermission
+
+    def layout_args(self, helper):
+        return (
+            Field("tool", type="hidden"),
+            Field("cleared_user"),
+            Submit("action", _("Clear Person"), css_class="offset-md-3"),
+        )
+
+    def clean_cleared_user(self):
+        tool = self.initial.get('tool')
+        cleared_user = self.cleaned_data.get('cleared_user')
+
+        if cleared_user and ClearancePermission.objects.filter(tool=tool, cleared_user=cleared_user).exists():
+            raise forms.ValidationError(_("This person already has clearance to use this tool."))
+
+        return cleared_user
