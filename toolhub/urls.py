@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.views.generic import TemplateView
+import toolhub.views as toolhub_views
 
 
 urlpatterns = [
@@ -14,15 +15,13 @@ urlpatterns = [
     path("markdownx/", include("markdownx.urls")),
 ]
 
+handler400 = toolhub_views.BadRequest.as_view()
+handler403 = toolhub_views.PermissionDenied.as_view()
+handler404 = toolhub_views.PageNotFound.as_view()
+handler500 = toolhub_views.ServerError.as_view()
 
 if settings.DEBUG:
     import debug_toolbar
-    from django_jinja import views as jinja_views
-
-    handler400 = jinja_views.BadRequest.as_view()
-    handler403 = jinja_views.PermissionDenied.as_view()
-    handler404 = jinja_views.PageNotFound.as_view()
-    handler500 = jinja_views.ServerError.as_view()
 
     # debug error templates
     urlpatterns += [
