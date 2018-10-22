@@ -24,7 +24,8 @@ tag_forms.TagWidgetBase.render = replaced_render
 
 
 class UserToolAdmin(MarkdownxModelAdmin):
-    list_display = ("title", "taxonomies", "visibility", "clearance")
+    list_display = ("title", "user", "taxonomies", "visibility", "clearance")
+    list_select_related = ("user",)
     list_filter = ("state", "visibility", "clearance")
     raw_id_fields = ("user",)
 
