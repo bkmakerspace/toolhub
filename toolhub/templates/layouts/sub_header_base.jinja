@@ -2,6 +2,7 @@
 
 {% block header %}
 {{ super() }}
+{% block sub_header_block %}
 <nav class="navbar navbar-dark bg-dark">
     <div class="container">
         {% block page_header %}
@@ -11,4 +12,5 @@
         {% block sub_actions %}{% endblock %}
     </div>
 </nav>
+{% endblock %}
 {% endblock %}

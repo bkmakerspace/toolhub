@@ -1,7 +1,32 @@
-{% extends "layouts/base.jinja" %}
+{% extends "layouts/sub_header_base.jinja" %}
 {% from "macros/badges.jinja" import taxonomy_list, availability_badge %}
 
 {% block head_title %}{{ tool }}{% endblock %}
+
+{% block sub_header_block %}
+{# TODO: a better check in the future, as non-owners can possibly admin certain things #}
+{% if request.user == tool.user %}
+   {{ super() }}
+{% endif %}
+{% endblock %}
+
+{% block sub_header %}
+    Admin
+{% endblock %}
+
+{% block sub_actions %}
+<div class="btn-toolbar" role="toolbar" aria-label="{{ _('Tool actions') }}">
+    {# TODO: only show this group to owner for now #}
+    <div class="btn-group mr-2">
+        <a href="{{ url('tools:edit', pk=tool.pk) }}" class="btn btn-warning">{{ _('Edit') }}</a>
+        <a href="{{ url('tools:delete', pk=tool.pk) }}" class="btn btn-danger">{{ _('Delete') }}</a>
+    </div>
+    <div class="btn-group">
+        <a href="{{ url('tools:clear', pk=tool.pk) }}" class="btn btn-success">{{ _('Clear Person') }}</a>
+        {# TODO: remove clearance #}
+    </div>
+</div>
+{% endblock %}
 
 {% block content %}
 <div class="row">

@@ -7,7 +7,7 @@
 {% block sub_header %}{{ _("Filter Tools") }}{% endblock %}
 
 {% block sub_actions %}
-<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+<div class="btn-toolbar" role="toolbar" aria-label="{{ _('Tool actions') }}">
     <div class="btn-group">
         <a href="{{ url('tools:create') }}" class="btn btn-success">{{ _('Register a Tool') }}</a>
     </div>
