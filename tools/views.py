@@ -2,9 +2,9 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db.transaction import atomic
-from django.urls import reverse
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.generic import CreateView, DetailView, DeleteView, ListView, UpdateView
 from django.views.generic.detail import BaseDetailView, SingleObjectMixin
 from django_filters.views import FilterView, View
 
@@ -68,6 +68,13 @@ class UserToolDetailView(VisibleToUserMixin, DetailView):
     model = UserTool
     template_name = "tools/usertool_detail.jinja"
     context_object_name = "tool"
+
+
+class UserToolDeleteView(RestrictToUserMixin, DeleteView):
+    model = UserTool
+    template_name = "tools/usertool_delete.jinja"
+    context_object_name = "tool"
+    success_url = reverse_lazy('tools:owned')
 
 
 class UserToolHistoryView(LoginRequiredMixin, FilteredByToolObjectMixin, ListView):

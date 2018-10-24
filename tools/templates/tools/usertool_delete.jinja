@@ -1,0 +1,17 @@
+{% extends "layouts/sub_header_base.jinja" %}
+
+{% block sub_header %}
+{{tool}}
+{% endblock %}
+
+{% block content %}
+<p>{{ _("Really delete this tool?") }}</p>
+
+<form method="post">
+  {% csrf_token %}
+  <div class="btn-group d-flex">
+    <a href="{{ url('tools:detail', pk=tool.pk) }}" class="btn btn-success w-100">No, Take me back</a>
+    <button type="submit" name="delete" class="btn btn-danger">Yes, delete it</button>
+  </div>
+</form>
+{% endblock %}

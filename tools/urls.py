@@ -4,6 +4,7 @@ from tools.views import (
     ClearUserView,
     OwnerUserToolFilterView,
     UserToolCreateView,
+    UserToolDeleteView,
     UserToolDetailView,
     UserToolHistoryView,
     UserToolFilterView,
@@ -19,6 +20,6 @@ urlpatterns = [
     path("<int:pk>/history", UserToolHistoryView.as_view(), name="history"),
     path("<int:pk>/edit", UserToolUpdateView.as_view(), name="edit"),
     path("<int:pk>/clear", ClearUserView.as_view(), name="clear"),
-    path("<int:pk>/delete", ClearUserView.as_view(), name="delete"),
+    path("<int:pk>/delete", UserToolDeleteView.as_view(), name="delete"),
     path("create/", UserToolCreateView.as_view(), name="create"),
 ]
