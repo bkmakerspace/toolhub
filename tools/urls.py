@@ -3,6 +3,7 @@ from django.urls import path
 from tools.views import (
     ClearUserView,
     OwnerUserToolFilterView,
+    UserToolClearedView,
     UserToolCreateView,
     UserToolDeleteView,
     UserToolDetailView,
@@ -20,6 +21,7 @@ urlpatterns = [
     path("<int:pk>/history", UserToolHistoryView.as_view(), name="history"),
     path("<int:pk>/edit", UserToolUpdateView.as_view(), name="edit"),
     path("<int:pk>/clear", ClearUserView.as_view(), name="clear"),
+    path("<int:pk>/cleared", UserToolClearedView.as_view(), name="cleared"),
     path("<int:pk>/delete", UserToolDeleteView.as_view(), name="delete"),
     path("create/", UserToolCreateView.as_view(), name="create"),
 ]

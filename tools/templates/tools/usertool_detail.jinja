@@ -57,7 +57,7 @@
     {# right column #}
     <div class="col-md-3">
         <h3>{{ _("History") }}</h3>
-        <div class="list-group">
+        <div class="list-group mb-3">
         {% set history_count = tool.history.count() %}
         {% set history_display_count = 6 %}
         {% for item in tool.history.all()[:history_display_count] %}
@@ -67,6 +67,19 @@
             </div>
             {% if loop.last and history_count > history_display_count %}
                 <a class="list-group-item list-group-item-action list-group-item-primary" href={{ url('tools:history', pk=tool.pk) }}>View all history</a>
+            {% endif %}
+        {% endfor %}
+        </div>
+        <h3>{{ _("Cleared") }}</h3>
+        {% set cleared_count = tool.permissions.count() %}
+        {% set cleared_display_count = 6 %}
+        {% for item in tool.permissions.all()[:cleared_display_count] %}
+            <div class="list-group-item">
+                {{ item.cleared_user }}<br>
+                <small class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }}</small>
+            </div>
+            {% if loop.last and cleared_count > cleared_display_count %}
+                <a class="list-group-item list-group-item-action list-group-item-primary" href={{ url('tools:cleared', pk=tool.pk) }}>View all cleared People</a>
             {% endif %}
         {% endfor %}
         </div>
