@@ -12,11 +12,7 @@ class AuthenticationForm(CrispyFormMixin, DjangoAuthenticationForm):
 
     def layout_args(self, helper):
         return (
-            Fieldset(
-                _("Login"),
-                Field("username"),
-                Field("password"),
-            ),
+            Fieldset(_("Login"), Field("username"), Field("password")),
             Div(
                 Div(
                     Submit(None, "Login"),
@@ -42,22 +38,24 @@ class SignupForm(CrispyFormMixin, forms.ModelForm):
         fields = ("email", "first_name", "last_name", "password")
 
     def layout_args(self, helper):
-        return (Div(
-            Fieldset(
-                _("New account details"),
-                Field("email"),
-                Field("password"),
-                css_class="col-md-6",
+        return (
+            Div(
+                Fieldset(
+                    _("New account details"),
+                    Field("email"),
+                    Field("password"),
+                    css_class="col-md-6",
+                ),
+                Fieldset(
+                    _("Extra Information"),
+                    Field("first_name"),
+                    Field("last_name"),
+                    css_class="col-md-6",
+                ),
+                FormActions(Submit("signup", _("Sign up")), css_class="col-12 mb-0"),
+                css_class="row",
             ),
-            Fieldset(
-                _("Extra Information"),
-                Field("first_name"),
-                Field("last_name"),
-                css_class="col-md-6",
-            ),
-            FormActions(Submit("signup", _("Sign up")), css_class="col-12 mb-0"),
-            css_class="row",
-        ),)
+        )
 
     def clean_email(self):
         email = self.cleaned_data.get("email")

@@ -36,7 +36,7 @@ class UserToolQuerySetTests(TestCase):
         # tool for a different user
         self.make_tool(title="tool2", user__first_name="tommy")
 
-        qs = self.qs.order_by('id').for_user(self.user)
+        qs = self.qs.order_by("id").for_user(self.user)
         self.assertSequenceEqual(qs.all(), [self.user_tool1, self.user_tool2, self.user_tool3])
 
     def test_visible_to_user(self):

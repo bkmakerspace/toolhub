@@ -16,7 +16,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.forms",
     "django_extensions",
-    'django_jinja.contrib._humanize',
+    "django_jinja.contrib._humanize",
     "tagulous",
     "crispy_forms",
     "django_filters",
@@ -123,9 +123,9 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_PAGINATE_BY = 18
 
 MESSAGE_TAGS = {
-    message_constants.DEBUG: 'alert-dark',
-    message_constants.INFO: 'alert-info',
-    message_constants.SUCCESS: 'alert-success',
-    message_constants.WARNING: 'alert-warning',
-    message_constants.ERROR: 'alert-danger',
+    message_constants.DEBUG: "alert-dark",
+    message_constants.INFO: "alert-info",
+    message_constants.SUCCESS: "alert-success",
+    message_constants.WARNING: "alert-warning",
+    message_constants.ERROR: "alert-danger",
 }

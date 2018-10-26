@@ -9,7 +9,7 @@ SECRET_KEY = env.str("SECRET_KEY", default="keepitsecret")
 DEBUG = env.bool("DEBUG", default=False)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
-INTERNAL_IPS = env.list("INTERNAL_IPS", default=["172.20.0.1"])
+INTERNAL_IPS = env.list("INTERNAL_IPS", default=["172.21.0.1"])
 DATABASES = {"default": env.db(default="sqlite:///db.sqlite")}
 TIME_ZONE = env.str("TIME_ZONE", default="UTC")
 LANGUAGE_CODE = env.str("LANGUAGE_CODE", default="en-us")

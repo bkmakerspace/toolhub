@@ -3,7 +3,7 @@ from django_jinja import views as jinja_views
 
 class ExceptionContextMixin:
     def get(self, *args, **kwargs):
-        self.exception = kwargs.pop('exception', None)
+        self.exception = kwargs.pop("exception", None)
         return super().get(*args, **kwargs)
 
     def get_context_data(self):

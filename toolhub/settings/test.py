@@ -10,12 +10,7 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="!!!SET DJANGO_SECRET_KEY!!!")
 
 TEST_RUNNER = "utils.test_runner.PytestTestRunner"
 
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "",
-    }
-}
+CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache", "LOCATION": ""}}
 
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": "test.sql"}}
 

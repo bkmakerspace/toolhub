@@ -74,7 +74,7 @@ class UserToolDeleteView(RestrictToUserMixin, DeleteView):
     model = UserTool
     template_name = "tools/usertool_delete.jinja"
     context_object_name = "tool"
-    success_url = reverse_lazy('tools:owned')
+    success_url = reverse_lazy("tools:owned")
 
 
 class UserToolHistoryView(LoginRequiredMixin, FilteredByToolObjectMixin, ListView):
@@ -104,9 +104,7 @@ class ClearUserView(SingleToolObjectMixin, CreateView):
 
     def get_initial(self):
         # Pass tool into initial arguments for form so it can be used for validation.
-        return {
-            "tool": self.tool
-        }
+        return {"tool": self.tool}
 
     def get(self, request, *args, **kwargs):
         self.tool = self.get_tool()

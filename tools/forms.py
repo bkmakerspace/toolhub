@@ -55,7 +55,7 @@ class UserToolFilterViewForm(CrispyFormMixin, forms.Form):
 
 class ClearancePermissionForm(CrispyFormMixin, forms.ModelForm):
     class Meta:
-        fields = ("cleared_user", "tool",)
+        fields = ("cleared_user", "tool")
         model = ClearancePermission
 
     def layout_args(self, helper):
@@ -66,10 +66,13 @@ class ClearancePermissionForm(CrispyFormMixin, forms.ModelForm):
         )
 
     def clean_cleared_user(self):
-        tool = self.initial.get('tool')
-        cleared_user = self.cleaned_data.get('cleared_user')
+        tool = self.initial.get("tool")
+        cleared_user = self.cleaned_data.get("cleared_user")
 
-        if cleared_user and ClearancePermission.objects.filter(tool=tool, cleared_user=cleared_user).exists():
+        if (
+            cleared_user
+            and ClearancePermission.objects.filter(tool=tool, cleared_user=cleared_user).exists()
+        ):
             raise forms.ValidationError(_("This person already has clearance to use this tool."))
 
         return cleared_user

@@ -6,9 +6,7 @@ from .models import UserTool
 
 
 class UserToolFilterSet(FilterSet):
-    name = filters.CharFilter(
-        field_name="title", lookup_expr="icontains", label=_("Tool name")
-    )
+    name = filters.CharFilter(field_name="title", lookup_expr="icontains", label=_("Tool name"))
 
     class Meta:
         model = UserTool
@@ -17,6 +15,4 @@ class UserToolFilterSet(FilterSet):
     def get_form_class(self):
         default_class = super().get_form_class()
         fields = default_class.base_fields
-        return type(
-            str("%sForm" % self.__class__.__name__), (UserToolFilterViewForm,), fields
-        )
+        return type(str("%sForm" % self.__class__.__name__), (UserToolFilterViewForm,), fields)

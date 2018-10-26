@@ -144,8 +144,7 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
         if not event.kwargs.get("skip_save", False):
             self.save()
         self.history.create(
-            user=event.kwargs.get("user"),
-            action=self.Transitions(event.event.name, "name").value,
+            user=event.kwargs.get("user"), action=self.Transitions(event.event.name, "name").value
         )
 
     def check_clearance(self, user):
@@ -171,9 +170,7 @@ class ToolHistory(TimeStampedModel):
         null=True,
         related_name="tool_history",
     )
-    action = models.PositiveSmallIntegerField(
-        choices=UserTool.Transitions._zip("value", "label")
-    )
+    action = models.PositiveSmallIntegerField(choices=UserTool.Transitions._zip("value", "label"))
 
     objects = ToolHistoryQuerySet.as_manager()
 
@@ -189,26 +186,18 @@ class ToolHistory(TimeStampedModel):
 
 
 class ClearancePermission(TimeStampedModel):
-    tool = models.ForeignKey(
-        UserTool, on_delete=models.CASCADE, related_name="permissions"
-    )
+    tool = models.ForeignKey(UserTool, on_delete=models.CASCADE, related_name="permissions")
     cleared_by_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
-        related_name="given_tool_permissions",
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="given_tool_permissions"
     )
     cleared_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
-        related_name="tool_permissions",
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="tool_permissions"
     )
 
     class Meta:
         ordering = ("-created",)
         get_latest_by = "created"
-        unique_together = (
-            ('tool', 'cleared_user'),
-        )
+        unique_together = (("tool", "cleared_user"),)
         verbose_name = _("Clearance")
         verbose_name_plural = _("Clearances")
 
@@ -219,9 +208,7 @@ class ClearancePermission(TimeStampedModel):
 class ToolPhoto(TimeStampedModel):
     tool = models.ForeignKey(UserTool, on_delete=models.CASCADE, related_name="photos")
     uploading_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
-        related_name="uploaded_photos",
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="uploaded_photos"
     )
     file = models.FileField()
     title = models.CharField(max_length=255, blank=True)

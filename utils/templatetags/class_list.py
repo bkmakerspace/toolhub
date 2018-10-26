@@ -7,6 +7,7 @@ class ClassList(MutableSet):
     """Data structure for holding, and ultimately returning as a single string,
     a set of identifiers that should be managed like CSS classes.
     """
+
     def __init__(self, arg=None):
         """Constructor.
         :param arg: A single class name or an iterable thereof.
@@ -16,8 +17,7 @@ class ClassList(MutableSet):
         elif isinstance(arg, Iterable):
             classes = arg
         elif arg is not None:
-            raise TypeError(
-                "expected a string or string iterable, got %r" % type(arg))
+            raise TypeError("expected a string or string iterable, got %r" % type(arg))
 
         self.classes = set(filter(None, classes))
 
