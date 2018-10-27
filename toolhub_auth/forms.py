@@ -30,6 +30,7 @@ class AuthenticationForm(CrispyFormMixin, DjangoAuthenticationForm):
 class SignupForm(CrispyFormMixin, forms.ModelForm):
     first_name = forms.CharField(required=False)
     last_name = forms.CharField(required=False)
+    password = forms.CharField(widget=forms.PasswordInput, required=True)
 
     has_columns = False
 
