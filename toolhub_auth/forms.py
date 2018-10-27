@@ -1,4 +1,4 @@
-from crispy_forms.layout import Layout, Fieldset, Submit, Field, Div, HTML
+from crispy_forms.layout import Fieldset, Submit, Field, Div, HTML
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm as DjangoAuthenticationForm

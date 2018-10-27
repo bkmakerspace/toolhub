@@ -93,7 +93,8 @@ class UserToolQuerySetTests(TestCase):
 
     def test_visible_to_user_include_users_tools_false(self):
         """
-        When include_users_tools kwarg is false we don't see the user's private or cleared only tools
+        When include_users_tools kwarg is false we don't see the user's private
+        or cleared only tools
         """
         # Tools that the user shouldn't be able to see
         self.make_tool(

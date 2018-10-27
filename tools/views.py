@@ -5,8 +5,7 @@ from django.db.transaction import atomic
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, DetailView, DeleteView, ListView, UpdateView
-from django.views.generic.detail import BaseDetailView, SingleObjectMixin
-from django_filters.views import FilterView, View
+from django_filters.views import FilterView
 
 from tools.filters import UserToolFilterSet
 from tools.forms import ClearancePermissionForm, UserToolCreateForm, UserToolUpdateForm

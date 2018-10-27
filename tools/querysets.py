@@ -24,9 +24,9 @@ class UserToolQuerySet(QuerySet):
             own_tools = Q(
                 visibility__in=[
                     self.model.Visibility.private.value,
-                    self.model.Visibility.cleared.value
+                    self.model.Visibility.cleared.value,
                 ],
-                user=user
+                user=user,
             )
         else:
             own_tools = Q()
