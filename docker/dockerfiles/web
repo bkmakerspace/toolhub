@@ -1,7 +1,7 @@
 FROM python:3.7
 
 ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE
+ENV PYTHONDONTWRITEBYTECODE=1
 
 RUN adduser --uid 1000 --gecos --quiet --disabled-password toolhub
 
