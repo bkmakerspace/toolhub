@@ -24,7 +24,8 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "toolhub",
     "toolhub_auth.apps.ToolhubAuthConfig",
-    "tools",
+    "tools.apps.ToolsConfig",
+    "borrowing.apps.BorrowingConfig",
     "utils",
     "markdownx",  # placed below all so templates can be overwritten
 ]

@@ -25,8 +25,6 @@ class CrispyFormMixin(object):
         if cols and self.has_columns:
             kwargs.update({"label_col": cols[0], "field_col": cols[1]})
         self.helper = FormHelper()
-        if self.form_action:
-            self.helper.form_action = self.form_action
         self.helper.disable_csrf = False
         self.helper.html5_required = True  # render required attribute
         if self.has_columns:
@@ -41,10 +39,15 @@ class CrispyFormMixin(object):
         if layout_args:
             self.helper.layout = Layout(*layout_args)
         super(CrispyFormMixin, self).__init__(*args, **kwargs)
+        form_action = self.get_form_action()
+        if form_action:
+            self.helper.form_action = form_action
+
+    def get_form_action(self):
         if self.pk_field and self.helper.form_action == self.form_action and self.instance:
-            self.helper.form_action = reverse(
-                self.form_action, kwargs={self.pk_field: self.instance.pk}
-            )
+            return reverse(self.form_action, kwargs={self.pk_field: self.instance.pk})
+        if self.form_action:
+            return self.form_action
 
     def layout_args(self, helper):
         pass
