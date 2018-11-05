@@ -8,7 +8,8 @@ class SingleToolObjectMixin:
     tool_model = None
     _tool = None
 
-    def get_tool(self):
+    @property
+    def tool(self):
         if self._tool:
             return self._tool
 
@@ -39,10 +40,9 @@ class SingleToolObjectMixin:
         return obj
 
     def get_context_data(self, **kwargs):
-        tool = self.get_tool()
         if self.extra_context is None:
             self.extra_context = {}
-        self.extra_context.update({self.tool_context_object_name: tool})
+        self.extra_context.update({self.tool_context_object_name: self.tool})
         return super().get_context_data(**kwargs)
 
 
@@ -51,5 +51,5 @@ class FilteredByToolObjectMixin(SingleToolObjectMixin):
 
     def get_queryset(self):
         """Restrict queryset to found tool"""
-        tool = self.get_tool()
+        tool = self.tool
         return super().get_queryset().filter(**{self.tool_rel_lookup: tool})
