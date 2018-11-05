@@ -129,6 +129,14 @@ pytz = "*"
 
 [[package]]
 category = "main"
+description = "Reusable, generic mixins for Django"
+name = "django-braces"
+optional = false
+python-versions = "*"
+version = "1.13.0"
+
+[[package]]
+category = "main"
 description = "An extension to the Django web framework that provides database and form color fields"
 name = "django-colorful"
 optional = false
@@ -709,8 +717,8 @@ python-versions = "*"
 version = "0.14.1"
 
 [metadata]
-content-hash = "444d369d6a22fa2a53ee54e316d755e0c80966b41fca7c953566d013377f67bf"
-python-versions = "3.7"
+content-hash = "5def97a037efc23792dca8dcbf915dae788ffcfdb215741d13c92b43ff9f843f"
+python-versions = "3.7.*"
 
 [metadata.hashes]
 apipkg = ["37228cda29411948b422fae072f57e31d3396d2ee1c9783775980ee9c9990af6", "58587dd4dc3daefad0487f6d9ae32b4542b185e1c36db6993290e7c41ca2b47c"]
@@ -727,6 +735,7 @@ click = ["2335065e6395b9e67ca716de5f7526736bfa6ceead690adf616d925bdc622b13", "5b
 colorama = ["a3d89af5db9e9806a779a50296b5fdb466e281147c2c235e8225ecc6dbf7bbf3", "c9b54bebe91a6a803e0772c8561d53f2926bfeb17cd141fbabcb08424086595c"]
 decorator = ["2c51dff8ef3c447388fe5e4453d24a2bf128d3a4c32af3fabef1f01c6851ab82", "c39efa13fbdeb4506c476c9b3babf6a718da943dab7811c206005a4a956c080c"]
 django = ["04f2e423f2e60943c02bd2959174b844f7d1bcd19eabb7f8e4282999958021fd", "e1cc1cd6b658aa4e052f5f2b148bfda08091d7c3558529708342e37e4e33f72c"]
+django-braces = ["a457d74ea29478123c0c4652272681b3cea0bf1232187fd9f9b6f1d97d32a890", "ba68e98b817c6f01d71d10849f359979617b3fe4cefb7f289adefddced092ddc"]
 django-colorful = ["49d3feefdabdf6a22931c12ce1ed0cbb4596e7754e66bd55c0f362c0a369e5cb", "fd246f2fb297ed074dc4349966d33a1c82d0308b7fb0d6ef6e2e76b90cefffb7"]
 django-crispy-forms = ["5952bab971110d0b86c278132dae0aa095beee8f723e625c3d3fa28888f1675f", "705ededc554ad8736157c666681165fe22ead2dec0d5446d65fc9dd976a5a876"]
 django-debug-toolbar = ["08e0e43f6c1fd9820af4cbdcd54b5fb80bf83a2e08b2cc952547a671174999b8", "1dcae28d430522debafde2602b3450eb784410b78e16c29a00448032df2a4c90"]
