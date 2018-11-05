@@ -45,6 +45,7 @@ class ClearancePermissionAdmin(admin.ModelAdmin):
 
 @admin.register(ToolHistory)
 class ToolHistoryAdmin(admin.ModelAdmin):
+    date_hierarchy = "created"
     list_display = ("tool", "action", "user", "created")
     list_filter = ("action",)
     raw_id_fields = ("user",)
@@ -52,6 +53,7 @@ class ToolHistoryAdmin(admin.ModelAdmin):
 
 @admin.register(ToolPhoto)
 class ToolPhotoAdmin(admin.ModelAdmin):
+    date_hierarchy = "created"
     raw_id_fields = ("tool", "uploading_user")
 
 
