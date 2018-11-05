@@ -13,6 +13,7 @@ urlpatterns = [
     path("", include("toolhub_auth.urls"), name="auth"),
     path("admin/", admin.site.urls),
     path("tools/", include("tools.urls"), name="tools"),
+    path("borrowing/", include("borrowing.urls"), name="borrowing"),
     path("markdownx/", include("markdownx.urls")),
 ]
 

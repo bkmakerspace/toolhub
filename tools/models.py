@@ -20,7 +20,8 @@ from tagulous.models import TagField, TagTreeModel
 
 from utils.models import StateMachineMixin
 
-from .querysets import ToolHistoryQuerySet, UserToolQuerySet
+from tools.exceptions import ToolClearanceException
+from tools.querysets import ToolHistoryQuerySet, UserToolQuerySet
 
 
 class ToolTaxonomy(TagTreeModel):
@@ -160,6 +161,17 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
         if level == self.Clearance.cleared:
             return self.user == user or self.check_clearance(user)
 
+    def user_can_borrow(self, user):
+        return self._meta.model.objects.borrowable_to_user(user).filter(pk=self.pk).exists()
+
+    def prepare_borrow(self, event):
+        """Do validation before allowing a user to borrow a tool"""
+        user = event.kwargs.get("user")
+        if not self.user_can_borrow(user):
+            raise ToolClearanceException("%s isn't allowed to borrow this tool" % user)
+        # Is this needed?
+        if not self.is_available():
+            raise ToolAvailabilityException()
 
 class ToolHistory(TimeStampedModel):
     tool = models.ForeignKey(UserTool, on_delete=models.CASCADE, related_name="history")
