@@ -46,6 +46,7 @@ class ClearancePermissionAdmin(admin.ModelAdmin):
 @admin.register(ToolHistory)
 class ToolHistoryAdmin(admin.ModelAdmin):
     list_display = ("tool", "action", "user", "created")
+    list_filter = ("action",)
     raw_id_fields = ("user",)
 
 
