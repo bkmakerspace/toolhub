@@ -17,9 +17,9 @@ ENV DJANGO_SETTINGS_MODULE=toolhub.settings.env \
     ## cleanup
     #&& rm -rf /var/lib/apt/lists/*
 
-COPY --chown=toolhub:toolhub pyproject.* ./
 RUN pip install poetry
 RUN poetry config settings.virtualenvs.create false
+COPY --chown=toolhub:toolhub pyproject.* ./
 
 ARG POETRY_ARGS=--no-dev
 RUN poetry install $POETRY_ARGS
