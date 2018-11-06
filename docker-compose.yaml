@@ -17,6 +17,7 @@ services:
             - "upload-volume:/var/www/media"
         ports:
             - '8001:8000'
+        tty: true
         environment:
             DEBUG: 'true'
             ALLOWED_HOSTS: '*'
@@ -24,6 +25,8 @@ services:
             MEDIA_ROOT: /var/www/media/
             STATIC_ROOT: /var/www/static/
             PYTHONUNBUFFERED: 1
+            TERM: xterm-256color
+            PYTEST_ADDOPTS: --color=yes
         depends_on:
             - db
         env_file: .dockerenv
