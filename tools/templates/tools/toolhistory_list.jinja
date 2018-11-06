@@ -1,0 +1,18 @@
+{% extends "layouts/sub_header_base.jinja" %}
+{% from "partials/pagination.jinja" import pagination %}
+
+{% block head_title %}{{ _("Tools History") }}{% endblock %}
+
+{% block sub_header %}{{ tool }} {{ _("History") }}{% endblock %}
+
+{% block content %}
+ <div class="list-group mb-4">
+    {% for item in history_items.all() %}
+        <div class="list-group-item">
+            {{ item.get_action_display() }} by {{ item.user }} {{ item.created|naturaltime }}<br>
+            <small class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }} </small>
+        </div>
+    {% endfor %}
+</div>
+{{ pagination(is_paginated, paginator, page_obj, _("Tool history navigation")) }}
+{% endblock %}

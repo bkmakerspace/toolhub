@@ -5,24 +5,28 @@ class UserToolQuerySet(QuerySet):
     def for_user(self, user):
         return self.filter(user=user)
 
-    def visible_to_user(self, user, own_tools=True):
+    def visible_to_user(self, user, include_users_tools=True):
         """Filter to the UserTools a user is allowed to view"""
-        from tools.models import ToolClearance, ToolVisibility
-
         # user is on clearance list for tools marked as public or cleared
         cleared_tools = Q(
             permissions__cleared_user=user,
-            clearance=ToolClearance.cleared.value,
-            visibility__in=[ToolVisibility.public.value, ToolVisibility.cleared.value],
+            visibility__in=[
+                self.model.Visibility.public.value,
+                self.model.Visibility.cleared.value,
+            ],
         )
 
         # all tools that have their visibility set to open
-        open_tools = Q(visibility=ToolVisibility.public.value)
+        open_tools = Q(visibility=self.model.Visibility.public.value)
 
         # Show the user's own tools
-        if not own_tools:
-            own_tools = Q(user=user) | Q(
-                visibility=ToolVisibility.private.value, user=user
+        if include_users_tools:
+            own_tools = Q(
+                visibility__in=[
+                    self.model.Visibility.private.value,
+                    self.model.Visibility.cleared.value,
+                ],
+                user=user,
             )
         else:
             own_tools = Q()
@@ -32,6 +36,6 @@ class UserToolQuerySet(QuerySet):
 
 class ToolHistoryQuerySet(QuerySet):
     def latest_loan(self):
-        from tools.models import ToolTransitions
+        from tools.models import UserTool
 
-        return self.filter(action=ToolTransitions.borrow.value).latest()
+        return self.filter(action=UserTool.Transitions.borrow.value).latest()

@@ -1,11 +1,11 @@
-{% extends "layouts/sub_header.jinja" %}
+{% extends "layouts/sub_header_base.jinja" %}
 
-{% block head_title %}Forbidden{% endblock %}
+{% block head_title %}{{ _("Forbidden") }}{% endblock %}
 
 {% block sub_header %}
-Not without the magic words!
+{{ _("Not without the magic words!") }}
 {% endblock %}
 
 {% block content %}
-<p>This is not the page you were looking for.</p>
+{{ exception }}
 {% endblock content %}

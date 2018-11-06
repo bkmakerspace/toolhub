@@ -1,12 +1,12 @@
 from jinja2.ext import Extension
 
-from tools.models import ToolStates, ToolTransitions, ToolClearance, ToolVisibility
+from tools.models import UserTool
 
 
 class ToolConstantsExtension(Extension):
     def __init__(self, environment):
         super().__init__(environment)
-        environment.globals["ToolStates"] = ToolStates
-        environment.globals["ToolTransitions"] = ToolTransitions
-        environment.globals["ToolClearance"] = ToolClearance
-        environment.globals["ToolVisibility"] = ToolVisibility
+        environment.globals["ToolStates"] = UserTool.States
+        environment.globals["ToolTransitions"] = UserTool.Transitions
+        environment.globals["ToolClearance"] = UserTool.Clearance
+        environment.globals["ToolVisibility"] = UserTool.Visibility

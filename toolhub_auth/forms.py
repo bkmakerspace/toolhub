@@ -1,4 +1,4 @@
-from crispy_forms.layout import Layout, Fieldset, Submit, Field, Div, HTML
+from crispy_forms.layout import Fieldset, Submit, Field, Div, HTML
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm as DjangoAuthenticationForm
@@ -10,9 +10,8 @@ class AuthenticationForm(CrispyFormMixin, DjangoAuthenticationForm):
 
     has_columns = False
 
-    def __init__(self, *args, **kwargs):
-        super(AuthenticationForm, self).__init__(*args, **kwargs)
-        self.helper.layout = Layout(
+    def layout_args(self, helper):
+        return (
             Fieldset(_("Login"), Field("username"), Field("password")),
             Div(
                 Div(
@@ -31,6 +30,7 @@ class AuthenticationForm(CrispyFormMixin, DjangoAuthenticationForm):
 class SignupForm(CrispyFormMixin, forms.ModelForm):
     first_name = forms.CharField(required=False)
     last_name = forms.CharField(required=False)
+    password = forms.CharField(widget=forms.PasswordInput, required=True)
 
     has_columns = False
 
@@ -38,9 +38,8 @@ class SignupForm(CrispyFormMixin, forms.ModelForm):
         model = get_user_model()
         fields = ("email", "first_name", "last_name", "password")
 
-    def __init__(self, *args, **kwargs):
-        super(SignupForm, self).__init__(*args, **kwargs)
-        self.helper.layout = Layout(
+    def layout_args(self, helper):
+        return (
             Div(
                 Fieldset(
                     _("New account details"),
@@ -56,7 +55,7 @@ class SignupForm(CrispyFormMixin, forms.ModelForm):
                 ),
                 FormActions(Submit("signup", _("Sign up")), css_class="col-12 mb-0"),
                 css_class="row",
-            )
+            ),
         )
 
     def clean_email(self):

@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib import admin
+from markdownx.admin import MarkdownxModelAdmin
 import tagulous.admin
 from tagulous import forms as tag_forms
 
@@ -22,16 +23,18 @@ def replaced_render(self, name, value, attrs={}, renderer=None):
 tag_forms.TagWidgetBase.render = replaced_render
 
 
-class UserToolAdmin(admin.ModelAdmin):
-    list_display = ("title", "taxonomies", "clearance")
+class UserToolAdmin(MarkdownxModelAdmin):
+    list_display = ("title", "user", "taxonomies", "visibility", "clearance")
+    list_select_related = ("user",)
+    list_filter = ("state", "visibility", "clearance")
     raw_id_fields = ("user",)
 
 
-class ToolTaxonomyAdmin(admin.ModelAdmin):
-    list_display = ["name", "count", "protected", "state"]
-    list_filter = ["protected"]
-    exclude = ["count"]
-    actions = ["merge_tags"]
+class ToolTaxonomyAdmin(tagulous.admin.TagModelAdmin):
+    list_display = ("name", "count", "protected", "state", "color")
+    list_filter = ("protected", "state")
+    exclude = ("count",)
+    actions = ("merge_tags",)
 
 
 @admin.register(ClearancePermission)
@@ -42,7 +45,7 @@ class ClearancePermissionAdmin(admin.ModelAdmin):
 
 @admin.register(ToolHistory)
 class ToolHistoryAdmin(admin.ModelAdmin):
-    list_display = ("tool", "user", "action", "created")
+    list_display = ("tool", "action", "user", "created")
     raw_id_fields = ("user",)
 
 

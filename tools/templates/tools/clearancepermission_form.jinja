@@ -1,0 +1,9 @@
+{% extends "layouts/sub_header_base.jinja" %}
+
+{% block head_title %}{{ _("Clear a person for") }} {{ tool }}{% endblock %}
+
+{% block sub_header %}{{ _("Clear a person for") }} {{ tool }}{% endblock %}
+
+{% block content %}
+    {{ crispy(form) }}
+{% endblock %}

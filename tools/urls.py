@@ -1,11 +1,25 @@
 from django.urls import path
 
-from tools.views import CreateUserTool, UserToolDetail, UserToolFilter
+from tools.views import (
+    ClearUserView,
+    OwnerUserToolFilterView,
+    UserToolCreateView,
+    UserToolDeleteView,
+    UserToolDetailView,
+    UserToolHistoryView,
+    UserToolFilterView,
+    UserToolUpdateView,
+)
 
 app_name = "tools"  # url namespace
 
 urlpatterns = [
-    path("", UserToolFilter.as_view(), name="home"),
-    path("<int:pk>/", UserToolDetail.as_view(), name="detail"),
-    path("create/", CreateUserTool.as_view(), name="create"),
+    path("", UserToolFilterView.as_view(), name="home"),
+    path("owned/", OwnerUserToolFilterView.as_view(), name="owned"),
+    path("<int:pk>/", UserToolDetailView.as_view(), name="detail"),
+    path("<int:pk>/history", UserToolHistoryView.as_view(), name="history"),
+    path("<int:pk>/edit", UserToolUpdateView.as_view(), name="edit"),
+    path("<int:pk>/clear", ClearUserView.as_view(), name="clear"),
+    path("<int:pk>/delete", UserToolDeleteView.as_view(), name="delete"),
+    path("create/", UserToolCreateView.as_view(), name="create"),
 ]

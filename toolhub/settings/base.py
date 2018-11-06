@@ -1,5 +1,6 @@
 import os
 
+from django.contrib.messages import constants as message_constants
 from django.urls import reverse_lazy
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -13,17 +14,23 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.forms",
     "django_extensions",
+    "django_jinja.contrib._humanize",
     "tagulous",
     "crispy_forms",
     "django_filters",
+    "colorful",
+    "debug_toolbar",
     "toolhub",
     "toolhub_auth.apps.ToolhubAuthConfig",
     "tools",
     "utils",
+    "markdownx",  # placed below all so templates can be overwritten
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -32,6 +39,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+INTERNAL_IPS = ["127.0.0.1"]
 
 ROOT_URLCONF = "toolhub.urls"
 
@@ -63,6 +72,7 @@ TEMPLATES = [
                 "django_jinja.builtins.extensions.UrlsExtension",
                 "django_jinja.builtins.extensions.StaticFilesExtension",
                 "django_jinja.builtins.extensions.DjangoFiltersExtension",
+                "django_jinja_markdown.extensions.MarkdownExtension",
                 "tools.extensions.ToolConstantsExtension",
             ],
             "auto_reload": True,
@@ -87,14 +97,15 @@ TEMPLATES = [
     },
 ]
 
+# Use above template engines when choosing form renderer
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
+
 AUTH_USER_MODEL = "toolhub_auth.User"
 
 WSGI_APPLICATION = "toolhub.wsgi.application"
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -110,3 +121,11 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 DEFAULT_PAGINATE_BY = 18
+
+MESSAGE_TAGS = {
+    message_constants.DEBUG: "alert-dark",
+    message_constants.INFO: "alert-info",
+    message_constants.SUCCESS: "alert-success",
+    message_constants.WARNING: "alert-warning",
+    message_constants.ERROR: "alert-danger",
+}

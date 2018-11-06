@@ -2,6 +2,7 @@ from crispy_forms.bootstrap import FormActions as CrispyBootstrapFormActions
 from crispy_forms.layout import Layout
 from crispy_forms.helper import FormHelper
 from crispy_forms.utils import TEMPLATE_PACK
+from django.urls import reverse
 
 
 DEFAULT_LABEL_COL = 3
@@ -14,7 +15,9 @@ class CrispyFormMixin(object):
     with styling.
     """
 
+    pk_field = None
     has_columns = True
+    form_action = None
 
     def __init__(self, *args, **kwargs):
         cols = kwargs.pop("cols", None)
@@ -22,6 +25,8 @@ class CrispyFormMixin(object):
         if cols and self.has_columns:
             kwargs.update({"label_col": cols[0], "field_col": cols[1]})
         self.helper = FormHelper()
+        if self.form_action:
+            self.helper.form_action = self.form_action
         self.helper.disable_csrf = False
         self.helper.html5_required = True  # render required attribute
         if self.has_columns:
@@ -36,6 +41,10 @@ class CrispyFormMixin(object):
         if layout_args:
             self.helper.layout = Layout(*layout_args)
         super(CrispyFormMixin, self).__init__(*args, **kwargs)
+        if self.pk_field and self.helper.form_action == self.form_action and self.instance:
+            self.helper.form_action = reverse(
+                self.form_action, kwargs={self.pk_field: self.instance.pk}
+            )
 
     def layout_args(self, helper):
         pass
@@ -63,6 +72,4 @@ class FormActions(CrispyBootstrapFormActions):
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         if self.cols:
             context.update(self.cols)
-        return super().render(
-            form, form_style, context, template_pack=template_pack, **kwargs
-        )
+        return super().render(form, form_style, context, template_pack=template_pack, **kwargs)
