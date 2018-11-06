@@ -13,10 +13,7 @@ class UserToolQuerySet(QuerySet):
         cleared_tools = Q(
             permissions__cleared_user=user,
             clearance=ToolClearance.cleared.value,
-            visibility__in=[
-                ToolVisibility.public.value,
-                ToolVisibility.cleared.value,
-            ],
+            visibility__in=[ToolVisibility.public.value, ToolVisibility.cleared.value],
         )
 
         # all tools that have their visibility set to open
@@ -36,4 +33,5 @@ class UserToolQuerySet(QuerySet):
 class ToolHistoryQuerySet(QuerySet):
     def latest_loan(self):
         from tools.models import ToolTransitions
+
         return self.filter(action=ToolTransitions.borrow.value).latest()

@@ -17,24 +17,21 @@ class CrispyFormMixin(object):
     has_columns = True
 
     def __init__(self, *args, **kwargs):
-        cols = kwargs.pop('cols', None)
-        self.has_columns = kwargs.pop('has_columns', self.has_columns)
+        cols = kwargs.pop("cols", None)
+        self.has_columns = kwargs.pop("has_columns", self.has_columns)
         if cols and self.has_columns:
-            kwargs.update({
-                'label_col': cols[0],
-                'field_col': cols[1]
-            })
+            kwargs.update({"label_col": cols[0], "field_col": cols[1]})
         self.helper = FormHelper()
         self.helper.disable_csrf = False
         self.helper.html5_required = True  # render required attribute
         if self.has_columns:
-            self.helper.form_class = 'form-horizontal'
+            self.helper.form_class = "form-horizontal"
             self.helper.cols = {
-                'label_col': kwargs.pop('label_col', DEFAULT_LABEL_COL),
-                'field_col': kwargs.pop('field_col', DEFAULT_FIELD_COL),
+                "label_col": kwargs.pop("label_col", DEFAULT_LABEL_COL),
+                "field_col": kwargs.pop("field_col", DEFAULT_FIELD_COL),
             }
-            self.helper.label_class = 'col-md-{label_col}'.format(**self.helper.cols)
-            self.helper.field_class = 'col-md-{field_col}'.format(**self.helper.cols)
+            self.helper.label_class = "col-md-{label_col}".format(**self.helper.cols)
+            self.helper.field_class = "col-md-{field_col}".format(**self.helper.cols)
         layout_args = self.layout_args(self.helper)
         if layout_args:
             self.helper.layout = Layout(*layout_args)
@@ -53,16 +50,19 @@ class FormActions(CrispyBootstrapFormActions):
             HTML(<span style="display: hidden;">Information Saved</span>),
             Submit('Save', 'Save', css_class='btn-primary'), helper=self.helper)
     """
+
     cols = None
 
     def __init__(self, *fields, **kwargs):
         # self.has_columns = kwargs.pop('has_columns', True)
-        self.helper = kwargs.pop('helper', False)
+        self.helper = kwargs.pop("helper", False)
         if self.helper and self.helper.has_columns:
-            self.cols = kwargs.pop('cols', self.helper.cols)
+            self.cols = kwargs.pop("cols", self.helper.cols)
         super().__init__(*fields, **kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         if self.cols:
             context.update(self.cols)
-        return super().render(form, form_style, context, template_pack=template_pack, **kwargs)
+        return super().render(
+            form, form_style, context, template_pack=template_pack, **kwargs
+        )
