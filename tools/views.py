@@ -121,3 +121,11 @@ class ClearUserView(SingleToolObjectMixin, CreateView):
 
     def get_success_url(self):
         return self.tool.get_absolute_url()
+
+
+class UserToolClearedView(LoginRequiredMixin, FilteredByToolObjectMixin, ListView):
+    model = ClearancePermission
+    tool_model = UserTool
+    template_name = "tools/usertool_clearred_list.jinja"
+    context_object_name = "cleared_items"
+    paginate_by = settings.DEFAULT_PAGINATE_BY
