@@ -36,7 +36,6 @@ class UserToolQuerySet(QuerySet):
         else:
             own_tools = Q()
 
-        # TODO: decide on keeping distinct, and changing default order_by on the model to id
         return self.filter(cleared_tools | open_tools | own_tools)
 
     def borrowable_to_user(self, user):
