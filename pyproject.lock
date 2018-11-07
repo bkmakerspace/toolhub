@@ -249,13 +249,14 @@ category = "dev"
 description = "the modular source code checker: pep8, pyflakes and co"
 name = "flake8"
 optional = false
-python-versions = "*"
-version = "3.5.0"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "3.6.0"
 
 [package.dependencies]
 mccabe = ">=0.6.0,<0.7.0"
-pycodestyle = ">=2.0.0,<2.4.0"
-pyflakes = ">=1.5.0,<1.7.0"
+pycodestyle = ">=2.4.0,<2.5.0"
+pyflakes = ">=2.0.0,<2.1.0"
+setuptools = ">=30"
 
 [[package]]
 category = "main"
@@ -520,15 +521,15 @@ description = "Python style guide checker"
 name = "pycodestyle"
 optional = false
 python-versions = "*"
-version = "2.3.1"
+version = "2.4.0"
 
 [[package]]
 category = "dev"
 description = "passive checker of Python programs"
 name = "pyflakes"
 optional = false
-python-versions = "*"
-version = "1.6.0"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "2.0.0"
 
 [[package]]
 category = "dev"
@@ -709,7 +710,7 @@ python-versions = "*"
 version = "0.14.1"
 
 [metadata]
-content-hash = "6f0b63ac6278027bb4d463a8c6c89f57a6a98069cbce396faa80a2a747ee85e7"
+content-hash = "0290b2e390732fbc815944d9676b9d67a6b65edeca658f19f3756bfede7432d3"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -738,7 +739,7 @@ django-jinja-markdown = ["233dcde5d6895416f5613e4ca030e88f18a163e4b676e7aa815d19
 django-markdownx = ["b1152f3129d47f1335d87d95912fe92fddfc987087058e8241cc0b9232d86cf0", "b7d0934df50a249b7c09c3d9919654f149872636f4a1effeabf647fa4ab64d9b"]
 django-tagulous = ["593cf09f2f8b7f752388f1ee8cf4e7b8d33dfab56d23438b8dcd338f59922a76"]
 execnet = ["a7a84d5fa07a089186a329528f127c9d73b9de57f1a1131b82bb5320ee651f6a", "fc155a6b553c66c838d1a22dba1dc9f5f505c43285a878c6f74a79c024750b83"]
-flake8 = ["7253265f7abd8b313e3892944044a365e3f4ac3fcdcfb4298f55ee9ddf188ba0", "c7841163e2b576d435799169b78703ad6ac1bbb0f199994fc05f700b2a90ea37"]
+flake8 = ["6a35f5b8761f45c5513e3405f110a86bea57982c3b75b766ce7b65217abe1670", "c01f8a3963b3571a8e6bd7a4063359aff90749e160778e03817cd9b71c9e07d2"]
 future = ["67045236dcfd6816dc439556d009594abf643e5eb48992e36beac09c2ca659b8"]
 identify = ["5e956558a9a1e3b3891d7c6609fc9709657a11878af288ace484d1a46a93922b", "623086059219cc7b86c77a3891f3700cb175d4ce02b8fb8802b047301d71e783"]
 ipdb = ["7081c65ed7bfe7737f83fa4213ca8afd9617b42ff6b3f1daf9a3419839a2a00a"]
@@ -764,8 +765,8 @@ psycopg2-binary = ["04afb59bbbd2eab3148e6816beddc74348078b8c02a1113ea7f7822f5be4
 ptyprocess = ["923f299cc5ad920c68f2bc0bc98b75b9f838b93b599941a6b63ddbc2476394c0", "d7cc528d76e76342423ca640335bd3633420dc1366f258cb31d05e865ef5ca1f"]
 py = ["bf92637198836372b520efcba9e020c330123be8ce527e535d185ed4b6f45694", "e76826342cefe3c3d5f7e8ee4316b80d1dd8a300781612ddbc765c17ba25a6c6"]
 pycatalog = ["72bbcbc26aa6ae2797e6cbb3af80ec2adc814a9d65ff1e9346b4e9867c5b77fd", "d0cc1497cdc8a3dd82f2de26bba519955132b5853e85a831cf2f174c85ece986"]
-pycodestyle = ["682256a5b318149ca0d2a9185d365d8864a768a28db66a84a2ea946bcc426766", "6c4245ade1edfad79c3446fadfc96b0de2759662dc29d07d80a6f27ad1ca6ba9"]
-pyflakes = ["08bd6a50edf8cffa9fa09a463063c425ecaaf10d1eb0335a7e8b1401aef89e6f", "8d616a382f243dbf19b54743f280b80198be0bca3a5396f1d2e1fca6223e8805"]
+pycodestyle = ["74abc4e221d393ea5ce1f129ea6903209940c1ecd29e002e8c6933c2b21026e0", "cbc619d09254895b0d12c2c691e237b2e91e9b2ecf5e84c26b35400f93dcfb83", "cbfca99bd594a10f674d0cd97a3d802a1fdef635d4361e1a2658de47ed261e3a"]
+pyflakes = ["9a7662ec724d0120012f6e29d6248ae3727d821bba522a0e6b356eff19126a49", "f661252913bc1dbe7fcfcbf0af0db3f42ab65aabd1a6ca68fe5d466bace94dae"]
 pygments = ["78f3f434bcc5d6ee09020f92ba487f95ba50f1e3ef83ae96b9d5ffa1bab25c5d", "dbae1046def0efb574852fab9e90209b23f556367b5a320c0bcb871c77c3e8cc"]
 pytest = ["10e59f84267370ab20cec9305bafe7505ba4d6b93ecbf66a1cce86193ed511d5", "8c827e7d4816dfe13e9329c8226aef8e6e75d65b939bc74fda894143b6d1df59"]
 pytest-django = ["49e9ffc856bc6a1bec1c26c5c7b7213dff7cc8bc6b64d624c4d143d04aff0bcf", "b379282feaf89069cb790775ab6bbbd2bd2038a68c7ef9b84a41898e0b551081"]
