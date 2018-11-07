@@ -22,7 +22,7 @@ from django.views.generic import View
 
 from tools.mixins import SingleToolObjectMixin
 from tools.models import UserTool
-from utils.transitions.mixins import TransitionActionMixin, TransitionMessageMixin
+from utils.transitions.mixins import TransitionMessageMixin
 
 
 class ActionViewMixin(TransitionMessageMixin):

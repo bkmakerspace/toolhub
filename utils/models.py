@@ -20,9 +20,7 @@ class StateMachineMixin:
             self.find_additional_args_for_transitions(trans_kwargs)
             for trans_kwargs in machine_args["transitions"]
         ]
-        machine_args.update({"transitions": transitions})
-
-        machine_args.update({"model": self, "initial": self.state})
+        machine_args.update({"transitions": transitions, "model": self, "initial": self.state})
         self.machine = Machine(**machine_args)
 
     def find_additional_args_for_transitions(self, existing):
