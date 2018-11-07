@@ -36,7 +36,7 @@ class UserToolQuerySet(QuerySet):
         else:
             own_tools = Q()
 
-        return self.filter(cleared_tools | open_tools | own_tools)
+        return self.filter(cleared_tools | open_tools | own_tools).distinct()
 
     def borrowable_to_user(self, user):
         all_users_tools = Q(user=user)
