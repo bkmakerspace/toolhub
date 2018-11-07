@@ -22,8 +22,10 @@ INSTALLED_APPS = [
     "django_filters",
     "colorful",
     "debug_toolbar",
+    'graphene_django',
     "toolhub",
     "toolhub_auth.apps.ToolhubAuthConfig",
+    "api.apps.APIConfig",
     "tools.apps.ToolsConfig",
     "borrowing.apps.BorrowingConfig",
     "utils",
@@ -42,6 +44,14 @@ MIDDLEWARE = [
 ]
 
 INTERNAL_IPS = ["127.0.0.1"]
+
+GRAPHENE = {
+    'SCHEMA': 'api.schema.schema',
+    'SCHEMA_INDENT': 2,
+    'MIDDLEWARE': (
+        'graphene_django.debug.DjangoDebugMiddleware',
+    )
+}
 
 ROOT_URLCONF = "toolhub.urls"
 

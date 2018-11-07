@@ -4,9 +4,13 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.views.generic import RedirectView, TemplateView
+from graphene_django.views import GraphQLView
 
 import toolhub.views as toolhub_views
 
+api_urlpatterns = [
+    path("graphql/", GraphQLView.as_view(graphiql=True)),
+]
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="home.jinja"), name="home"),
@@ -15,6 +19,7 @@ urlpatterns = [
     path("tools/", include("tools.urls"), name="tools"),
     path("borrowing/", include("borrowing.urls"), name="borrowing"),
     # endpoints
+    path("api/", include(api_urlpatterns)),
     path("markdownx/", include("markdownx.urls")),
     # shortcut urls
     path(
