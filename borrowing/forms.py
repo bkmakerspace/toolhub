@@ -1,4 +1,4 @@
-from crispy_forms.layout import Field, Submit
+from crispy_forms.layout import Submit
 from django import forms
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _

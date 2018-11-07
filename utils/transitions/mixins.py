@@ -65,9 +65,6 @@ class TransitionMessageMixin(MessageMixin):
         return response
 
     def get_transition_success_message(self):
-        return self.transition_success_message
-
-    def get_transition_success_message(self):
         """
         Validate that transition_success_message is set and is either a
         unicode or str object.
@@ -93,9 +90,6 @@ class TransitionMessageMixin(MessageMixin):
         response = super().transition_failure(e)
         self.messages.error(self.get_transition_failed_message(), fail_silently=True)
         return response
-
-    def get_transition_failed_message(self):
-        return self.transition_failed_message
 
     def get_transition_failed_message(self):
         """

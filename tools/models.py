@@ -20,7 +20,7 @@ from tagulous.models import TagField, TagTreeModel
 
 from utils.models import StateMachineMixin
 
-from tools.exceptions import ToolClearanceException
+from tools.exceptions import ToolAvailabilityException, ToolClearanceException
 from tools.querysets import ToolHistoryQuerySet, UserToolQuerySet
 
 
@@ -172,6 +172,7 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
         # Is this needed?
         if not self.is_available():
             raise ToolAvailabilityException()
+
 
 class ToolHistory(TimeStampedModel):
     tool = models.ForeignKey(UserTool, on_delete=models.CASCADE, related_name="history")

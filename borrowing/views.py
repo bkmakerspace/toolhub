@@ -14,15 +14,12 @@ they are given option to request a lend.
 
 Lended:
 """
-from braces.views import MessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View
-from transitions import MachineError
 
-from tools.exceptions import ToolException
 from tools.mixins import SingleToolObjectMixin
 from tools.models import UserTool
 from utils.transitions.mixins import TransitionActionMixin, TransitionMessageMixin
