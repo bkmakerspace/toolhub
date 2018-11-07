@@ -39,12 +39,10 @@ class TransitionActionMixin:
         pass
 
     def transition_success(self):
-        # raise NotImplementedError
-        pass
+        raise NotImplementedError
 
     def transition_failure(self, exception):
-        # raise NotImplementedError
-        pass
+        raise NotImplementedError
 
     def get_transition_object(self):
         return getattr(self, self.object_class_attribute)
@@ -53,16 +51,14 @@ class TransitionActionMixin:
         return {"user": self.request.user}
 
 
-class TransitionMessageMixin(MessageMixin):
+class TransitionMessageMixin(TransitionActionMixin, MessageMixin):
     """Configurable transition messages for action views"""
 
     transition_success_message = None
     transition_failed_message = None
 
     def transition_success(self):
-        response = super().transition_success()
         self.messages.success(self.get_transition_success_message(), fail_silently=True)
-        return response
 
     def get_transition_success_message(self):
         """
@@ -87,9 +83,7 @@ class TransitionMessageMixin(MessageMixin):
         return force_text(self.transition_success_message)
 
     def transition_failure(self, e):
-        response = super().transition_failure(e)
         self.messages.error(self.get_transition_failed_message(), fail_silently=True)
-        return response
 
     def get_transition_failed_message(self):
         """

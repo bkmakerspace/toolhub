@@ -25,7 +25,7 @@ from tools.models import UserTool
 from utils.transitions.mixins import TransitionActionMixin, TransitionMessageMixin
 
 
-class ActionView(TransitionMessageMixin, TransitionActionMixin):
+class ActionViewMixin(TransitionMessageMixin):
     def transition_success(self):
         super().transition_success()
         success_url = self.get_success_url()
@@ -40,7 +40,7 @@ class ActionView(TransitionMessageMixin, TransitionActionMixin):
         return reverse("tools:detail", kwargs=dict(pk=self.tool.pk))
 
 
-class BorrowView(ActionView, LoginRequiredMixin, SingleToolObjectMixin, View):
+class BorrowView(ActionViewMixin, LoginRequiredMixin, SingleToolObjectMixin, View):
     """
     Process a request to borrow a tool
     """
@@ -52,7 +52,7 @@ class BorrowView(ActionView, LoginRequiredMixin, SingleToolObjectMixin, View):
     transition_failed_message = _("Can't borrow tool")
 
 
-class ReturnView(ActionView, LoginRequiredMixin, SingleToolObjectMixin, View):
+class ReturnView(ActionViewMixin, LoginRequiredMixin, SingleToolObjectMixin, View):
     """
     Process a request to return a tool
     """
