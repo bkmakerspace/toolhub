@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView, TemplateView
 
 import toolhub.views as toolhub_views
 
@@ -13,7 +13,15 @@ urlpatterns = [
     path("", include("toolhub_auth.urls"), name="auth"),
     path("admin/", admin.site.urls),
     path("tools/", include("tools.urls"), name="tools"),
+    path("borrowing/", include("borrowing.urls"), name="borrowing"),
+    # endpoints
     path("markdownx/", include("markdownx.urls")),
+    # shortcut urls
+    path(
+        "t/<int:pk>/",
+        RedirectView.as_view(permanent=False, pattern_name="tools:detail"),
+        name="tool_short",
+    ),  # redirect /t/#/ to /tools/#/
 ]
 
 handler400 = toolhub_views.BadRequest.as_view()

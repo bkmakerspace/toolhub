@@ -106,12 +106,10 @@ class ClearUserView(SingleToolObjectMixin, CreateView):
         return {"tool": self.tool}
 
     def get(self, request, *args, **kwargs):
-        self.tool = self.get_tool()
         self.check_grant_perms(self.tool)
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.tool = self.get_tool()
         self.check_grant_perms(self.tool)
         return super().post(request, *args, **kwargs)
 

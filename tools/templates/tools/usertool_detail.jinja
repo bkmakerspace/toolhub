@@ -15,6 +15,7 @@
 {% endblock %}
 
 {% block sub_actions %}
+<small class="text-muted">{{ url('tool_short', pk=tool.pk) }}</small>
 <div class="btn-toolbar" role="toolbar" aria-label="{{ _('Tool actions') }}">
     {# TODO: only show this group to owner for now #}
     <div class="btn-group mr-2">
@@ -44,13 +45,23 @@
                     <div class="col-lg-4">
                         <p>{{ taxonomy_list(tool.taxonomies.all()) }}</p>
                         {% if tool.is_in_use() %}
-                            <span>{{ _("Currently checked out by:") }} <strong>{{ tool.history.latest_loan().user }}</strong></span>
+                            <span>{{ _("Currently checked out by:") }} <strong>{{ tool.history.latest_borrow().user }}</strong></span>
                         {% endif %}
                     </div>
                 </div>
             </div>
         </div>
-        <section class="py-4">
+        <div class="row my-3">
+            <div class="col flex-grow-0">
+                {% if tool.user_can_borrow(user) and not tool.is_in_use() %}
+                    {{ borrow_button(tool) }}
+                {% endif %}
+                {% if tool.is_in_use() %}
+                    {{ return_button(tool) }}
+                {% endif %}
+            </div>
+        </div>
+        <section class="my-3">
             {% markdown %}{{ tool.description }}{% endmarkdown %}
         </section>
     </div>

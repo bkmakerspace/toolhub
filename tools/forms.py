@@ -47,6 +47,7 @@ class UserToolFilterViewForm(CrispyFormMixin, forms.Form):
         helper.form_method = "GET"
         return (
             Field("name"),
+            Field("state"),
             Field("taxonomies"),
             Submit("action", _("Filter")),
             # Button('clear', _("Clear Filter"), type="reset")

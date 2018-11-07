@@ -10,7 +10,7 @@ class UserToolFilterSet(FilterSet):
 
     class Meta:
         model = UserTool
-        fields = ("name", "visibility", "clearance", "taxonomies")
+        fields = ("name", "visibility", "clearance", "taxonomies", "state")
 
     def get_form_class(self):
         default_class = super().get_form_class()
