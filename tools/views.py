@@ -49,7 +49,7 @@ class UserToolCreateView(LoginRequiredMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.user = user
         response = super(UserToolCreateView, self).form_valid(form)
-        self.object.create(user=user, skip_save=True)
+        self.object.create(user=user)
         return response
 
 
