@@ -688,7 +688,7 @@ description = "A lightweight, object-oriented Python state machine implementatio
 name = "transitions"
 optional = false
 python-versions = "*"
-version = "0.6.8"
+version = "0.6.9"
 
 [package.dependencies]
 six = "*"
@@ -718,7 +718,7 @@ python-versions = "*"
 version = "0.14.1"
 
 [metadata]
-content-hash = "8f4895ffbc0861f34503f794b81171d5cbe6a3af7adf48f3b91cf2bf506b0f3c"
+content-hash = "410060190822576d7c1fab604930e5a2b91253564ccbc7e21aa720f28825bd4d"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -790,7 +790,7 @@ sqlparse = ["ce028444cfab83be538752a2ffdb56bc417b7784ff35bb9a3062413717807dec", 
 termcolor = ["1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b"]
 toml = ["229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c", "235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e", "f1db651f9657708513243e61e6cc67d101a39bad662eaa9b5546f789338e07a3"]
 traitlets = ["9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835", "c6cb5e6f57c5a9bdaa40fa71ce7b4af30298fbab9ece9815b5d995ab6217c7d9"]
-transitions = ["155de243bd935959ae66cdab5c4c1a92f2bbf48555c6f994365935a0a9fffc1b", "adbfce523187e4f1b8745250e4562d43fe4562e7d2152ab11d1c8ae9da51eaad"]
+transitions = ["00bfa91b0cfe3f649731b2f28478c4314bb9e830c600b422973f1b3a704ac710", "afe0f498cf1f3f3b0fc13562011b8895a172df8f891dbb5118923d46e78a96d7"]
 virtualenv = ["686176c23a538ecc56d27ed9d5217abd34644823d6391cbeb232f42bf722baad", "f899fafcd92e1150f40c8215328be38ff24b519cd95357fa6e78e006c7638208"]
 wcwidth = ["3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e", "f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c"]
 werkzeug = ["c3fd7a7d41976d9f44db327260e263132466836cef6f91512889ed60ad26557c", "d5da73735293558eb1651ee2fddc4d0dedcfa06538b8813a2e20011583c9e49b"]
