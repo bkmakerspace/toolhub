@@ -44,7 +44,7 @@ class CrispyFormMixin(object):
             self.helper.form_action = form_action
 
     def get_form_action(self):
-        if self.pk_field and self.helper.form_action == self.form_action and self.instance:
+        if self.pk_field and self.form_action and self.instance:
             return reverse(self.form_action, kwargs={self.pk_field: self.instance.pk})
         if self.form_action:
             return self.form_action
