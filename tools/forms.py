@@ -47,7 +47,7 @@ class UserToolFilterViewForm(CrispyFormMixin, forms.Form):
     def layout_args(self, helper):
         helper.form_method = "GET"
         return (
-            Field("name"),
+            Field("search"),
             Field("state"),
             Field("taxonomies"),
             Submit("action", _("Filter")),

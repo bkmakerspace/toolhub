@@ -3,10 +3,12 @@ from django_filters import FilterSet, filters
 
 from .forms import UserToolFilterViewForm
 from .models import UserTool
+from utils.filters.fields import SearchFilter
 
 
 class UserToolFilterSet(FilterSet):
     name = filters.CharFilter(field_name="title", lookup_expr="icontains", label=_("Tool name"))
+    search = SearchFilter(vectors=("title", "description"), label=_("Search"))
 
     class Meta:
         model = UserTool
