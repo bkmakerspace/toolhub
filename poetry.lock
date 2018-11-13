@@ -225,7 +225,7 @@ description = "A comprehensive Markdown editor built for Django."
 name = "django-markdownx"
 optional = false
 python-versions = "*"
-version = "2.0.24"
+version = "2.0.26"
 
 [package.dependencies]
 Django = "*"
@@ -718,7 +718,7 @@ python-versions = "*"
 version = "0.14.1"
 
 [metadata]
-content-hash = "410060190822576d7c1fab604930e5a2b91253564ccbc7e21aa720f28825bd4d"
+content-hash = "9823a1b2a81eeba5a44af1013ad8107ecd61044f530955bb49beb669652c00e4"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -745,7 +745,7 @@ django-extensions = ["30cb6a8c7d6f75a55edf0c0c4491bd98f8264ae1616ce105f9cecac438
 django-filter = ["6f4e4bc1a11151178520567b50320e5c32f8edb552139d93ea3e30613b886f56", "86c3925020c27d072cdae7b828aaa5d165c2032a629abbe3c3a1be1edae61c58"]
 django-jinja = ["8a49d73de616a12075eee14c6d3bbab936261a463457d40348d8b8e2995cfbed", "ceaa0eeebc4d91a5800967e50f4f087f0b6457503e3c2af85dc199bed8732a9a"]
 django-jinja-markdown = ["233dcde5d6895416f5613e4ca030e88f18a163e4b676e7aa815d191754f53085", "d41db694bbf3085b026df227428427b859478a2846b55088429e3ccc7115c0c5"]
-django-markdownx = ["b1152f3129d47f1335d87d95912fe92fddfc987087058e8241cc0b9232d86cf0", "b7d0934df50a249b7c09c3d9919654f149872636f4a1effeabf647fa4ab64d9b"]
+django-markdownx = ["8219d054e6e1624a5375a5341f0b85ad99468c8c8d4192aace593ddd9bfdad4d", "c73bb6fb765e3659105dd67acd37ed18dcff748c4707bc1752524227df88e350"]
 django-tagulous = ["593cf09f2f8b7f752388f1ee8cf4e7b8d33dfab56d23438b8dcd338f59922a76"]
 execnet = ["a7a84d5fa07a089186a329528f127c9d73b9de57f1a1131b82bb5320ee651f6a", "fc155a6b553c66c838d1a22dba1dc9f5f505c43285a878c6f74a79c024750b83"]
 flake8 = ["6a35f5b8761f45c5513e3405f110a86bea57982c3b75b766ce7b65217abe1670", "c01f8a3963b3571a8e6bd7a4063359aff90749e160778e03817cd9b71c9e07d2"]
