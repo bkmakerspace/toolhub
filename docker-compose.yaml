@@ -16,7 +16,7 @@ services:
             - "python-packages:/usr/local/lib/python3.6/site-packages:z"
             - "upload-volume:/var/www/media"
         ports:
-            - '8001:8000'
+            - '8000:8000'
         environment:
             DEBUG: 'true'
             ALLOWED_HOSTS: '*'
