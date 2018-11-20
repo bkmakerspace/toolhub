@@ -8,7 +8,7 @@ source $script_base/tools
 no_save=
 no_input=
 dev=
-install_type=
+uninstall_type=
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]; do
@@ -24,17 +24,17 @@ while [[ $# -gt 0 ]]; do
             dev=1
             ;;
         -h|--help|?)
-            echo "Install a package."
+            echo "Uninstall a package."
             echo
             cecho "Usage: $(basename $0) <options> <PKG TYPE> <PKG NAME>..." default bold
             echo
             echo "Package Types:"
             echo "  py  | python"
-            echo "  apt | linux"
+            # echo "  js | javascript"
             echo
             echo "Options:"
-            echo "      --dev           Install package for development only (JS and Python only)"
-            echo "      --no-save       Do not save packages, install only (JS and Python only)"
+            echo "      --dev           Un-install package for development only (JS and Python only)"
+            echo "      --no-save       Do not save package changes, un-install only (JS and Python only)"
             echo "  -y  --no-input      Assume yes for all user input"
             echo "  -h  --help          This help message"
             exit 0
@@ -47,7 +47,7 @@ while [[ $# -gt 0 ]]; do
 done
 set -- "${POSITIONAL[@]}"
 
-install_type=$1
+uninstall_type=$1
 shift
 args=$@
 
@@ -56,27 +56,20 @@ if [ ! "$args" ]; then
     exit 2
 fi
 
-case $install_type in
+case $uninstall_type in
     py|python)
         if [ "$no_save" ]; then
             args="$args --dry-run"
         fi
         if [ "$dev" ]; then
-            docker-compose exec -u root web python -m poetry add --dev $args
+            docker-compose exec -u root web python -m poetry remove --dev $args
         else
-            docker-compose exec -u root web python -m poetry add $args
+            docker-compose exec -u root web python -m poetry remove $args
         fi
         ;;
-    apt|linux)
-        if [ ! "$no_input" ]; then
-            cecho "Linux packages are not saved upon install. If these packages are needed " yellow bold
-            cecho "permenantly, please make sure to update '$(resolve_path "$script_base/..")/Dockerfile' accordingly." yellow bold
-            read -n1 -r -p "Press any key to continue..."
-        fi
-        docker-compose exec -u root web apt-get update
-        docker-compose exec -u root web apt-get install -y $args
-        ;;
+    js|javascript)
+       ;;
     *)
-        cecho "You must provide a valid package type to install. Use '$(basename $0) --help' for most information." yellow bold
+        cecho "You must provide a valid package type to un-install. Use '$(basename $0) --help' for most information." yellow bold
         exit 1
 esac
