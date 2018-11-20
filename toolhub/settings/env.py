@@ -18,3 +18,9 @@ STATIC_ROOT = env.str("STATIC_ROOT", default=f"{BASE_DIR}static/")  # noqa: F405
 STATIC_URL = env.str("STATIC_URL", default="/static/")
 MEDIA_ROOT = env.str("MEDIA_ROOT", default=f"{BASE_DIR}media/")  # noqa: F405
 MEDIA_URL = env.str("MEDIA_URL", default="/media/")
+
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": [env.str("SEARCH_HOST")],
+    }
+}
