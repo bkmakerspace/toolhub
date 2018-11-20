@@ -13,7 +13,7 @@ services:
         restart: unless-stopped
         volumes:
             - ".:/srv/app"
-            - "python-packages:/usr/local/lib/python3.6/site-packages:z"
+            - "python-packages:/usr/local/lib/python3.7/site-packages"
             - "upload-volume:/var/www/media"
         ports:
             - '8000:8000'
