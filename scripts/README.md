@@ -136,11 +136,6 @@ This script will allow you to run certain, short lived, utilities that are not s
 running or developing the application, but can sometimes come in handy. See the help text of this
 command to see all available utilities.
 
-### flower
-
-This starts a web-based tool for monitoring Celery. It's recommended that you set `FLOWER_PORT` in
-your .env file to expose the service on a non-random port.
-
 ### pgadmin
 
 pgAdmin4 is a web-based tool for monitoring and managing Postgres databases. You will need to
