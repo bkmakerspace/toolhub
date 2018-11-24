@@ -10,7 +10,7 @@ from django_filters.views import FilterView
 from tools.filters import UserToolFilterSet
 from tools.forms import ClearancePermissionForm, UserToolCreateForm, UserToolUpdateForm
 from tools.mixins import SingleToolObjectMixin, FilteredByToolObjectMixin
-from tools.models import ClearancePermission, ToolHistory, UserTool
+from tools.models import ClearancePermission, ToolHistory, ToolTaxonomy, UserTool
 from utils.mixins import RestrictToUserMixin, VisibleToUserMixin
 
 
@@ -129,3 +129,29 @@ class UserToolClearedView(LoginRequiredMixin, FilteredByToolObjectMixin, ListVie
     template_name = "tools/usertool_clearred_list.jinja"
     context_object_name = "cleared_items"
     paginate_by = settings.DEFAULT_PAGINATE_BY
+
+
+class TaxTreeView(LoginRequiredMixin, ListView):
+    model = ToolTaxonomy
+    context_object_name = "tags"
+    template_name = "tools/tag_tree.jinja"
+    queryset = ToolTaxonomy.objects.filter(parent__isnull=True)
+
+
+class TaxDetailView(LoginRequiredMixin, UserToolBaseFilterView):
+    template_name = "tools/usertool_tax_filter.jinja"
+    def get_queryset(self):
+        path = self.kwargs.get('path', None)
+        # handle not found
+        tax = ToolTaxonomy.objects.get(path=path)
+        decendant_ids = list(tax.get_descendants().values_list('id', flat=True))
+        tax_ids = [tax.id] + decendant_ids
+        ancestors = tax.get_ancestors()
+        breadcrumbs = [(reverse_lazy('tools:home'), "Tools")]
+        breadcrumbs += [(a.get_absolute_url(), a.name) for a in ancestors]
+        breadcrumbs += [(None, tax.name)]
+        self.extra_context = {
+            "tax_breadcrumbs": breadcrumbs,
+            "tax": tax,
+        }
+        return super().get_queryset().filter(taxonomies__in=tax_ids)

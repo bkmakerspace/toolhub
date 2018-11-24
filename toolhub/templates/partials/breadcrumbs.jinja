@@ -1,0 +1,16 @@
+{# accepts navigation lists: breadcumbs([('index.html', 'Index'), ('about.html', 'About')]) #}
+{% macro breadcrumbs(items, object=None) %}
+<nav class="breadcrumb m-0">
+    {% for link, name in items -%}
+        {%- if link -%}
+            <a class="breadcrumb-item" href="{{link}}">{{name}}</a></li>
+        {%- else -%}
+            <span class="breadcrumb-item active">{{name}}</span>
+        {%- endif %}
+    {%- endfor %}
+    {# extra content in breadcrumb #}
+    {% if caller %}
+      {{ caller(object) }}
+    {% endif %}
+</nav>
+{% endmacro %}

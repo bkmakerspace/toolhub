@@ -1,0 +1,25 @@
+{% extends "layouts/sub_header_base.jinja" %}
+
+{% block head_title %}{{ _("Taxonomies") }}{% endblock %}
+
+{% block sub_header %}{{ _("Taxonomies") }}{% endblock %}
+
+{% macro tags_list(tags) %}
+{% if tags %}
+<ul>
+{% for tag in tags %}
+<li>
+    {{ tag }}
+    {{ tags_list(tag.children.all()) }}
+</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endmacro %}
+
+{% block content %}
+    {% for tag in tags.all() %}
+    <h3 class="border-bottom">{{ tag }}</h3>
+    {{ tags_list(tag.children.all()) }}
+    {% endfor %}
+{% endblock %}

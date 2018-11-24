@@ -1,0 +1,13 @@
+{% extends "tools/usertool_filter.jinja" %}
+{% from "partials/breadcrumbs.jinja" import breadcrumbs %}
+
+{% block head_title %}{{ _("Filter Taxonomies") }}{% endblock %}
+
+{% block sub_header %}{{ _("Filter") }} {{ tax }}{% endblock %}
+
+{% block sub_header_block %}
+{{ super() }}
+<div class="container mt-4">
+{{ breadcrumbs(tax_breadcrumbs) }}
+</div>
+{% endblock %}

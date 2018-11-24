@@ -10,6 +10,8 @@ from tools.views import (
     UserToolHistoryView,
     UserToolFilterView,
     UserToolUpdateView,
+    TaxDetailView,
+    TaxTreeView,
 )
 
 app_name = "tools"  # url namespace
@@ -24,4 +26,6 @@ urlpatterns = [
     path("<int:pk>/cleared", UserToolClearedView.as_view(), name="cleared"),
     path("<int:pk>/delete", UserToolDeleteView.as_view(), name="delete"),
     path("create/", UserToolCreateView.as_view(), name="create"),
+    path("tags/", TaxTreeView.as_view(), name="tags"),
+    path("<path:path>/", TaxDetailView.as_view(), name="taxonomy_detail"),
 ]
