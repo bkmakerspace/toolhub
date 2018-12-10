@@ -579,7 +579,7 @@ description = "A Django plugin for pytest."
 name = "pytest-django"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "3.4.3"
+version = "3.4.4"
 
 [package.dependencies]
 pytest = ">=3.6"
@@ -779,7 +779,7 @@ pycodestyle = ["74abc4e221d393ea5ce1f129ea6903209940c1ecd29e002e8c6933c2b21026e0
 pyflakes = ["9a7662ec724d0120012f6e29d6248ae3727d821bba522a0e6b356eff19126a49", "f661252913bc1dbe7fcfcbf0af0db3f42ab65aabd1a6ca68fe5d466bace94dae"]
 pygments = ["6301ecb0997a52d2d31385e62d0a4a4cf18d2f2da7054a5ddad5c366cd39cee7", "82666aac15622bd7bb685a4ee7f6625dd716da3ef7473620c192c0168aae64fc"]
 pytest = ["630ff1dbe04f469ee78faa5660f712e58b953da7df22ea5d828c9012e134da43", "a2b5232735dd0b736cbea9c0f09e5070d78fcaba2823a4f6f09d9a81bd19415c"]
-pytest-django = ["49e9ffc856bc6a1bec1c26c5c7b7213dff7cc8bc6b64d624c4d143d04aff0bcf", "b379282feaf89069cb790775ab6bbbd2bd2038a68c7ef9b84a41898e0b551081"]
+pytest-django = ["deffd9d65827c582bd0a85638a0fe52f0eb65a764872ddcee9ce51cdf6ae9f55", "fe1f71a0171f6b7edac37654da0904c9bd5ffba5221ab5a76779ab870611f41f"]
 pytest-forked = ["e4500cd0509ec4a26535f7d4112a8cc0f17d3a41c29ffd4eab479d2a55b30805", "f275cb48a73fc61a6710726348e1da6d68a978f0ec0c54ece5a5fae5977e5a08"]
 pytest-sugar = ["ab8cc42faf121344a4e9b13f39a51257f26f410e416c52ea11078cdd00d98a2c"]
 pytest-xdist = ["3bc9dcb6ff47e607d3c710727cd9996fd7ac1466d405c3b40bb495da99b6b669", "8e188d13ce6614c7a678179a76f46231199ffdfe6163de031c17e62ffa256917"]
