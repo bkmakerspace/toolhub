@@ -180,7 +180,7 @@ description = "Extensions for Django"
 name = "django-extensions"
 optional = false
 python-versions = "*"
-version = "2.1.3"
+version = "2.1.4"
 
 [package.dependencies]
 six = ">=1.2"
@@ -739,7 +739,7 @@ python-versions = "*"
 version = "0.14.1"
 
 [metadata]
-content-hash = "7f2675ae83a5a4482f841e461fb9752a8942fa3f080b0ab13888669079c537af"
+content-hash = "07c913b44139d77c325e5ccb54d7a76152ef7245d0c6ace6a6b10a0e2f1bc73e"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -762,7 +762,7 @@ django-colorful = ["49d3feefdabdf6a22931c12ce1ed0cbb4596e7754e66bd55c0f362c0a369
 django-crispy-forms = ["5952bab971110d0b86c278132dae0aa095beee8f723e625c3d3fa28888f1675f", "705ededc554ad8736157c666681165fe22ead2dec0d5446d65fc9dd976a5a876"]
 django-debug-toolbar = ["89d75b60c65db363fb24688d977e5fbf0e73386c67acf562d278402a10fc3736", "c2b0134119a624f4ac9398b44f8e28a01c7686ac350a12a74793f3dd57a9eea0"]
 django-environ = ["6c9d87660142608f63ec7d5ce5564c49b603ea8ff25da595fd6098f6dc82afde", "c57b3c11ec1f319d9474e3e5a79134f40174b17c7cc024bbb2fad84646b120c4"]
-django-extensions = ["30cb6a8c7d6f75a55edf0c0c4491bd98f8264ae1616ce105f9cecac4387edd07", "4ad86a7a5e84f1c77db030761ae87a600647250c652030a2b71a16e87f3a3d62"]
+django-extensions = ["8317a3fe479b1ba3e3a04ecf33fb8d6ccf09bb18f30eab64e34c40a593741d26", "a76a61566f1c8d96acc7bcf765080b8e91367a25a2c6f8c5bddd574493839180"]
 django-filter = ["6f4e4bc1a11151178520567b50320e5c32f8edb552139d93ea3e30613b886f56", "86c3925020c27d072cdae7b828aaa5d165c2032a629abbe3c3a1be1edae61c58"]
 django-jinja = ["8a49d73de616a12075eee14c6d3bbab936261a463457d40348d8b8e2995cfbed", "ceaa0eeebc4d91a5800967e50f4f087f0b6457503e3c2af85dc199bed8732a9a"]
 django-jinja-markdown = ["233dcde5d6895416f5613e4ca030e88f18a163e4b676e7aa815d191754f53085", "d41db694bbf3085b026df227428427b859478a2846b55088429e3ccc7115c0c5"]
