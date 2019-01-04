@@ -7,9 +7,6 @@ services:
             dockerfile: docker/dockerfiles/web
             args:
                 - POETRY_ARGS=  # allow dev install
-        working_dir: /srv/app
-        command: ./manage.py runserver_plus 0.0.0.0:8000
-        user: ${UID:-1000}  # user id or default
         restart: unless-stopped
         volumes:
             - ".:/srv/app"
