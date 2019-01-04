@@ -70,9 +70,9 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "7.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Cross-platform colored terminal text."
-marker = "python_version >= \"3.3\" and sys_platform == \"win32\" or sys_platform == \"win32\""
+marker = "python_version >= \"3.3\" and sys_platform == \"win32\" or platform_system == \"Windows\" or sys_platform == \"win32\""
 name = "colorama"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
@@ -191,6 +191,18 @@ Django = "*"
 Markdown = "*"
 Pillow = "*"
 pip = "*"
+
+[[package]]
+category = "main"
+description = "An application that provides tools for displaying QR codes on your Django site."
+name = "django-qr-code"
+optional = false
+python-versions = ">=3"
+version = "1.0.0"
+
+[package.dependencies]
+django = "*"
+qrcode = "*"
 
 [[package]]
 category = "main"
@@ -567,6 +579,18 @@ version = "2018.9"
 
 [[package]]
 category = "main"
+description = "QR Code image generator"
+name = "qrcode"
+optional = false
+python-versions = "*"
+version = "6.1"
+
+[package.dependencies]
+colorama = "*"
+six = "*"
+
+[[package]]
+category = "main"
 description = "Python 2 and 3 compatibility utilities"
 name = "six"
 optional = false
@@ -638,7 +662,7 @@ python-versions = "*"
 version = "0.14.1"
 
 [metadata]
-content-hash = "2d88a90621bfd82588fbf5927627a379917eb02c06a7cdecddcabd6bac7a22f1"
+content-hash = "0df6600d0bc61cdc5a53718e392c3d77f7eaf20d50b85bc654c86fabddfc576a"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -662,6 +686,7 @@ django-extensions = ["8317a3fe479b1ba3e3a04ecf33fb8d6ccf09bb18f30eab64e34c40a593
 django-filter = ["6f4e4bc1a11151178520567b50320e5c32f8edb552139d93ea3e30613b886f56", "86c3925020c27d072cdae7b828aaa5d165c2032a629abbe3c3a1be1edae61c58"]
 django-jinja = ["8a49d73de616a12075eee14c6d3bbab936261a463457d40348d8b8e2995cfbed", "ceaa0eeebc4d91a5800967e50f4f087f0b6457503e3c2af85dc199bed8732a9a"]
 django-markdownx = ["285a40ab405830c0a049e05f3dafabb2c195146f577b824913555aa62512b90d", "d6e706c0b1329b23d6dcaa8754e5921fa2531711dc5afeec4ed3c73a8cb6a178"]
+django-qr-code = ["23a8d871aaac5287b827cd9f75f38ca12602b576d527bf34722d97b00f9dbea0", "cd4eaf77b796f6addcc205a73b227ccfe24c1ff25eb72ea819c5c6cc937effda"]
 django-tagulous = ["593cf09f2f8b7f752388f1ee8cf4e7b8d33dfab56d23438b8dcd338f59922a76"]
 execnet = ["a7a84d5fa07a089186a329528f127c9d73b9de57f1a1131b82bb5320ee651f6a", "fc155a6b553c66c838d1a22dba1dc9f5f505c43285a878c6f74a79c024750b83"]
 flake8 = ["6a35f5b8761f45c5513e3405f110a86bea57982c3b75b766ce7b65217abe1670", "c01f8a3963b3571a8e6bd7a4063359aff90749e160778e03817cd9b71c9e07d2"]
@@ -698,6 +723,7 @@ pytest-forked = ["260d03fbd38d5ce41a657759e8d19bc7c8cfa6d0dcfa36c0bc9742d33bc307
 pytest-sugar = ["26cf8289fe10880cbbc130bd77398c4e6a8b936d8393b116a5c16121d95ab283", "fcd87a74b2bce5386d244b49ad60549bfbc4602527797fac167da147983f58ab"]
 pytest-xdist = ["107e9db0ee30ead02ca93e7d6d4846675f1b2142234f0eb1cd4d76739cd9ae6f", "5795f665e112520fa5beab736ad957e7f36ce7d44210f4004be9d99f86529d97"]
 pytz = ["32b0891edff07e28efe91284ed9c31e123d84bea3fd98e1f72be2508f43ef8d9", "d5f05e487007e29e03409f9398d074e158d920d36eb82eaf66fb1136b0c5374c"]
+qrcode = ["3996ee560fc39532910603704c82980ff6d4d5d629f9c3f25f34174ce8606cf5", "505253854f607f2abf4d16092c61d4e9d511a3b4392e60bff957a68592b04369"]
 six = ["3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c", "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"]
 sqlparse = ["ce028444cfab83be538752a2ffdb56bc417b7784ff35bb9a3062413717807dec", "d9cf190f51cbb26da0412247dfe4fb5f4098edb73db84e02f9fc21fdca31fed4"]
 termcolor = ["1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b"]

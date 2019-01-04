@@ -1,0 +1,100 @@
+{% extends "layouts/base.jinja" %}
+
+{% block head_title %}{{ tool }} {{ _("label") }}{% endblock %}
+
+{% block main_css %}{% endblock %}
+
+{% block head %}
+<style type="text/css">
+html {
+    height: 100%;
+    width: 100%;
+}
+body.label-page {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/*body.portrait {
+    width: 4in;
+    height: 6in;
+}*/
+body.portrait .label-content {
+    grid-template-rows: 4in auto;
+    grid-template-areas:
+        "link"
+        "details"
+}
+
+/*body.landscape {
+    width: 6in;
+    height: 4in;
+}*/
+body.landscape .label-content {
+    grid-template-columns: 4in auto;
+    grid-template-rows: 4in;
+    grid-template-areas: "link details"
+}
+
+body.label-page .label-content {
+    display: grid;
+    grid-gap: 1.25rem;
+    /*justify-items: stretch;*/
+    height: 100%;
+}
+
+body.label-page svg{
+    /* Size SVG to fit inside grid item */
+    height: auto;
+    max-height: 100%;
+    width: 100%;
+    max-width: 100%;
+}
+
+#tool-details {
+    grid-area: details
+}
+
+#qr-detail-link{
+    grid-area: link;
+/*    justify-self: stretch;
+    align-self: start;
+*/}
+
+@media print {
+    @page {
+        /* make the page remove all title/page text and make fill selection orientation */
+        size: {{ page_orientation }};
+        margin: 0mm;
+    }
+}
+</style>
+{% endblock %}
+
+{% set body_classes = classlist(['label-page', page_orientation] ) %}
+
+{% block body_args %} {{ body_classes }}{% endblock %}
+
+{% block body %}
+<main role="main" class="label-content">
+    <div id="qr-detail-link" class="qr-link">
+        {{ qr_from_text(full_link, **qr_options) }}
+    </div>
+    <div id="tool-details" class="card">
+        <div class="card-body">
+            <h4 id="tool-name" class="card-title">{{ tool }}</h4>
+            <h5 id="tool-owner" class="card-subtitle mb-2 text-muted"><small>owner:</small> {{ tool.user }}</h5>
+            <p id="tool-id" class="card-text text-muted">{{ link }}</p>
+        </div>
+    </div>
+</main>
+{% if force_print %}
+<script>
+    window.print();
+</script>
+{% endif %}
+
+{% endblock %}

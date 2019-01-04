@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db.transaction import atomic
+from django import forms
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, DetailView, DeleteView, ListView, UpdateView
@@ -153,3 +154,51 @@ class TaxDetailView(LoginRequiredMixin, UserToolBaseFilterView):
         breadcrumbs += [(None, tax.name)]
         self.extra_context = {"tax_breadcrumbs": breadcrumbs, "tax": tax}
         return super().get_queryset().filter(taxonomies__in=tax_ids)
+
+
+class PrintLabelView(VisibleToUserMixin, DetailView):
+    """
+    Presents a template that is printable and shows a QR code link to a tools
+    detail page.
+
+    Allows for some customization via query parameters
+    """
+
+    model = UserTool
+    template_name = "tools/usertool_label_detail.jinja"
+    context_object_name = "tool"
+
+    class PrintLabelOptions(forms.Form):
+        # maps to CSS @page size propery value:
+        ORIENTATION_CHOICES = ("landscape", "Landscape"), ("portrait", "Portrait")
+
+        orientation = forms.ChoiceField(choices=ORIENTATION_CHOICES, required=False)
+        force_print = forms.BooleanField(required=False)
+
+    def get_tool_detail_url(self):
+        return self.object.get_absolute_url()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        detail_link = self.get_tool_detail_url()
+
+        qr_options = {"error_correction": "H", "border": 0, "image_format": "svg"}
+
+        # set some default options
+        data = dict(orientation="landscape", force_print=True)
+        data.update(self.request.GET.dict())
+        form = self.PrintLabelOptions(data)
+        if not form.is_valid():
+            context.update({"errors": form.errors})
+
+        context.update(
+            {
+                "errors": None,
+                "force_print": form.cleaned_data.get("force_print"),
+                "page_orientation": form.cleaned_data.get("orientation"),
+                "link": detail_link,
+                "full_link": self.request.build_absolute_uri(detail_link),
+                "qr_options": qr_options,
+            }
+        )
+        return context

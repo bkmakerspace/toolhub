@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "django_filters",
     "colorful",
     "debug_toolbar",
+    "qr_code",
     "toolhub",
     "toolhub_auth.apps.ToolhubAuthConfig",
     "tools.apps.ToolsConfig",

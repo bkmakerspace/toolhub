@@ -7,11 +7,14 @@
         <meta name="author" content="{% block page_author %}{% endblock %}">
         <title>Toolhub - {% block head_title %}{% endblock %}</title>
         <!-- BS4 CDN for now. -->
+        {% block head_css %}
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{ static('main.css') }}">
+        {% block main_css %}<link rel="stylesheet" href="{{ static('main.css') }}">{% endblock %}
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-LRlmVvLKVApDVGuspQFnRQJjkv0P7/YFrw84YYQtmYG4nK8c+M+NlmYDCv0rKWpG" crossorigin="anonymous">
+        {% endblock %}
         {% block head %}{% endblock %}
     </head>
-    <body>
+    <body{% block body_args %}{% endblock %}>
 {% block body %}
     {% block header %}
         {% include "partials/main_header.jinja" %}
