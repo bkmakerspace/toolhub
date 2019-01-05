@@ -7,6 +7,8 @@ services:
             dockerfile: docker/dockerfiles/web
             args:
                 - POETRY_ARGS=  # allow dev install
+        user: ${UID:-toolhub} # user id or default
+        command: ./manage.py runserver_plus 0.0.0.0:8000 # override for local dev
         restart: unless-stopped
         volumes:
             - ".:/srv/app"
