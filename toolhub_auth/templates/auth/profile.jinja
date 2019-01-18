@@ -1,8 +1,9 @@
 {% extends "layouts/sub_header_base.jinja" %}
 
-{% block head_title %}{{ user }}{% endblock %}
+{% block head_title %}{{ profile_user }}{% endblock %}
 
-{% block sub_header %}{{ user }}{% endblock %}
+{% block sub_header %}{{ profile_user }}{% endblock %}
 
 {% block content %}
+    {% markdown %}{{ profile_user.profile.text }}{% endmarkdown %}
 {% endblock %}

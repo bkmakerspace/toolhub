@@ -1,6 +1,10 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from django_extensions.db.models import TimeStampedModel
+from markdownx.models import MarkdownxField
 
 
 class UserManager(BaseUserManager):
@@ -16,6 +20,8 @@ class UserManager(BaseUserManager):
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
+        # create user profile to be edited by user later.
+        UserProfile.objects.create(user=user)
         return user
 
     def create_user(self, email=None, password=None, **extra_fields):
@@ -52,3 +58,25 @@ class User(AbstractUser):
         if self.get_full_name():
             return self.get_full_name()
         return self.email
+
+    def get_absolute_url(self):
+        return reverse("profile", kwargs={"pk": self.pk})
+
+
+class UserProfile(TimeStampedModel):
+    """
+    Custom user profile page details
+    """
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    text = MarkdownxField(_("Profile Text"), blank=True)
+
+    def __str__(self):
+        return f"{self.user} Profile"
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """Create the user profile when a user is created"""
+    if created:
+        UserProfile.objects.create(user=instance)

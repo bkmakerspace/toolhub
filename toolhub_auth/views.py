@@ -1,3 +1,5 @@
+from braces.views import SelectRelatedMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login as auth_login
 from django.views.generic import CreateView, DetailView
@@ -25,7 +27,8 @@ class SignupView(CreateView):
         return response
 
 
-class ProfileView(DetailView):
+class ProfileView(LoginRequiredMixin, SelectRelatedMixin, DetailView):
     model = User
     template_name = "auth/profile.jinja"
-    context_object_name = "user"
+    context_object_name = "profile_user"
+    select_related = ("profile",)
