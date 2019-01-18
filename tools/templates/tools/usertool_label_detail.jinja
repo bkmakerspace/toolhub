@@ -6,43 +6,32 @@
 
 {% block head %}
 <style type="text/css">
-html {
-    height: 100%;
-    width: 100%;
-}
+
 body.label-page {
     overflow: hidden;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
-/*body.portrait {
-    width: 4in;
-    height: 6in;
-}*/
 body.portrait .label-content {
-    grid-template-rows: 4in auto;
+    grid-template-rows: 60vh auto;
     grid-template-areas:
         "link"
-        "details"
+        "details";
 }
 
-/*body.landscape {
-    width: 6in;
-    height: 4in;
-}*/
 body.landscape .label-content {
-    grid-template-columns: 4in auto;
-    grid-template-rows: 4in;
-    grid-template-areas: "link details"
+    grid-template-columns: 40vw auto;
+    grid-template-rows: 100vh;
+    grid-template-areas: "link details";
 }
 
 body.label-page .label-content {
     display: grid;
     grid-gap: 1.25rem;
-    /*justify-items: stretch;*/
     height: 100%;
 }
 
@@ -60,9 +49,7 @@ body.label-page svg{
 
 #qr-detail-link{
     grid-area: link;
-/*    justify-self: stretch;
-    align-self: start;
-*/}
+}
 
 @media print {
     @page {
@@ -82,10 +69,14 @@ body.label-page svg{
 <main role="main" class="label-content">
     <div id="qr-detail-link" class="qr-link">
         {{ qr_from_text(full_link, **qr_options) }}
+        <p class="text-center">
+            <small class="text-muted">scan to open toolhub page</small>
+        </p>
     </div>
     <div id="tool-details" class="card">
         <div class="card-body">
-            <h4 id="tool-name" class="card-title">{{ tool }}</h4>
+            <small>Toolhub identifier:</small>
+            <h2 id="tool-name" class="card-title">{{ tool }}</h2>
             <h5 id="tool-owner" class="card-subtitle mb-2 text-muted"><small>owner:</small> {{ tool.user }}</h5>
             <p id="tool-id" class="card-text text-muted">{{ link }}</p>
         </div>
