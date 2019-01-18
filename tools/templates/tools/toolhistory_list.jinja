@@ -1,5 +1,6 @@
 {% extends "layouts/sub_header_base.jinja" %}
 {% from "partials/pagination.jinja" import pagination %}
+{% from "partials/links.jinja" import profile_link %}
 
 {% block head_title %}{{ _("Tools History") }}{% endblock %}
 
@@ -9,7 +10,7 @@
  <div class="list-group mb-4">
     {% for item in history_items.all() %}
         <div class="list-group-item">
-            {{ item.get_action_display() }} by {{ item.user }} {{ item.created|naturaltime }}<br>
+            {{ item.get_action_display() }} by {{ profile_link(item.user) }} {{ item.created|naturaltime }}<br>
             <small class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }} </small>
         </div>
     {% endfor %}

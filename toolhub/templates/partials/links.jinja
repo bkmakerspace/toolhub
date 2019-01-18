@@ -1,0 +1,4 @@
+{% macro profile_link(user, extra_classes=[]) %}
+    {% set classes = classlist(["profile-link"] + extra_classes) %}
+    <a href="{{ user.get_absolute_url() }}" {{ classes }}>{{ user }}</a>
+{% endmacro %}
