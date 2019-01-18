@@ -1,6 +1,6 @@
 from crispy_forms.layout import Fieldset, Submit, Field, Div, HTML
 from django import forms
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.forms import AuthenticationForm as DjangoAuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from utils.forms import CrispyFormMixin, FormActions
@@ -30,13 +30,22 @@ class AuthenticationForm(CrispyFormMixin, DjangoAuthenticationForm):
 class SignupForm(CrispyFormMixin, forms.ModelForm):
     first_name = forms.CharField(required=False)
     last_name = forms.CharField(required=False)
-    password = forms.CharField(widget=forms.PasswordInput, required=True)
+    password = forms.CharField(
+        widget=forms.PasswordInput,
+        required=True,
+        help_text=password_validation.password_validators_help_text_html(),
+    )
 
     has_columns = False
 
     class Meta:
         model = get_user_model()
-        fields = ("email", "first_name", "last_name", "password")
+        fields = ("email", "first_name", "last_name")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self._meta.model.USERNAME_FIELD in self.fields:
+            self.fields[self._meta.model.USERNAME_FIELD].widget.attrs.update({'autofocus': True})
 
     def layout_args(self, helper):
         return (
@@ -64,3 +73,21 @@ class SignupForm(CrispyFormMixin, forms.ModelForm):
         if email and User.objects.filter(email=email).exists():
             raise forms.ValidationError("There is already a user with that email.")
         return email
+
+    def _post_clean(self):
+        super()._post_clean()
+        # Validate the password after self.instance is updated with form data
+        # by super().
+        password = self.cleaned_data.get("password")
+        if password:
+            try:
+                password_validation.validate_password(password, self.instance)
+            except forms.ValidationError as error:
+                self.add_error("password", error)
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
