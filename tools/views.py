@@ -140,18 +140,16 @@ class TaxTreeView(LoginRequiredMixin, ListView):
 
 class TaxDetailView(LoginRequiredMixin, UserToolBaseFilterView):
     template_name = "tools/usertool_tax_filter.jinja"
+
     def get_queryset(self):
-        path = self.kwargs.get('path', None)
+        path = self.kwargs.get("path", None)
         # handle not found
         tax = ToolTaxonomy.objects.get(path=path)
-        decendant_ids = list(tax.get_descendants().values_list('id', flat=True))
+        decendant_ids = list(tax.get_descendants().values_list("id", flat=True))
         tax_ids = [tax.id] + decendant_ids
         ancestors = tax.get_ancestors()
-        breadcrumbs = [(reverse_lazy('tools:home'), "Tools")]
+        breadcrumbs = [(reverse_lazy("tools:home"), "Tools")]
         breadcrumbs += [(a.get_absolute_url(), a.name) for a in ancestors]
         breadcrumbs += [(None, tax.name)]
-        self.extra_context = {
-            "tax_breadcrumbs": breadcrumbs,
-            "tax": tax,
-        }
+        self.extra_context = {"tax_breadcrumbs": breadcrumbs, "tax": tax}
         return super().get_queryset().filter(taxonomies__in=tax_ids)
