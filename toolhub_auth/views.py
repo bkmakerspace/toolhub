@@ -38,7 +38,13 @@ class ProfileView(LoginRequiredMixin, SelectRelatedMixin, DetailView):
     def get_context_data(self, **kwargs):
         if self.extra_context is None:
             self.extra_context = {}
-        self.extra_context.update({"borrowing": UserTool.objects.borrowing_by_user(self.object)})
+        self.extra_context.update(
+            {
+                "borrowing": UserTool.objects.visible_to_user(self.request.user)
+                .borrowing_by_user(self.object)
+                .order_by("-last_history_date")
+            }
+        )
         return super().get_context_data(**kwargs)
 
 

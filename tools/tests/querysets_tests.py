@@ -135,25 +135,36 @@ class UserToolQuerySetTests(TestCase):
             list(qs.all()), [self.user_tool1, self.others_tool1, self.others_tool_cleared_for_user]
         )
 
-    def xtest_borrowing_by_user(self):
+    def test_borrowing_by_user(self):
+        borrowed = self.make_tool(title="A borrowed tool", state=UserTool.States.in_use.value)
 
-        borrowed = self.make_tool(
-            title="A previously borrowed tool", state=UserTool.States.in_use.value
+        borrowed_and_own = self.make_tool(
+            title="A borrowed owned tool", user=self.user, state=UserTool.States.in_use.value
         )
 
         returned = self.make_tool(
-            title="A previously borrowed tool, returned", state=UserTool.States.available.value
+            title="A previously borrowed tool, returned",
+            user=self.user,
+            state=UserTool.States.available.value,
         )
 
         # Borrowed by another user
         mommy.make(ToolHistory, tool=borrowed, action=UserTool.Transitions.borrow.value)
+        mommy.make(ToolHistory, tool=borrowed_and_own, action=UserTool.Transitions.borrow.value)
         mommy.make(ToolHistory, tool=returned, action=UserTool.Transitions.borrow.value)
-        # Both returned
+        # All returned
         mommy.make(ToolHistory, tool=borrowed, action=UserTool.Transitions.return_.value)
+        mommy.make(ToolHistory, tool=borrowed_and_own, action=UserTool.Transitions.return_.value)
         mommy.make(ToolHistory, tool=returned, action=UserTool.Transitions.return_.value)
-        # Both are borrowed by test user
+        # All are borrowed by test user
         mommy.make(
             ToolHistory, tool=borrowed, user=self.user, action=UserTool.Transitions.borrow.value
+        )
+        mommy.make(
+            ToolHistory,
+            tool=borrowed_and_own,
+            user=self.user,
+            action=UserTool.Transitions.borrow.value,
         )
         mommy.make(
             ToolHistory, tool=returned, user=self.user, action=UserTool.Transitions.borrow.value
@@ -164,4 +175,10 @@ class UserToolQuerySetTests(TestCase):
         )
 
         result = UserTool.objects.borrowing_by_user(self.user)
+        self.assertSequenceEqual(
+            list(result.all().order_by("-last_history_date")), [borrowed_and_own, borrowed]
+        )
+
+        # Test that we exclude out own tools when requested
+        result = UserTool.objects.borrowing_by_user(self.user, exclude_own=True)
         self.assertSequenceEqual(list(result.all()), [borrowed])
