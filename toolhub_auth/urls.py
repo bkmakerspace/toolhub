@@ -9,7 +9,7 @@ from django.contrib.auth.views import (
 )
 from django.urls import path
 
-from toolhub_auth.views import ToolhubLoginView, SignupView, ProfileView
+from toolhub_auth.views import EditProfileView, ToolhubLoginView, SignupView, ProfileView
 
 
 urlpatterns = [
@@ -31,4 +31,5 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     path("profile/<int:pk>", ProfileView.as_view(), name="profile"),
+    path("profile/update/", EditProfileView.as_view(), name="update_profile"),
 ]

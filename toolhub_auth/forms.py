@@ -3,6 +3,8 @@ from django import forms
 from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.forms import AuthenticationForm as DjangoAuthenticationForm
 from django.utils.translation import ugettext_lazy as _
+
+from .models import UserProfile
 from utils.forms import CrispyFormMixin, FormActions
 
 
@@ -91,3 +93,25 @@ class SignupForm(CrispyFormMixin, forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class UserProfileUpdateForm(CrispyFormMixin, forms.ModelForm):
+    action_button_label = _("Update profile")
+    form_action = "update_profile"
+    has_columns = False
+
+    def layout_args(self, helper):
+        return (
+            Fieldset(
+                None,
+                Field("text", css_class="h-100", label_class="", field_class=""),
+            ),
+            Div(
+                Div(Submit("action", self.action_button_label)),
+                css_class="form-group",
+            ),
+        )
+
+    class Meta:
+        fields = ("text",)
+        model = UserProfile

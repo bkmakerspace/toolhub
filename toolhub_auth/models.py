@@ -73,7 +73,10 @@ class UserProfile(TimeStampedModel):
     text = MarkdownxField(_("Profile Text"), blank=True)
 
     def __str__(self):
-        return f"{self.user} Profile"
+        return f"{self.user} profile"
+
+    def get_absolute_url(self):
+        return reverse("profile", kwargs={"pk": self.user_id})
 
 
 @receiver(post_save, sender=User)

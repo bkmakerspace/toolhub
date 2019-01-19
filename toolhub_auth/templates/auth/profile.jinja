@@ -29,6 +29,9 @@
             </div>
         </div>
         <div class="col-md-8 profile-content">
+            {% if request.user == profile_user %}
+                <a href="{{ url('update_profile') }}" class="btn btn-info">{{ _('Update Profile') }}</a>
+            {% endif %}
             <section class="my-3">
             {{ markdown(profile_user.profile.text) }}
             </section>

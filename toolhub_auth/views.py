@@ -2,12 +2,13 @@ from braces.views import SelectRelatedMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login as auth_login
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, UpdateView
 from django.urls import reverse_lazy
 
-from .forms import AuthenticationForm, SignupForm
-from .models import User
+from .forms import AuthenticationForm, SignupForm, UserProfileUpdateForm
+from .models import User, UserProfile
 from tools.models import UserTool
+from utils.mixins import RestrictToUserMixin
 
 
 class ToolhubLoginView(LoginView):
@@ -39,3 +40,16 @@ class ProfileView(LoginRequiredMixin, SelectRelatedMixin, DetailView):
             self.extra_context = {}
         self.extra_context.update({"borrowing": UserTool.objects.borrowing_by_user(self.object)})
         return super().get_context_data(**kwargs)
+
+
+class EditProfileView(RestrictToUserMixin, UpdateView):
+    model = UserProfile
+    form_class = UserProfileUpdateForm
+    template_name = "auth/profile_update.jinja"
+    context_object_name = "profile"
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
