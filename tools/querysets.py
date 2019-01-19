@@ -46,13 +46,14 @@ class UserToolQuerySet(QuerySet):
 
     def borrowing_by_user(self, user):
         return (
-            self.order_by('history__id', '-history__created')
-            .distinct('history__id')
+            self.order_by("history__id", "-history__created")
+            .distinct("history__id")
             .filter(
                 history__user=user,
                 history__action=self.model.Transitions.borrow.value,
-                state=self.model.States.in_use.value
-            ))
+                state=self.model.States.in_use.value,
+            )
+        )
 
 
 class ToolHistoryQuerySet(QuerySet):
