@@ -1,9 +1,37 @@
-{% extends "layouts/sub_header_base.jinja" %}
+{% extends "layouts/base.jinja" %}
+{% from "partials/links.jinja" import object_link %}
 
 {% block head_title %}{{ profile_user }}{% endblock %}
 
-{% block sub_header %}{{ profile_user }}{% endblock %}
-
 {% block content %}
-    {% markdown %}{{ profile_user.profile.text }}{% endmarkdown %}
+    <div class="row profile">
+        <div class="col-md-4 profile-sidebar">
+            <div class="profile-userpic">
+                <img src="{{ gravatar_url(profile_user.email, 240) }}" class="img-fluid" alt="Profile picture of {{ profile_user }}">
+            </div>
+            <h2>{{ profile_user }}</h2>
+            <div class="my-2">
+                <span class="badge badge-primary">
+                    {% trans tool_count=profile_user.tools.visible_to_user(user).count() %}
+                        {{ tool_count }} Tools
+                    {% endtrans %}
+                </span>
+            </div>
+            <div class="my-2">
+                <h3>Borrowing <span class="badge badge-primary">{{ borrowing.count() }}</span></h3>
+                <div class="list-group my-2">
+                {% for tool in borrowing %}
+                    {{ object_link(tool, "tool-link", ["list-group-item", "ist-group-item-action"] )}}
+                {% else %}
+                    <div class="list-group-item">No open borrows</div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 profile-content">
+            <section class="my-3">
+            {% markdown %}{{ profile_user.profile.text }}{% endmarkdown %}
+            </section>
+        </div>
+    </div>
 {% endblock %}

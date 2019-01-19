@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 
 from .forms import AuthenticationForm, SignupForm
 from .models import User
+from tools.models import UserTool
 
 
 class ToolhubLoginView(LoginView):
@@ -32,3 +33,11 @@ class ProfileView(LoginRequiredMixin, SelectRelatedMixin, DetailView):
     template_name = "auth/profile.jinja"
     context_object_name = "profile_user"
     select_related = ("profile",)
+
+    def get_context_data(self, **kwargs):
+        if self.extra_context is None:
+            self.extra_context = {}
+        self.extra_context.update({
+            "borrowing": UserTool.objects.borrowing_by_user(self.object)
+        })
+        return super().get_context_data(**kwargs)
