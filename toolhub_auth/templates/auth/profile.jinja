@@ -30,7 +30,7 @@
         </div>
         <div class="col-md-8 profile-content">
             <section class="my-3">
-            {% markdown %}{{ profile_user.profile.text }}{% endmarkdown %}
+            {{ markdown(profile_user.profile.text) }}
             </section>
         </div>
     </div>
