@@ -21,7 +21,11 @@
                 <h3>Borrowing <span class="badge badge-primary">{{ borrowing.count() }}</span></h3>
                 <div class="list-group my-2">
                 {% for tool in borrowing %}
-                    {{ object_link(tool, "tool-link", ["list-group-item", "ist-group-item-action"] )}}
+                    {% set borrow=tool.history.latest_borrow() %}
+                    {% call object_link(tool, "tool-link", ["list-group-item", "ist-group-item-action"]) %}
+                        {{ tool }} <span class="text-secondary">{{ borrow.created|naturaltime }}</span><br>
+                        <small class="font-weight-light text-muted">{{ borrow.created|date("SHORT_DATETIME_FORMAT") }} </small>
+                    {% endcall %}
                 {% else %}
                     <div class="list-group-item">No open borrows</div>
                 {% endfor %}
