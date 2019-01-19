@@ -1,6 +1,6 @@
 {% extends "layouts/sub_header_base.jinja" %}
 {% from "partials/badges.jinja" import taxonomy_list, availability_badge %}
-{% from "partials/links.jinja" import profile_link %}
+{% from "partials/links.jinja" import object_link %}
 
 {% block head_title %}{{ tool }}{% endblock %}
 
@@ -41,12 +41,12 @@
                     <div class="col-lg-8">
                         <h1 class="d-inline">{{ tool }}</h1>
                         {{ availability_badge(tool, extra_classes="sup small align-top") }}
-                        <h6><span class="text-uppercase text-muted small">owner:</span> {{ profile_link(tool.user) }}</h6>
+                        <h6><span class="text-uppercase text-muted small">owner:</span> {{ object_link(tool.user, "profile-link") }}</h6>
                     </div>
                     <div class="col-lg-4">
                         <p>{{ taxonomy_list(tool.taxonomies.all()) }}</p>
                         {% if tool.is_in_use() %}
-                            <span>{{ _("Currently checked out by:") }} <strong>{{ profile_link(tool.history.latest_borrow().user) }}</strong></span>
+                            <span>{{ _("Currently checked out by:") }} <strong>{{ object_link(tool.history.latest_borrow().user, "profile-link") }}</strong></span>
                         {% endif %}
                     </div>
                 </div>
@@ -74,7 +74,7 @@
         {% set history_display_count = 6 %}
         {% for item in tool.history.all()[:history_display_count] %}
             <div class="list-group-item">
-                {{ item.get_action_display() }} by {{ profile_link(item.user) }}<br>
+                {{ item.get_action_display() }} by {{ object_link(item.user, "profile-link") }}<br>
                 <small class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }}</small>
             </div>
             {% if loop.last and history_count > history_display_count %}
@@ -87,7 +87,7 @@
         {% set cleared_display_count = 6 %}
         {% for item in tool.permissions.all()[:cleared_display_count] %}
             <div class="list-group-item">
-                {{ profile_link(item.cleared_user) }}<br>
+                {{ object_link(item.cleared_user, "profile-link") }}<br>
                 <small class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }}</small>
             </div>
             {% if loop.last and cleared_count > cleared_display_count %}
