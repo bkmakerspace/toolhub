@@ -102,14 +102,8 @@ class UserProfileUpdateForm(CrispyFormMixin, forms.ModelForm):
 
     def layout_args(self, helper):
         return (
-            Fieldset(
-                None,
-                Field("text", css_class="h-100", label_class="", field_class=""),
-            ),
-            Div(
-                Div(Submit("action", self.action_button_label)),
-                css_class="form-group",
-            ),
+            Fieldset(None, Field("text", css_class="h-100", label_class="", field_class="")),
+            Div(Div(Submit("action", self.action_button_label)), css_class="form-group"),
         )
 
     class Meta:

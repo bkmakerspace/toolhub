@@ -1,6 +1,5 @@
 from django.utils.module_loading import import_string
 from django_jinja import library, utils
-import jinja2
 from markdownx.settings import MARKDOWNX_MARKDOWNIFY_FUNCTION
 
 
