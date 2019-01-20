@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 SECRET_KEY = "wataboutthechildren"
+SITE_ID = 1
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -14,6 +15,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
+    "django.contrib.flatpages",
     "django.forms",
     "django_extensions",
     "django_jinja.contrib._humanize",
@@ -30,6 +33,11 @@ INSTALLED_APPS = [
     "utils",
     "markdownx",  # placed below all so templates can be overwritten
 ]
+
+# MIGRATIONS
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
+MIGRATION_MODULES = {"sites": "toolhub.contrib.sites.migrations"}
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
