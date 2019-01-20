@@ -1,8 +1,9 @@
 * **Please check if the PR fulfills these requirements**
-- [ ] Tests for the changes have been added (for bug fixes / features)
+- [ ] Tests for the changes have been added and pass (for bug fixes / features) (`./script/test -h` for details)
+- [ ] Ran the check script to make sure system and linting checks pass (`./script/check -h` for details)
 - [ ] Docs have been added / updated (for bug fixes / features)
-- [ ] Linting and code tests pass
-- [ ] Rebased or merges from latest master branch
+- [ ] Rebased or merged from latest master branch
+
 
 
 * **What kind of change does this PR introduce?** (Bug fix, feature, docs update, ...)
