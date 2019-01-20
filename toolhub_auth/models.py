@@ -62,10 +62,11 @@ class User(AbstractUser):
         return reverse("profile", kwargs={"pk": self.pk})
 
     def save(self, *args, **kwargs):
-        if not self.pk:
-            # Create the user profile when a user is created
-            UserProfile.objects.create(user=self)
+        created = not self.pk
         super().save(*args, **kwargs)
+        # Create the user profile when a user is created
+        if created:
+            UserProfile.objects.create(user=self)
 
 
 class UserProfile(TimeStampedModel):
