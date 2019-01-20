@@ -28,6 +28,9 @@ class AuthenticationForm(CrispyFormMixin, DjangoAuthenticationForm):
             ),
         )
 
+    def clean_username(self):
+        return self.cleaned_data.get("username").lower()
+
 
 class SignupForm(CrispyFormMixin, forms.ModelForm):
     first_name = forms.CharField(required=False)
@@ -70,7 +73,7 @@ class SignupForm(CrispyFormMixin, forms.ModelForm):
         )
 
     def clean_email(self):
-        email = self.cleaned_data.get("email")
+        email = self.cleaned_data.get("email").lower()
         User = get_user_model()
         if email and User.objects.filter(email=email).exists():
             raise forms.ValidationError("There is already a user with that email.")
