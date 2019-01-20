@@ -1,7 +1,5 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
@@ -63,6 +61,12 @@ class User(AbstractUser):
     def get_absolute_url(self):
         return reverse("profile", kwargs={"pk": self.pk})
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            # Create the user profile when a user is created
+            UserProfile.objects.create(user=self)
+        super().save(*args, **kwargs)
+
 
 class UserProfile(TimeStampedModel):
     """
@@ -77,10 +81,3 @@ class UserProfile(TimeStampedModel):
 
     def get_absolute_url(self):
         return reverse("profile", kwargs={"pk": self.user_id})
-
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    """Create the user profile when a user is created"""
-    if created:
-        UserProfile.objects.create(user=instance)
