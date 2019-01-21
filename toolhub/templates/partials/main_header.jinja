@@ -1,5 +1,5 @@
 <nav role="navigation" class="navbar navbar-expand-md navbar-light bg-light">
-    <a class="navbar-brand" href="{{ url('home') }}">{{ _("Toolhub") }}</a>
+    <a class="navbar-brand" href="{{ url('home') }}">{{ _("Toolhub") }} <i class="fal fa-tools"></i></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -7,7 +7,7 @@
         {# main nav #}
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('home') }}">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ url('home') }}">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('tools:home') }}">Tools</a>
@@ -17,32 +17,35 @@
         <ul class="navbar-nav">
         {% if request.user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('profile', pk=request.user.pk) }}">{{ _("Profile") }}</a>
+                <a class="nav-link" href="{{ url('profile', pk=request.user.pk) }}">{{ _("Profile") }} <i class="fal fa-id-card"></i></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('tools:owned') }}">{{ _("Your Tools") }}</a>
+                <a class="nav-link" href="{{ url('tools:owned') }}">{{ _("Your Tools") }} <i class="far fa-wrench"></i></a>
             </li>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="user-menu">
-                {{ gravatar(user.email, size=24) }}
-                {{ user.get_full_name()|default(user.email, True) }}
-              </a>
-              <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="user-menu">
-                  <a class="dropdown-item" tabindex="-1" href="{{ url('home') }}">{{ _("Your Account") }}</a>
-                  <h6 class="dropdown-header">{{ _("Profile Custommizations") }}</h6>
-                  <a class="dropdown-item" tabindex="-1" href="{{ url('home') }}">{{ _("My Info") }}</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" tabindex="-1" href="{{ url('logout') }}">{{ _("Logout") }}</a></li>
-              </div>
+                    {{ gravatar(user.email, size=24) }}
+                    {{ user.get_full_name()|default(user.email, True) }}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="user-menu">
+                    {% if user.is_staff %}
+                        <a class="dropdown-item" tabindex="-1" href="{{ url('admin:index') }}"><i class="fal fa-unlock-alt"></i> {{ _("Admin") }}</a>
+                    {% endif %}
+                    <a class="dropdown-item" tabindex="-1" href="{{ url('home') }}">{{ _("Your Account") }}</a>
+                    <h6 class="dropdown-header">{{ _("Profile Custommizations") }}</h6>
+                    <a class="dropdown-item" tabindex="-1" href="{{ url('home') }}">{{ _("My Info") }}</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" tabindex="-1" href="{{ url('logout') }}">{{ _("Logout") }}</a></li>
+                </div>
             </li>
-            {% else %}
+        {% else %}
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('signup') }}">{{ _("Sign Up") }}</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('login') }}">{{ _("Login") }}</a>
             </li>
-            {% endif %}
+        {% endif %}
       </ul>
   </div>
 </nav>

@@ -61,6 +61,7 @@ LOGOUT_REDIRECT_URL = reverse_lazy("home")
 TEMPLATES = [
     {
         "BACKEND": "django_jinja.backend.Jinja2",
+        "NAME": "Jinja2",
         "APP_DIRS": True,
         "OPTIONS": {
             "match_extension": ".jinja",
@@ -83,6 +84,7 @@ TEMPLATES = [
                 "django_jinja.builtins.extensions.StaticFilesExtension",
                 "django_jinja.builtins.extensions.DjangoFiltersExtension",
                 "tools.extensions.ToolConstantsExtension",
+                "toolhub.extensions.StatsExtension",
             ],
             "auto_reload": True,
             "autoescape": True,
