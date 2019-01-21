@@ -1,0 +1,10 @@
+{% macro object_link(object, default_class="link", extra_classes=[]) %}
+    {% set classes = classlist([default_link] + extra_classes) %}
+    <a href="{{ object.get_absolute_url() }}" {{ classes }}>
+        {% if caller %}
+            {{ caller() }}
+        {% else %}
+            {{ object }}
+        {% endif %}
+    </a>
+{% endmacro %}

@@ -1,5 +1,6 @@
 {% extends "layouts/sub_header_base.jinja" %}
-{% from "macros/badges.jinja" import taxonomy_list, availability_badge %}
+{% from "partials/badges.jinja" import taxonomy_list, availability_badge %}
+{% from "partials/links.jinja" import object_link %}
 {% from "partials/pagination.jinja" import pagination %}
 
 {% block head_title %}{{ _("Filter Tools") }}{% endblock %}
@@ -35,7 +36,7 @@
                 <div class="card-body">
                     <h5 class="card-title"><a href="{{ tool_link }}">{{ tool.title }}</a> {{ availability_badge(tool) }}</h5>
                     <p class="card-text">{{ tool.description|truncate(80) }}</p>
-                    <p class="card-text">{{ tool.user }}</p>
+                    <p class="card-text">{{ object_link(tool.user, "profile-link") }}</p>
                     <p class="card-text">{{ taxonomy_list(tool.taxonomies.all()) }}</p>
                 </div>
             </div>

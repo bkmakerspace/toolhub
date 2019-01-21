@@ -17,14 +17,15 @@
         <ul class="navbar-nav">
         {% if request.user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('home') }}">{{ _("Profile") }}</a>
+                <a class="nav-link" href="{{ url('profile', pk=request.user.pk) }}">{{ _("Profile") }}</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('tools:owned') }}">{{ _("Your Tools") }}</a>
             </li>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="user-menu">
-                  {{ user.get_full_name()|default(user.email, True) }}
+                {{ gravatar(user.email, size=24) }}
+                {{ user.get_full_name()|default(user.email, True) }}
               </a>
               <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="user-menu">
                   <a class="dropdown-item" tabindex="-1" href="{{ url('home') }}">{{ _("Your Account") }}</a>

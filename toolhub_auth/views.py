@@ -1,9 +1,14 @@
+from braces.views import SelectRelatedMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login as auth_login
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView, UpdateView
 from django.urls import reverse_lazy
 
-from .forms import AuthenticationForm, SignupForm
+from .forms import AuthenticationForm, SignupForm, UserProfileUpdateForm
+from .models import User, UserProfile
+from tools.models import UserTool
+from utils.mixins import RestrictToUserMixin
 
 
 class ToolhubLoginView(LoginView):
@@ -22,3 +27,35 @@ class SignupView(CreateView):
         response = super().form_valid(form)
         auth_login(self.request, user=self.object)
         return response
+
+
+class ProfileView(LoginRequiredMixin, SelectRelatedMixin, DetailView):
+    model = User
+    template_name = "auth/profile.jinja"
+    context_object_name = "profile_user"
+    select_related = ("profile",)
+
+    def get_context_data(self, **kwargs):
+        if self.extra_context is None:
+            self.extra_context = {}
+        self.extra_context.update(
+            {
+                "borrowing": UserTool.objects.visible_to_user(self.request.user)
+                .borrowing_by_user(self.object)
+                .order_by("-last_history_date")
+            }
+        )
+        return super().get_context_data(**kwargs)
+
+
+class EditProfileView(RestrictToUserMixin, UpdateView):
+    model = UserProfile
+    form_class = UserProfileUpdateForm
+    template_name = "auth/profile_update.jinja"
+    context_object_name = "profile"
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()

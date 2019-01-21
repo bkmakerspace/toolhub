@@ -47,7 +47,7 @@ class CrispyFormMixin(object):
         if self.pk_field and self.form_action and self.instance:
             return reverse(self.form_action, kwargs={self.pk_field: self.instance.pk})
         if self.form_action:
-            return self.form_action
+            return reverse(self.form_action)
 
     def layout_args(self, helper):
         pass

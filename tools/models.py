@@ -58,6 +58,9 @@ class ToolTaxonomy(TagTreeModel):
         else:
             return self.color
 
+    def get_absolute_url(self):
+        return reverse("tools:taxonomy_detail", kwargs={"path": self.path})
+
 
 class ToolStates(Catalog):
     _attrs = "value", "label", "badge_type"

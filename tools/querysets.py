@@ -1,4 +1,4 @@
-from django.db.models import Q, QuerySet
+from django.db.models import Q, QuerySet, Subquery, OuterRef
 
 
 class UserToolQuerySet(QuerySet):
@@ -42,6 +42,26 @@ class UserToolQuerySet(QuerySet):
         all_users_tools = Q(user=user)
         return self.filter(
             self._cleared_tools_query(user) | self._open_tools_query() | all_users_tools
+        )
+
+    def borrowing_by_user(self, user, exclude_own=False):
+        """
+        Return a QS of all tools a user is currently borrowing
+        """
+        from tools.models import ToolHistory
+
+        history_qs = ToolHistory.objects.filter(tool=OuterRef("pk"), user=user).order_by(
+            "-created"
+        )
+        qs = self
+        if exclude_own:
+            qs = qs.exclude(user=user)
+        return qs.annotate(
+            last_history_action=Subquery(history_qs.values("action")[:1]),
+            last_history_date=Subquery(history_qs.values("created")[:1]),
+        ).filter(
+            state=self.model.States.in_use.value,
+            last_history_action=self.model.Transitions.borrow.value,
         )
 
 

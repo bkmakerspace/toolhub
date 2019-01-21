@@ -2,10 +2,11 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-
 from django.utils.translation import ugettext_lazy as _
+from markdownx.models import MarkdownxField
+from markdownx.widgets import AdminMarkdownxWidget
 
-from .models import User
+from .models import User, UserProfile
 
 
 class UserCreationForm(forms.ModelForm):
@@ -55,6 +56,11 @@ class UserChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    formfield_overrides = {MarkdownxField: {"widget": AdminMarkdownxWidget}}
+
+
 class UserAdmin(DjangoUserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
@@ -80,6 +86,7 @@ class UserAdmin(DjangoUserAdmin):
     ordering = ("email",)
     filter_horizontal = ("groups", "user_permissions")
     readonly_fields = ("last_login", "date_joined")
+    inlines = (UserProfileInline,)
 
 
 admin.site.register(User, UserAdmin)

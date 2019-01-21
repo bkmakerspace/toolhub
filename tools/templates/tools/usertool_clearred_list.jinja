@@ -1,5 +1,6 @@
 {% extends "layouts/sub_header_base.jinja" %}
 {% from "partials/pagination.jinja" import pagination %}
+{% from "partials/links.jinja" import object_link %}
 
 {% block head_title %}{{ _("Tools Clearance") }}{% endblock %}
 
@@ -9,7 +10,7 @@
  <div class="list-group mb-4">
     {% for item in cleared_items.all() %}
         <div class="list-group-item">
-            {{ item.cleared_by_user }} cleared {{ item.cleared_user }} {{ item.created|naturaltime }}<br>
+            {{ item.cleared_by_user }} cleared {{ object_link(item.cleared_user, "profile-link") }} {{ item.created|naturaltime }}<br>
             <small class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }} </small>
         </div>
     {% endfor %}

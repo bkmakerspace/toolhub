@@ -73,7 +73,6 @@ TEMPLATES = [
                 "django_jinja.builtins.extensions.UrlsExtension",
                 "django_jinja.builtins.extensions.StaticFilesExtension",
                 "django_jinja.builtins.extensions.DjangoFiltersExtension",
-                "django_jinja_markdown.extensions.MarkdownExtension",
                 "tools.extensions.ToolConstantsExtension",
             ],
             "auto_reload": True,
@@ -130,3 +129,22 @@ MESSAGE_TAGS = {
     message_constants.WARNING: "alert-warning",
     message_constants.ERROR: "alert-danger",
 }
+
+# MarkdownX settings
+MARKDOWNX_MARKDOWN_EXTENSIONS = [
+    "markdown.extensions.extra",
+    "markdown.extensions.abbr",
+    "markdown.extensions.attr_list",
+    "markdown.extensions.def_list",
+    "markdown.extensions.fenced_code",
+    "markdown.extensions.footnotes",
+    "markdown.extensions.tables",
+    "markdown.extensions.admonition",
+    "markdown.extensions.codehilite",
+    "markdown.extensions.meta",
+    "markdown.extensions.nl2br",
+    "markdown.extensions.sane_lists",
+    "markdown.extensions.smarty",
+    "markdown.extensions.toc",
+    "markdown.extensions.wikilinks",
+]

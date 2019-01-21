@@ -6,9 +6,10 @@
 
 {% macro render_taxonomy_badge(tax) %}
     {% set color = tax.get_color() %}
-    <span {% if color %}class="badge" style="background-color: {{ color }}; color: #fff;"{% else %}class="badge badge-primary"{% endif %}>
+    {% set classes = classlist(["badge", "badge-primary" if not color else "badge-custom"]) %}
+    <a {{ classes }}{% if color %} style="background-color: {{ color }}; color: #fff;"{% endif %} href="{{ tax.get_absolute_url() }}">
         {{ tax }}
-    </span>
+    </a>
 {% endmacro %}
 
 {% macro availability_badge(tool, extra_classes) %}
