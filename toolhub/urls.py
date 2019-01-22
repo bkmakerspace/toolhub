@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.flatpages import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.views.generic import RedirectView, TemplateView
@@ -22,6 +23,7 @@ urlpatterns = [
         RedirectView.as_view(permanent=False, pattern_name="tools:detail"),
         name="tool_short",
     ),  # redirect /t/#/ to /tools/#/
+    path("<path:url>", views.flatpage),
 ]
 
 handler400 = toolhub_views.BadRequest.as_view()
@@ -30,8 +32,6 @@ handler404 = toolhub_views.PageNotFound.as_view()
 handler500 = toolhub_views.ServerError.as_view()
 
 if settings.DEBUG:
-    import debug_toolbar
-
     # debug error templates
     urlpatterns += [
         path("400/", handler400, kwargs={"exception": Exception("Bad Request!")}),
@@ -39,7 +39,12 @@ if settings.DEBUG:
         path("404/", handler404, kwargs={"exception": Exception("Page not Found")}),
         path("500/", handler500),
     ]
+
+    # Static and media files served by django in debug
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    # Django debug toolbar urls
+    import debug_toolbar
 
     urlpatterns += [path("__debug__/", include(debug_toolbar.urls))]

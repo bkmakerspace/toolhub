@@ -1,12 +1,22 @@
+from django.contrib.auth import get_user_model
 from django.db.models import Q, QuerySet, Subquery, OuterRef
+
+User = get_user_model()
 
 
 class UserToolQuerySet(QuerySet):
-    def for_user(self, user):
+    def for_user(self, user: User) -> QuerySet:
         return self.filter(user=user)
 
-    def _cleared_tools_query(self, user):
-        """Query object of all tools a user as clearance to that are visible"""
+    def _cleared_tools_query(self, user: User) -> Q:
+        """Query object of all tools a user as clearance to that are visible
+
+        Args:
+            user (User): The user who we are checking for clearance
+
+        Returns:
+            Q
+        """
         return Q(
             permissions__cleared_user=user,
             visibility__in=[
@@ -15,12 +25,24 @@ class UserToolQuerySet(QuerySet):
             ],
         )
 
-    def _open_tools_query(self):
-        """Query object of all tools that have their visibility set to public"""
+    def _open_tools_query(self) -> Q:
+        """Query object of all tools that have their visibility set to public
+
+        Returns:
+            Q
+        """
         return Q(visibility=self.model.Visibility.public.value)
 
-    def visible_to_user(self, user, include_users_tools=True):
-        """Filter to the UserTools a user is allowed to view"""
+    def visible_to_user(self, user: User, include_users_tools=True) -> QuerySet:
+        """Filter to the UserTools a user is allowed to view
+
+        Args:
+            user (User): The user who we are checking tool visibility for
+            include_users_tools (bool, optional): Also include the tools a user owns
+
+        Returns:
+            QuerySet
+        """
         cleared_tools = self._cleared_tools_query(user)
         open_tools = self._open_tools_query()
 
@@ -38,15 +60,29 @@ class UserToolQuerySet(QuerySet):
 
         return self.filter(cleared_tools | open_tools | own_tools).distinct()
 
-    def borrowable_to_user(self, user):
+    def borrowable_to_user(self, user: User) -> QuerySet:
+        """Filter tools that a user is able to borrow
+
+        Args:
+            user (User): The user who we are checking the borrowability status for
+
+        Returns:
+            QuerySet
+        """
         all_users_tools = Q(user=user)
         return self.filter(
             self._cleared_tools_query(user) | self._open_tools_query() | all_users_tools
         )
 
-    def borrowing_by_user(self, user, exclude_own=False):
-        """
-        Return a QS of all tools a user is currently borrowing
+    def borrowing_by_user(self, user: User, exclude_own=False) -> QuerySet:
+        """Return a QS of all tools a user is currently borrowing
+
+        Args:
+            user (User): The use who we are filtering tools to what they are currently borrowing
+            exclude_own (bool, optional): Description
+
+        Returns:
+            QuerySet
         """
         from tools.models import ToolHistory
 

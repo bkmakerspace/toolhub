@@ -23,6 +23,15 @@
         <a href="{{ url('tools:edit', pk=tool.pk) }}" class="btn btn-warning">{{ _('Edit') }}</a>
         <a href="{{ url('tools:delete', pk=tool.pk) }}" class="btn btn-danger">{{ _('Delete') }}</a>
     </div>
+    <div class="btn-group mr-2">
+        <a class="btn btn-info disabled" disabled aria-disabled="true">{{ _('Print Label') }}</a>
+        <a href="{{ url('tools:label', pk=tool.pk) }}?orientation=landscape" target="_blank" class="btn btn-info" title="{{ _('Landscape') }}">
+            <i class="far fa-rectangle-landscape"></i>
+        </a>
+        <a href="{{ url('tools:label', pk=tool.pk) }}?orientation=portrait" target="_blank" class="btn btn-info" title="{{ _('Portrait') }}">
+            <i class="far fa-rectangle-portrait"></i>
+        </a>
+    </div>
     <div class="btn-group">
         <a href="{{ url('tools:clear', pk=tool.pk) }}" class="btn btn-success">{{ _('Clear Person') }}</a>
         {# TODO: remove clearance #}

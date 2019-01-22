@@ -1,0 +1,53 @@
+<footer class="footer bg-dark py-4">
+    <div class="container text-white">
+        <div class="row">
+            <div class="col-md-3 col-sm-4">
+                <div class="mb-3 d-flex flex-column">
+                    <a href="{{ url('home') }}" class="text-black-50 mb-2">
+                        <i class="fal fa-5x fa-tools"></i>
+                    </a>
+                    <h4 class="font-weight-normal text-black-50">{{ _("Toolhub") }}</h4>
+                </div>
+                <div>
+                    {% block footer_container %}
+                        {%- set pages = get_flatpages() %}
+                        {%- for page in pages %}
+                            {%- call object_link(page, "page-link", ["text-white"]) -%}
+                                {{ page.title }}
+                                <br>
+                            {%- endcall -%}
+                        {% endfor -%}
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-8">
+                <h5 class="mb-3 font-weight-light">{{ _("Recent Happenings") }} <i class="fal fa-running"></i></h5>
+                Events&hellip;
+            </div>
+            <div class="col-md-4 offset-md-1 col-sm-12">
+                <h5 class="mb-3 font-weight-light">{{ _("Statistics") }} <i class="fal fa-abacus"></i></h5>
+                <div class="mb-4">
+                    {% for stat in toolhub_stats() %}
+                    <span class="badge badge-light badge-pill">
+                        {{ stat }}
+                    </span>
+                    {% endfor %}
+                </div>
+
+                <h5 class="mb-3 font-weight-light">{{ _("Project") }} <i class="fal fa-project-diagram"></i></h5>
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a target="_blank" class="text-white" href="https://github.com/bkmakerspace/toolhub">
+                            <i class="fab fa-github"></i> Github repo
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a target="_blank" class="text-white" href="https://github.com/bkmakerspace/toolhub/wiki">
+                            <i class="fal fa-cabinet-filing"></i> Docs
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,91 @@
+{% extends "layouts/base.jinja" %}
+
+{% block head_title %}{{ tool }} {{ _("label") }}{% endblock %}
+
+{% block main_css %}{% endblock %}
+
+{% block head %}
+<style type="text/css">
+
+body.label-page {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+body.portrait .label-content {
+    grid-template-rows: 60vh auto;
+    grid-template-areas:
+        "link"
+        "details";
+}
+
+body.landscape .label-content {
+    grid-template-columns: 40vw auto;
+    grid-template-rows: 100vh;
+    grid-template-areas: "link details";
+}
+
+body.label-page .label-content {
+    display: grid;
+    grid-gap: 1.25rem;
+    height: 100%;
+}
+
+body.label-page svg{
+    /* Size SVG to fit inside grid item */
+    height: auto;
+    max-height: 100%;
+    width: 100%;
+    max-width: 100%;
+}
+
+#tool-details {
+    grid-area: details
+}
+
+#qr-detail-link{
+    grid-area: link;
+}
+
+@media print {
+    @page {
+        /* make the page remove all title/page text and make fill selection orientation */
+        size: {{ page_orientation }};
+        margin: 0mm;
+    }
+}
+</style>
+{% endblock %}
+
+{% set body_classes = classlist(['label-page', page_orientation] ) %}
+
+{% block body_args %} {{ body_classes }}{% endblock %}
+
+{% block body %}
+<main role="main" class="label-content">
+    <div id="qr-detail-link" class="qr-link">
+        {{ qr_from_text(full_link, **qr_options) }}
+        <p class="text-center">
+            <small class="text-muted">scan to open toolhub page</small>
+        </p>
+    </div>
+    <div id="tool-details" class="card">
+        <div class="card-body">
+            <small>Toolhub identifier:</small>
+            <h2 id="tool-name" class="card-title">{{ tool }}</h2>
+            <h5 id="tool-owner" class="card-subtitle mb-2 text-muted"><small>owner:</small> {{ tool.user }}</h5>
+            <p id="tool-id" class="card-text text-muted">{{ link }}</p>
+        </div>
+    </div>
+</main>
+{% if force_print %}
+<script>
+    window.print();
+</script>
+{% endif %}
+
+{% endblock %}

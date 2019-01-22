@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 SECRET_KEY = "wataboutthechildren"
+SITE_ID = 1
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -14,6 +15,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
+    "django.contrib.flatpages",
+    "toolhub.contrib.toolhub_flatpages",
     "django.forms",
     "django_extensions",
     "django_jinja.contrib._humanize",
@@ -22,6 +26,7 @@ INSTALLED_APPS = [
     "django_filters",
     "colorful",
     "debug_toolbar",
+    "qr_code",
     "toolhub",
     "toolhub_auth.apps.ToolhubAuthConfig",
     "tools.apps.ToolsConfig",
@@ -29,6 +34,11 @@ INSTALLED_APPS = [
     "utils",
     "markdownx",  # placed below all so templates can be overwritten
 ]
+
+# MIGRATIONS
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
+MIGRATION_MODULES = {"sites": "toolhub.contrib.sites.migrations"}
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -52,6 +62,7 @@ LOGOUT_REDIRECT_URL = reverse_lazy("home")
 TEMPLATES = [
     {
         "BACKEND": "django_jinja.backend.Jinja2",
+        "NAME": "Jinja2",
         "APP_DIRS": True,
         "OPTIONS": {
             "match_extension": ".jinja",
@@ -74,6 +85,7 @@ TEMPLATES = [
                 "django_jinja.builtins.extensions.StaticFilesExtension",
                 "django_jinja.builtins.extensions.DjangoFiltersExtension",
                 "tools.extensions.ToolConstantsExtension",
+                "toolhub.extensions.StatsExtension",
             ],
             "auto_reload": True,
             "autoescape": True,

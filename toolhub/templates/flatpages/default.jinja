@@ -1,0 +1,9 @@
+{% extends "layouts/sub_header_base.jinja" %}
+
+{% block head_title %}{{ flatpage.title }}{% endblock %}
+
+{% block sub_header %}{{ flatpage.title }}{% endblock %}
+
+{% block content %}
+{{ markdown(flatpage.content) }}
+{% endblock %}
