@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django.contrib.flatpages",
+    "toolhub.contrib.toolhub_flatpages",
     "django.forms",
     "django_extensions",
     "django_jinja.contrib._humanize",
