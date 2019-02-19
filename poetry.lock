@@ -92,7 +92,7 @@ description = "A high-level Python Web framework that encourages rapid developme
 name = "django"
 optional = false
 python-versions = ">=3.5"
-version = "2.1.5"
+version = "2.1.7"
 
 [package.dependencies]
 pytz = "*"
@@ -670,7 +670,7 @@ python-versions = "*"
 version = "0.14.1"
 
 [metadata]
-content-hash = "3324d3d268f5d3ed47b88c145416682830ff74924b40395fc44ab202858c1f3a"
+content-hash = "82281ecce53372f8ffdd4df983e3156921a56d187d7d9677b7f7dfa6ef54d7f4"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -684,7 +684,7 @@ black = ["817243426042db1d36617910df579a54f1afd659adb96fc5032fcf4b36209739", "e0
 click = ["2335065e6395b9e67ca716de5f7526736bfa6ceead690adf616d925bdc622b13", "5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7"]
 colorama = ["05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d", "f8ac84de7840f5b9c4e3347b3c1eaa50f7e49c2b07596221daec5edaabbd7c48"]
 decorator = ["2c51dff8ef3c447388fe5e4453d24a2bf128d3a4c32af3fabef1f01c6851ab82", "c39efa13fbdeb4506c476c9b3babf6a718da943dab7811c206005a4a956c080c"]
-django = ["a32c22af23634e1d11425574dce756098e015a165be02e4690179889b207c7a8", "d6393918da830530a9516bbbcbf7f1214c3d733738779f06b0f649f49cc698c3"]
+django = ["275bec66fd2588dd517ada59b8bfb23d4a9abc5a362349139ddda3c7ff6f5ade", "939652e9d34d7d53d74d5d8ef82a19e5f8bb2de75618f7e5360691b6e9667963"]
 django-braces = ["a457d74ea29478123c0c4652272681b3cea0bf1232187fd9f9b6f1d97d32a890", "ba68e98b817c6f01d71d10849f359979617b3fe4cefb7f289adefddced092ddc"]
 django-colorful = ["49d3feefdabdf6a22931c12ce1ed0cbb4596e7754e66bd55c0f362c0a369e5cb", "fd246f2fb297ed074dc4349966d33a1c82d0308b7fb0d6ef6e2e76b90cefffb7"]
 django-crispy-forms = ["5952bab971110d0b86c278132dae0aa095beee8f723e625c3d3fa28888f1675f", "705ededc554ad8736157c666681165fe22ead2dec0d5446d65fc9dd976a5a876"]
