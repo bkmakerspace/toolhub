@@ -2,6 +2,7 @@ from crispy_forms.layout import Fieldset, Submit, Field, Div
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from toolhub_auth.models import User
 from tools.models import ClearancePermission, UserTool
 from utils.forms import CrispyFormMixin
 
@@ -54,26 +55,39 @@ class UserToolFilterViewForm(CrispyFormMixin, forms.Form):
         )
 
 
-class ClearancePermissionForm(CrispyFormMixin, forms.ModelForm):
-    class Meta:
-        fields = ("cleared_user", "tool")
-        model = ClearancePermission
+class ClearancePermissionForm(CrispyFormMixin, forms.Form):
+    cleared_users = forms.ModelMultipleChoiceField(
+        queryset=User.objects.none(),
+        widget=forms.CheckboxSelectMultiple())
+
+    def __init__(self, *args, instance=None, cleared_by_user=None, **kwargs):
+        self.instance = instance
+        self.cleared_by_user = cleared_by_user
+
+        super().__init__(*args, **kwargs)
+
+        self.initial = {'cleared_users': self._init_users}
+        self.fields['cleared_users'].queryset = User.objects.exclude(
+            pk=self.instance.user.pk).filter(is_active=True)
 
     def layout_args(self, helper):
         return (
-            Field("tool", type="hidden"),
-            Field("cleared_user"),
-            Submit("action", _("Clear Person"), css_class="offset-md-3"),
+            Field("cleared_users"),
+            Submit("action", _("Update Clearance"), css_class="offset-md-3"),
         )
 
-    def clean_cleared_user(self):
-        tool = self.initial.get("tool")
-        cleared_user = self.cleaned_data.get("cleared_user")
+    def _init_users(self):
+        return self.instance.permissions.values_list('cleared_user', flat=True)
 
-        if (
-            cleared_user
-            and ClearancePermission.objects.filter(tool=tool, cleared_user=cleared_user).exists()
-        ):
-            raise forms.ValidationError(_("This person already has clearance to use this tool."))
-
-        return cleared_user
+    def save(self):
+        init_users = set(self._init_users())
+        edited_users = set(self.cleaned_data['cleared_users'].values_list('pk', flat=True))
+        added_users = edited_users - init_users
+        ClearancePermission.objects.bulk_create([
+            ClearancePermission(
+                tool=self.instance, cleared_user_id=user_id,
+                cleared_by_user=self.cleared_by_user)
+            for user_id in added_users
+        ])
+        removed_users = init_users - edited_users
+        self.instance.permissions.filter(cleared_user_id__in=removed_users).delete()

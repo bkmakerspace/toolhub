@@ -32,10 +32,6 @@
             <i class="far fa-rectangle-portrait"></i>
         </a>
     </div>
-    <div class="btn-group">
-        <a href="{{ url('tools:clear', pk=tool.pk) }}" class="btn btn-success">{{ _('Clear Person') }}</a>
-        {# TODO: remove clearance #}
-    </div>
 </div>
 {% endblock %}
 
@@ -92,17 +88,24 @@
         {% endfor %}
         </div>
         <h3>{{ _("Cleared") }}</h3>
-        {% set cleared_count = tool.permissions.count() %}
-        {% set cleared_display_count = 6 %}
-        {% for item in tool.permissions.all()[:cleared_display_count] %}
-            <div class="list-group-item">
-                {{ object_link(item.cleared_user, "profile-link") }}<br>
-                <small class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }}</small>
-            </div>
-            {% if loop.last and cleared_count > cleared_display_count %}
-                <a class="list-group-item list-group-item-action list-group-item-primary" href={{ url('tools:cleared', pk=tool.pk) }}>View all cleared People</a>
-            {% endif %}
-        {% endfor %}
+        {% if tool.Clearance(tool.clearance) == tool.Clearance.none %}
+            No Clearence Needed
+        {% else %}
+            {% set cleared_count = tool.permissions.count() %}
+            {% set cleared_display_count = 6 %}
+            {% for item in tool.permissions.all()[:cleared_display_count] %}
+                <div class="list-group-item mb-4">
+                    {{ object_link(item.cleared_user, "profile-link") }}<br>
+                    <small class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }} by {{ object_link(item.cleared_by_user, "profile-link") }}</small>
+                </div>
+                {% if loop.last and cleared_count > cleared_display_count %}
+                    <a class="list-group-item list-group-item-action list-group-item-primary" href={{ url('tools:cleared', pk=tool.pk) }}>View all cleared People</a>
+                {% endif %}
+            {% endfor %}
+            {% if tool.user_can_grant_clearance(user) %}
+                <a href="{{ url('tools:clear', pk=tool.pk) }}" class="btn btn-success">{{ _('Modify Clearances') }}</a>
+            {% endif %} 
+        {% endif %}
         </div>
     </div>
 </div>
