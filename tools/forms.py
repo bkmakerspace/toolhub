@@ -57,8 +57,8 @@ class UserToolFilterViewForm(CrispyFormMixin, forms.Form):
 
 class ClearancePermissionForm(CrispyFormMixin, forms.Form):
     cleared_users = forms.ModelMultipleChoiceField(
-        queryset=User.objects.none(),
-        widget=forms.CheckboxSelectMultiple())
+        queryset=User.objects.none(), widget=forms.CheckboxSelectMultiple()
+    )
 
     def __init__(self, *args, instance=None, cleared_by_user=None, **kwargs):
         self.instance = instance
@@ -66,9 +66,10 @@ class ClearancePermissionForm(CrispyFormMixin, forms.Form):
 
         super().__init__(*args, **kwargs)
 
-        self.initial = {'cleared_users': self._init_users}
-        self.fields['cleared_users'].queryset = User.objects.exclude(
-            pk=self.instance.user.pk).filter(is_active=True)
+        self.initial = {"cleared_users": self._init_users}
+        self.fields["cleared_users"].queryset = User.objects.exclude(
+            pk=self.instance.user.pk
+        ).filter(is_active=True)
 
     def layout_args(self, helper):
         return (
@@ -77,17 +78,21 @@ class ClearancePermissionForm(CrispyFormMixin, forms.Form):
         )
 
     def _init_users(self):
-        return self.instance.permissions.values_list('cleared_user', flat=True)
+        return self.instance.permissions.values_list("cleared_user", flat=True)
 
     def save(self):
         init_users = set(self._init_users())
-        edited_users = set(self.cleaned_data['cleared_users'].values_list('pk', flat=True))
+        edited_users = set(self.cleaned_data["cleared_users"].values_list("pk", flat=True))
         added_users = edited_users - init_users
-        ClearancePermission.objects.bulk_create([
-            ClearancePermission(
-                tool=self.instance, cleared_user_id=user_id,
-                cleared_by_user=self.cleared_by_user)
-            for user_id in added_users
-        ])
+        ClearancePermission.objects.bulk_create(
+            [
+                ClearancePermission(
+                    tool=self.instance,
+                    cleared_user_id=user_id,
+                    cleared_by_user=self.cleared_by_user,
+                )
+                for user_id in added_users
+            ]
+        )
         removed_users = init_users - edited_users
         self.instance.permissions.filter(cleared_user_id__in=removed_users).delete()

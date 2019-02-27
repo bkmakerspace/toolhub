@@ -113,11 +113,11 @@ class ClearUserView(SingleToolObjectMixin, UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['cleared_by_user'] = self.request.user
+        kwargs["cleared_by_user"] = self.request.user
         return kwargs
 
     def form_valid(self, form):
-        messages.success(self.request, 'User clearance updated.')
+        messages.success(self.request, "User clearance updated.")
         return super().form_valid(form)
 
     def get_success_url(self):
