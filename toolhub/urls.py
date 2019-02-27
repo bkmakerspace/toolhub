@@ -4,13 +4,13 @@ from django.contrib import admin
 from django.contrib.flatpages import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
-from django.views.generic import RedirectView, TemplateView
+from django.views.generic import RedirectView
 
 import toolhub.views as toolhub_views
 
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="home.jinja"), name="home"),
+    path("", toolhub_views.HomeView.as_view(), name="home"),
     path("", include("toolhub_auth.urls"), name="auth"),
     path("admin/", admin.site.urls),
     path("tools/", include("tools.urls"), name="tools"),
