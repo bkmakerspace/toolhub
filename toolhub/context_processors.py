@@ -6,6 +6,6 @@ def settings(request):
     # For this reason, only expose settings that are absolutely needed.
     # NEVER include settings that contain credentials or other secrets.
     return {
-        'DEFAULT_PAGINATE_BY': dj_settings.DEFAULT_PAGINATE_BY,
-        'SHORT_PAGINATE_BY': dj_settings.SHORT_PAGINATE_BY,
+        "DEFAULT_PAGINATE_BY": dj_settings.DEFAULT_PAGINATE_BY,
+        "SHORT_PAGINATE_BY": dj_settings.SHORT_PAGINATE_BY,
     }
