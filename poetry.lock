@@ -237,7 +237,7 @@ description = "the modular source code checker: pep8, pyflakes and co"
 name = "flake8"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "3.7.4"
+version = "3.7.7"
 
 [package.dependencies]
 entrypoints = ">=0.3.0,<0.4.0"
@@ -274,7 +274,7 @@ description = "IPython: Productive Interactive Computing"
 name = "ipython"
 optional = false
 python-versions = ">=3.5"
-version = "7.2.0"
+version = "7.3.0"
 
 [package.dependencies]
 appnope = "*"
@@ -303,7 +303,7 @@ description = "A Python utility / library to sort Python imports."
 name = "isort"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "4.3.4"
+version = "4.3.9"
 
 [[package]]
 category = "dev"
@@ -366,6 +366,7 @@ six = "*"
 [[package]]
 category = "dev"
 description = "More routines for operating on iterables, beyond itertools"
+marker = "python_version > \"2.7\""
 name = "more-itertools"
 optional = false
 python-versions = "*"
@@ -516,17 +517,20 @@ description = "pytest: simple powerful testing with Python"
 name = "pytest"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "4.2.0"
+version = "4.3.0"
 
 [package.dependencies]
 atomicwrites = ">=1.0"
 attrs = ">=17.4.0"
 colorama = "*"
-more-itertools = ">=4.0.0"
 pluggy = ">=0.7"
 py = ">=1.5.0"
 setuptools = "*"
 six = ">=1.10.0"
+
+[package.dependencies.more-itertools]
+python = ">2.7"
+version = ">=4.0.0"
 
 [[package]]
 category = "dev"
@@ -534,7 +538,7 @@ description = "A Django plugin for pytest."
 name = "pytest-django"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "3.4.5"
+version = "3.4.8"
 
 [package.dependencies]
 pytest = ">=3.6"
@@ -670,7 +674,7 @@ python-versions = "*"
 version = "0.14.1"
 
 [metadata]
-content-hash = "82281ecce53372f8ffdd4df983e3156921a56d187d7d9677b7f7dfa6ef54d7f4"
+content-hash = "76e7c507c46a7357c01f27b2293f12d933a4ef548f814fb0a47112739f76a4a4"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -698,12 +702,12 @@ django-qr-code = ["23a8d871aaac5287b827cd9f75f38ca12602b576d527bf34722d97b00f9db
 django-tagulous = ["593cf09f2f8b7f752388f1ee8cf4e7b8d33dfab56d23438b8dcd338f59922a76"]
 entrypoints = ["589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19", "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"]
 execnet = ["a7a84d5fa07a089186a329528f127c9d73b9de57f1a1131b82bb5320ee651f6a", "fc155a6b553c66c838d1a22dba1dc9f5f505c43285a878c6f74a79c024750b83"]
-flake8 = ["09b9bb539920776da542e67a570a5df96ff933c9a08b62cfae920bcc789e4383", "e0f8cd519cfc0072c0ee31add5def09d2b3ef6040b34dc426445c3af9b02163c"]
+flake8 = ["859996073f341f2670741b51ec1e67a01da142831aa1fdc6242dbf88dffbe661", "a796a115208f5c03b18f332f7c11729812c8c3ded6c46319c59b53efd3819da8"]
 future = ["67045236dcfd6816dc439556d009594abf643e5eb48992e36beac09c2ca659b8"]
 ipdb = ["7081c65ed7bfe7737f83fa4213ca8afd9617b42ff6b3f1daf9a3419839a2a00a"]
-ipython = ["6a9496209b76463f1dec126ab928919aaf1f55b38beb9219af3fe202f6bbdd12", "f69932b1e806b38a7818d9a1e918e5821b685715040b48e59c657b3c7961b742"]
+ipython = ["06de667a9e406924f97781bda22d5d76bfb39762b678762d86a466e63f65dc39", "5d3e020a6b5f29df037555e5c45ab1088d6a7cf3bd84f47e0ba501eeb0c3ec82"]
 ipython-genutils = ["72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8", "eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8"]
-isort = ["1153601da39a25b14ddc54955dbbacbb6b2d19135386699e2ad58517953b34af", "b9c40e9750f3d77e6e4d441d8b0266cf555e7cdabdcff33c4fd06366ca761ef8", "ec9ef8f4a9bc6f71eec99e1806bfa2de401650d996c59330782b89a5555c1497"]
+isort = ["ee5fddfd792e6e1d664ee28f3fbe00dfc26d8d3c6f059ee78f4da4c19718007c", "f19b23b22fb5a919a081bc31aabcc0991614c244d9215267e11abf2ca7b684ce"]
 jedi = ["571702b5bd167911fe9036e5039ba67f820d6502832285cde8c881ab2b2149fd", "c8481b5e59d34a5c7c42e98f6625e633f6ef59353abea6437472c7ec2093f191"]
 jinja2 = ["74c935a1b8bb9a3947c50a54766a969d4846290e1e788ea44c1392163723c3bd", "f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4"]
 markdown = ["c00429bd503a47ec88d5e30a751e147dcb4c6889663cd3e2ba0afe858e009baa", "d02e0f9b04c500cde6637c11ad7c72671f359b87b9fe924b2383649d8841db7c"]
@@ -726,8 +730,8 @@ pycodestyle = ["95a2219d12372f05704562a14ec30bc76b05a5b297b21a5dfe3f6fac3491ae56
 pyflakes = ["5e8c00e30c464c99e0b501dc160b13a14af7f27d4dffb529c556e30a159e231d", "f277f9ca3e55de669fba45b7393a1449009cff5a37d1af10ebb76c52765269cd"]
 pygments = ["5ffada19f6203563680669ee7f53b64dabbeb100eb51b61996085e99c03b284a", "e8218dd399a61674745138520d0d4cf2621d7e032439341bc3f647bff125818d"]
 pyparsing = ["66c9268862641abcac4a96ba74506e594c884e3f57690a696d21ad8210ed667a", "f6c5ef0d7480ad048c054c37632c67fca55299990fff127850181659eea33fc3"]
-pytest = ["65aeaa77ae87c7fc95de56285282546cfa9c886dc8e5dc78313db1c25e21bc07", "6ac6d467d9f053e95aaacd79f831dbecfe730f419c6c7022cb316b365cd9199d"]
-pytest-django = ["1a5d33be930e3172fa238643a380414dc369fe8fa4b3c3de25e59ed142950736", "e88e471d3d0f9acfb6293bb03d0ee8a33ed978734e92ea6b5312163a6c9e87cc"]
+pytest = ["067a1d4bf827ffdd56ad21bd46674703fce77c5957f6c1eef731f6146bfcef1c", "9687049d53695ad45cf5fdc7bbd51f0c49f1ea3ecfc4b7f3fde7501b541f17f4"]
+pytest-django = ["30d773f1768e8f214a3106f1090e00300ce6edfcac8c55fd13b675fe1cbd1c85", "4d3283e774fe1d40630ee58bf34929b83875e4751b525eeb07a7506996eb42ee"]
 pytest-forked = ["260d03fbd38d5ce41a657759e8d19bc7c8cfa6d0dcfa36c0bc9742d33bc30742", "8d05c2e6f33cd4422571b2b1bb309720c398b0549cff499e3e4cde661875ab54"]
 pytest-sugar = ["26cf8289fe10880cbbc130bd77398c4e6a8b936d8393b116a5c16121d95ab283", "fcd87a74b2bce5386d244b49ad60549bfbc4602527797fac167da147983f58ab"]
 pytest-xdist = ["4a201bb3ee60f5dd6bb40c5209d4e491cecc4d5bafd656cfb10f86178786e568", "d03d1ff1b008458ed04fa73e642d840ac69b4107c168e06b71037c62d7813dd4"]
