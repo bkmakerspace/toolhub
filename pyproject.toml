@@ -26,7 +26,7 @@ django-qr-code = "^1.0"
 [tool.poetry.dev-dependencies]
 ipdb = "^0.11.0"
 Werkzeug = "=0.14.1"
-ipython = "^7.2"
+ipython = "^7.3"
 isort = "^4.3"
 flake8 = "^3.7"
 django-debug-toolbar = "^1.11"
