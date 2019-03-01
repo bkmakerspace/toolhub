@@ -1,13 +1,14 @@
 {% extends "layouts/base.jinja" %}
 {% from "partials/badges.jinja" import taxonomy_list, availability_badge %}
 
+{% block head_title %}{{_('Home')}}{% endblock %}
 {% block content %}
     {% if user.is_authenticated %}
         <div class="row">
-            <div class="col-sm-6 col-md-4 mb-4">
+            <div class="col-sm-12 col-md-6 col-lg-4 mb-4 order-md-1 order-2">
                 <h2>Your Tools</h2>
-                {% for tool in user.tools.all() %}
-                {% set classes = classlist(['card', ToolVisibility(tool.visibility).card_class] ) %}
+                {% for tool in user.tools.all()[:SHORT_PAGINATE_BY] %}
+                {% set classes = classlist(['card', ToolVisibility(tool.visibility).card_class, 'mb-4'] ) %}
                 {% set tool_link = tool.get_absolute_url() %}
                 <div {{ classes }}>
                     {% if tool.photos.exists() %}
@@ -27,11 +28,12 @@
                     </div>
                 </div>
                 {% endfor %}
+                <p><a href="{{url('tools:owned')}}">All Your Tools...</a></p>
             </div>
-            <div class="col-sm-6 col-md-4 mb-4">
+            <div class="col-sm-12 col-md-6 col-lg-4 mb-4 order-md-2 order-1">
                 <h2>Borrowed Tools</h2>
-                {% for tool in borrowed_tools.all() %}
-                {% set classes = classlist(['card', ToolVisibility(tool.visibility).card_class] ) %}
+                {% for tool in borrowed_tools.all()[:SHORT_PAGINATE_BY] %}
+                {% set classes = classlist(['card', ToolVisibility(tool.visibility).card_class, 'mb-4'] ) %}
                 {% set tool_link = tool.get_absolute_url() %}
                 <div {{ classes }}>
                     {% if tool.photos.exists() %}
@@ -46,6 +48,7 @@
                         <p class="card-text">{{ return_button(tool) }}</p>
                     </div>
                 </div>
+                <p><a href="{{url('profile', pk=user.pk)}}">All Borrowed Tools...</a></p>
                 {% else %}
                 <div class="card text-white bg-warning">
                     <div class="card-body">
