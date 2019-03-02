@@ -210,7 +210,7 @@ description = "Fabulous Tagging for Django"
 name = "django-tagulous"
 optional = false
 python-versions = "*"
-version = "0.13.2"
+version = "0.14.0"
 
 [[package]]
 category = "dev"
@@ -674,7 +674,7 @@ python-versions = "*"
 version = "0.14.1"
 
 [metadata]
-content-hash = "76e7c507c46a7357c01f27b2293f12d933a4ef548f814fb0a47112739f76a4a4"
+content-hash = "02a8f195acd6025a4e4e6d193e4e9586805faae640fced1b5f43f0cc55fd0dc7"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -699,7 +699,7 @@ django-filter = ["3dafb7d2810790498895c22a1f31b2375795910680ac9c1432821cbedb1e17
 django-jinja = ["8a49d73de616a12075eee14c6d3bbab936261a463457d40348d8b8e2995cfbed", "ceaa0eeebc4d91a5800967e50f4f087f0b6457503e3c2af85dc199bed8732a9a"]
 django-markdownx = ["285a40ab405830c0a049e05f3dafabb2c195146f577b824913555aa62512b90d", "d6e706c0b1329b23d6dcaa8754e5921fa2531711dc5afeec4ed3c73a8cb6a178"]
 django-qr-code = ["23a8d871aaac5287b827cd9f75f38ca12602b576d527bf34722d97b00f9dbea0", "cd4eaf77b796f6addcc205a73b227ccfe24c1ff25eb72ea819c5c6cc937effda"]
-django-tagulous = ["593cf09f2f8b7f752388f1ee8cf4e7b8d33dfab56d23438b8dcd338f59922a76"]
+django-tagulous = ["d8dad2050c65e6e06d7cf5c7b0a21f60fc6dcd2175bc53370181382ad22219bd"]
 entrypoints = ["589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19", "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"]
 execnet = ["a7a84d5fa07a089186a329528f127c9d73b9de57f1a1131b82bb5320ee651f6a", "fc155a6b553c66c838d1a22dba1dc9f5f505c43285a878c6f74a79c024750b83"]
 flake8 = ["859996073f341f2670741b51ec1e67a01da142831aa1fdc6242dbf88dffbe661", "a796a115208f5c03b18f332f7c11729812c8c3ded6c46319c59b53efd3819da8"]
