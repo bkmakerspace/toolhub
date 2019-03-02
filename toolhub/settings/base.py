@@ -71,6 +71,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "toolhub.context_processors.settings",
             ],
             "extensions": [
                 "jinja2.ext.do",
@@ -133,6 +134,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 DEFAULT_PAGINATE_BY = 18
+SHORT_PAGINATE_BY = DEFAULT_PAGINATE_BY / 3
 
 MESSAGE_TAGS = {
     message_constants.DEBUG: "alert-dark",

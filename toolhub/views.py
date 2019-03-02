@@ -1,4 +1,21 @@
 from django_jinja import views as jinja_views
+from django.views.generic import DetailView
+
+from tools.models import UserTool
+
+
+class HomeView(DetailView):
+    template_name = "home.jinja"
+    context_object_name = "user"
+
+    def get_object(self, qs=None):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        if ctx["user"].is_authenticated:
+            ctx["borrowed_tools"] = UserTool.objects.borrowing_by_user(ctx["user"])
+        return ctx
 
 
 class ExceptionContextMixin:
