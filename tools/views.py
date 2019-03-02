@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db.transaction import atomic
 from django import forms
@@ -90,10 +91,10 @@ class OwnerUserToolFilterView(RestrictToUserMixin, UserToolBaseFilterView):
 
 
 # TOOD: swap out restrict to user mixin to a new mixin that checks clearance.
-class ClearUserView(SingleToolObjectMixin, CreateView):
-    """Clear a user to use a particular tool"""
+class ClearUserView(SingleToolObjectMixin, UpdateView):
+    """Clear users to use a particular tool"""
 
-    model = ClearancePermission
+    model = UserTool
     tool_model = UserTool
     template_name = "tools/clearancepermission_form.jinja"
     form_class = ClearancePermissionForm
@@ -101,10 +102,6 @@ class ClearUserView(SingleToolObjectMixin, CreateView):
     def check_grant_perms(self, tool):
         if not self.tool.user_can_grant_clearance(self.request.user):
             raise PermissionDenied(_("You aren't allowed to give people access to this tool."))
-
-    def get_initial(self):
-        # Pass tool into initial arguments for form so it can be used for validation.
-        return {"tool": self.tool}
 
     def get(self, request, *args, **kwargs):
         self.check_grant_perms(self.tool)
@@ -114,10 +111,13 @@ class ClearUserView(SingleToolObjectMixin, CreateView):
         self.check_grant_perms(self.tool)
         return super().post(request, *args, **kwargs)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["cleared_by_user"] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
-        # attach data to form model instance so we don't have to send it in request.
-        form.instance.cleared_by_user = self.request.user
-        form.instance.tool = self.tool
+        messages.success(self.request, "User clearance updated.")
         return super().form_valid(form)
 
     def get_success_url(self):

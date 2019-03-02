@@ -32,10 +32,6 @@
             <i class="far fa-rectangle-portrait"></i>
         </a>
     </div>
-    <div class="btn-group">
-        <a href="{{ url('tools:clear', pk=tool.pk) }}" class="btn btn-success">{{ _('Clear Person') }}</a>
-        {# TODO: remove clearance #}
-    </div>
 </div>
 {% endblock %}
 
@@ -83,26 +79,35 @@
         {% set history_display_count = 6 %}
         {% for item in tool.history.all()[:history_display_count] %}
             <div class="list-group-item">
-                {{ item.get_action_display() }} by {{ object_link(item.user, "profile-link") }}<br>
+                {{ item.get_action_display() }} {{_('by')}} {{ object_link(item.user, "profile-link") }}<br>
                 <small class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }}</small>
             </div>
             {% if loop.last and history_count > history_display_count %}
-                <a class="list-group-item list-group-item-action list-group-item-primary" href={{ url('tools:history', pk=tool.pk) }}>View all history</a>
+                <a class="list-group-item list-group-item-action list-group-item-primary" href={{ url('tools:history', pk=tool.pk) }}>{{_('View all history')}}</a>
             {% endif %}
         {% endfor %}
         </div>
         <h3>{{ _("Cleared") }}</h3>
-        {% set cleared_count = tool.permissions.count() %}
-        {% set cleared_display_count = 6 %}
-        {% for item in tool.permissions.all()[:cleared_display_count] %}
-            <div class="list-group-item">
-                {{ object_link(item.cleared_user, "profile-link") }}<br>
-                <small class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }}</small>
+        {% if tool.Clearance(tool.clearance) == tool.Clearance.none %}
+            {{_('No Clearence Needed')}}
+        {% else %}
+            {% set cleared_count = tool.permissions.count() %}
+            {% set cleared_display_count = 6 %}
+            <div class="list-group">
+            {% for item in tool.permissions.all()[:cleared_display_count] %}
+                <div class="list-group-item">
+                    {{ object_link(item.cleared_user, "profile-link") }}<br>
+                    <small class="font-weight-light text-muted">{{ item.created|date("SHORT_DATETIME_FORMAT") }} {{_('by')}} {{ object_link(item.cleared_by_user, "profile-link") }}</small>
+                </div>
+                {% if loop.last and cleared_count > cleared_display_count %}
+                    <p class="list-group-item list-group-item-action list-group-item-primary"><a  href={{ url('tools:cleared', pk=tool.pk) }}>{{_('View all cleared People')}}</a></p>
+                {% endif %}
+            {% endfor %}
+                {% if tool.user_can_grant_clearance(user) %}
+                    <a href="{{ url('tools:clear', pk=tool.pk) }}" class="list-group-item list-group-item-action list-group-item-success">{{ _('Modify Clearances') }}</a>
+                {% endif %} 
             </div>
-            {% if loop.last and cleared_count > cleared_display_count %}
-                <a class="list-group-item list-group-item-action list-group-item-primary" href={{ url('tools:cleared', pk=tool.pk) }}>View all cleared People</a>
-            {% endif %}
-        {% endfor %}
+        {% endif %}
         </div>
     </div>
 </div>
