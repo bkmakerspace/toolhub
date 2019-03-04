@@ -1,4 +1,4 @@
-from crispy_forms.layout import Fieldset, Submit, Field, Div
+from crispy_forms.layout import BaseInput, Fieldset, Submit, Field, Div
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
@@ -51,7 +51,7 @@ class UserToolFilterViewForm(CrispyFormMixin, forms.Form):
             Field("state"),
             Field("taxonomies"),
             Submit("action", _("Filter")),
-            # Button('clear', _("Clear Filter"), type="reset")
+            # BaseInput('clear', _("Clear Filter"), type="reset"),
         )
 
 

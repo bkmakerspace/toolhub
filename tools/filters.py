@@ -3,12 +3,13 @@ from django_filters import FilterSet, filters
 
 from .forms import UserToolFilterViewForm
 from .models import UserTool
-from utils.filters.fields import SearchFilter
+from utils.filters.search import SearchFilter, TrigramSearchFilter
 
 
 class UserToolFilterSet(FilterSet):
     name = filters.CharFilter(field_name="title", lookup_expr="icontains", label=_("Tool name"))
-    search = SearchFilter(vectors=("title", "description"), label=_("Search"))
+    # search = SearchFilter(vectors=("title", "description"), label=_("Search"))
+    search = TrigramSearchFilter(vectors="title", label=_("Search"))
 
     class Meta:
         model = UserTool
