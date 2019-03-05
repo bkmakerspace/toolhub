@@ -27,6 +27,6 @@ RUN poetry install $POETRY_ARGS
 COPY --chown=toolhub:toolhub . .
 
 USER toolhub
-CMD ["/usr/local/bin/gunicorn", "toolhub.wsgi", "--bind 0.0.0.0:5000", "--workers=2", "--chdir=/srv/app"]
+CMD ["/usr/local/bin/gunicorn", "toolhub.wsgi", "--bind", "0.0.0.0:5000", "--workers=2", "--chdir=/srv/app"]
 
 # vim:set filetype=dockerfile:

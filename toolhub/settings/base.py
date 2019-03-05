@@ -40,7 +40,6 @@ INSTALLED_APPS = [
 MIGRATION_MODULES = {"sites": "toolhub.contrib.sites.migrations"}
 
 MIDDLEWARE = [
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

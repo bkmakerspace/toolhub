@@ -20,3 +20,7 @@ MEDIA_ROOT = env.str("MEDIA_ROOT", default=f"{BASE_DIR}media/")  # noqa: F405
 MEDIA_URL = env.str("MEDIA_URL", default="/media/")
 
 EMAIL_BACKEND = env.str("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
+
+if env.bool("DEBUG_TOOLBAR_ENABLE", default=False):
+    INSTALLED_APPS += ['debug_toolbar']  # noqa: F405
+    MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE  # noqa: F405
