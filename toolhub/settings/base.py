@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     "crispy_forms",
     "django_filters",
     "colorful",
-    "debug_toolbar",
     "qr_code",
     "toolhub",
     "toolhub_auth.apps.ToolhubAuthConfig",
