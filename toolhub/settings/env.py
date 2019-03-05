@@ -14,9 +14,9 @@ DATABASES = {"default": env.db(default="sqlite:///db.sqlite")}
 TIME_ZONE = env.str("TIME_ZONE", default="UTC")
 LANGUAGE_CODE = env.str("LANGUAGE_CODE", default="en-us")
 
-STATIC_ROOT = env.str("STATIC_ROOT", default=f"{BASE_DIR}static/")  # noqa: F405
+STATIC_ROOT = env.str("STATIC_ROOT", default=f"{BASE_DIR}/static/")  # noqa: F405
 STATIC_URL = env.str("STATIC_URL", default="/static/")
-MEDIA_ROOT = env.str("MEDIA_ROOT", default=f"{BASE_DIR}media/")  # noqa: F405
+MEDIA_ROOT = env.str("MEDIA_ROOT", default=f"{BASE_DIR}/media/")  # noqa: F405
 MEDIA_URL = env.str("MEDIA_URL", default="/media/")
 
 EMAIL_BACKEND = env.str("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
