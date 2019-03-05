@@ -32,7 +32,7 @@ services:
                 aliases:
                     - toolhub-web
     db:
-        image: postgres:latest
+        image: postgres:11.0
         ports:
             - "${DB_PORT-0}:5432"
         environment:
