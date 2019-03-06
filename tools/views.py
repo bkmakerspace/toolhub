@@ -77,7 +77,7 @@ class UserToolDeleteView(RestrictToUserMixin, DeleteView):
     context_object_name = "tool"
 
     def get_success_url(self):
-        return '{}?user={}'.format(reverse("tools:home"), self.request.user.pk)
+        return "{}?user={}".format(reverse("tools:home"), self.request.user.pk)
 
 
 class UserToolHistoryView(LoginRequiredMixin, FilteredByToolObjectMixin, ListView):

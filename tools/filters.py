@@ -10,7 +10,8 @@ from .models import UserTool
 class UserToolFilterSet(FilterSet):
     name = filters.CharFilter(field_name="title", lookup_expr="icontains", label=_("Tool name"))
     borrower = filters.ModelChoiceFilter(
-        method="filter_by_borrower", queryset=User.objects.none(), label=_("Borrower"))
+        method="filter_by_borrower", queryset=User.objects.none(), label=_("Borrower")
+    )
 
     class Meta:
         model = UserTool
@@ -18,8 +19,8 @@ class UserToolFilterSet(FilterSet):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.filters['user'].label = 'Owner'
-        self.filters['borrower'].queryset = User.objects.filter(is_active=True)
+        self.filters["user"].label = "Owner"
+        self.filters["borrower"].queryset = User.objects.filter(is_active=True)
 
     def get_form_class(self):
         default_class = super().get_form_class()
