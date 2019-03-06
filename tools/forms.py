@@ -1,4 +1,4 @@
-from crispy_forms.layout import Fieldset, Submit, Field, Div, Button
+from crispy_forms.layout import Fieldset, Submit, Field, Div, Button, Reset
 from crispy_forms.bootstrap import FormActions
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -56,10 +56,9 @@ class UserToolFilterViewForm(CrispyFormMixin, forms.Form):
             ),
             Div(
                 Submit("action", _("Filter"), css_class="btn-success"),
-                Button("advanced", _("Advanced"), type="button",
-                       css_class="btn-primary", data_toggle="collapse",
-                       data_target="#advancedFilters"),
-                Button('clear', _("Clear"), type="reset", css_class="btn-danger"),
+                Button("advanced", _("Advanced"), css_class="btn-primary",
+                       data_toggle="collapse", data_target="#advancedFilters"),
+                Reset('clear', _("Clear"), css_class="btn-danger"),
                 css_class="btn-group",
             ),
             Fieldset(

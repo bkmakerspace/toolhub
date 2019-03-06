@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db.transaction import atomic
 from django import forms
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, DetailView, DeleteView, ListView, UpdateView
 from django_filters.views import FilterView
@@ -75,7 +75,9 @@ class UserToolDeleteView(RestrictToUserMixin, DeleteView):
     model = UserTool
     template_name = "tools/usertool_delete.jinja"
     context_object_name = "tool"
-    success_url = reverse_lazy("tools:owned")
+
+    def get_success_url(self):
+        return '{}?user={}'.format(reverse("tools:home"), self.request.user.pk)
 
 
 class UserToolHistoryView(LoginRequiredMixin, FilteredByToolObjectMixin, ListView):
@@ -84,10 +86,6 @@ class UserToolHistoryView(LoginRequiredMixin, FilteredByToolObjectMixin, ListVie
     template_name = "tools/toolhistory_list.jinja"
     context_object_name = "history_items"
     paginate_by = settings.DEFAULT_PAGINATE_BY
-
-
-class OwnerUserToolFilterView(RestrictToUserMixin, UserToolBaseFilterView):
-    template_name = "tools/owner_usertool_filter.jinja"
 
 
 # TOOD: swap out restrict to user mixin to a new mixin that checks clearance.
