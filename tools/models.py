@@ -89,7 +89,7 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
     class Visibility(Catalog):
         _attrs = "value", "label", "card_class"
         private = 0, _("Private"), "tool-private border-danger"
-        cleared = 1, _("Cleared Users"), "tool-cleared border-success"
+        cleared = 1, _("Cleared Users"), "tool-cleared-only border-success"
         public = 2, _("Public"), "tool-public"
 
     class Clearance(Catalog):

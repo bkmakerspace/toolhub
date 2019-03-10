@@ -45,7 +45,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-8">
                         <h1 class="d-inline">{{ tool }}</h1>
-                        {{ availability_badge(tool, extra_classes="sup small align-top") }}
+                        {{ availability_badge(tool, extra_classes=["sup", "small", "align-top"]) }}
                         <h6><span class="text-uppercase text-muted small">owner:</span> {{ object_link(tool.user, "profile-link") }}</h6>
                     </div>
                     <div class="col-lg-4">
