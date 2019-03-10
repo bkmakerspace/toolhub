@@ -20,7 +20,7 @@
                 <a class="nav-link" href="{{ url('profile', pk=request.user.pk) }}">{{ _("Profile") }} <i class="fal fa-id-card"></i></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('tools:owned') }}">{{ _("Your Tools") }} <i class="far fa-wrench"></i></a>
+                <a class="nav-link" href="{{ url('tools:home') }}?user={{request.user.pk}}">{{ _("Your Tools") }} <i class="far fa-wrench"></i></a>
             </li>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="user-menu">

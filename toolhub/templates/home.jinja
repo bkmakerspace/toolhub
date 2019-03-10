@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 {% endfor %}
-                <p><a href="{{url('tools:owned')}}">{{ _("All Your Tools...") }}</a></p>
+                <p><a href="{{url('tools:home')}}?user={{user.pk}}">{{ _("All Your Tools...") }}</a></p>
             </div>
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4 order-md-2 order-1">
                 <h2>Borrowed Tools</h2>
@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 {% endfor %}
-                <p><a href="{{url('profile', pk=user.pk)}}">{{ _("All Borrowed Tools...") }}</a></p>
+                <p><a href="{{url('tools:home')}}?borrower={{user.pk}}">{{ _("All Borrowed Tools...") }}</a></p>
             </div>
         </div>
     {% else %}
