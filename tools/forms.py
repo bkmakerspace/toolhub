@@ -1,4 +1,4 @@
-from crispy_forms.layout import Fieldset, Submit, Field, Div
+from crispy_forms.layout import Button, Div, Field, Fieldset, Reset, Submit
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
@@ -47,12 +47,32 @@ class UserToolFilterViewForm(CrispyFormMixin, forms.Form):
     def layout_args(self, helper):
         helper.form_method = "GET"
         return (
-            Field("name"),
-            Field("state"),
-            Field("taxonomies"),
-            Submit("action", _("Filter")),
-            # Button('clear', _("Clear Filter"), type="reset")
+            Fieldset("", Field("name"), Field("state"), Field("taxonomies")),
+            Div(
+                Submit("action", _("Filter"), css_class="btn-success"),
+                Button(
+                    "advanced",
+                    _("Advanced"),
+                    css_class="btn-primary",
+                    data_toggle="collapse",
+                    data_target="#advancedFilters",
+                ),
+                Reset("clear", _("Clear"), css_class="btn-danger"),
+                css_class="btn-group",
+            ),
+            Fieldset(
+                "",
+                Field("user"),
+                Field("borrower"),
+                css_id="advancedFilters",
+                css_class="collapse",
+            ),
         )
+
+    def clean(self):
+        if any([self.cleaned_data["user"], self.cleaned_data["borrower"]]):
+            self.helper.layout.fields[2].css_class += " show"
+        return super().clean()
 
 
 class ClearancePermissionForm(CrispyFormMixin, forms.Form):

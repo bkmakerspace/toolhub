@@ -2,7 +2,6 @@ from django.urls import path
 
 from tools.views import (
     ClearUserView,
-    OwnerUserToolFilterView,
     PrintLabelView,
     UserToolClearedView,
     UserToolCreateView,
@@ -19,7 +18,6 @@ app_name = "tools"  # url namespace
 
 urlpatterns = [
     path("", UserToolFilterView.as_view(), name="home"),
-    path("owned/", OwnerUserToolFilterView.as_view(), name="owned"),
     path("<int:pk>/", UserToolDetailView.as_view(), name="detail"),
     path("<int:pk>/label", PrintLabelView.as_view(), name="label"),
     path("<int:pk>/history", UserToolHistoryView.as_view(), name="history"),
