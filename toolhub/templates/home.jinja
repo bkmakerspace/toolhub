@@ -1,5 +1,7 @@
 {% extends "layouts/base.jinja" %}
-{% from "partials/badges.jinja" import taxonomy_list, availability_badge %}
+{% from "macros/badges.jinja" import taxonomy_list, availability_badge %}
+{% from "macros/links.jinja" import object_link -%}
+{% from "macros/tool_card.jinja" import tool_details_card %}
 
 {% block head_title %}{{_('Home')}}{% endblock %}
 {% block content %}
@@ -8,19 +10,7 @@
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4 order-lg-1 order-3">
                 <h2>Your Tools</h2>
                 {% for tool in user.tools.all()[:SHORT_PAGINATE_BY] %}
-                {% set classes = classlist(['card', ToolVisibility(tool.visibility).card_class, 'mb-4'] ) %}
-                {% set tool_link = tool.get_absolute_url() %}
-                <div {{ classes }}>
-                    {% if tool.photos.exists() %}
-                        {% set photo = tool.photos.latest() %}
-                        <img class="card-img-top" src="{{ photo.file.file }}" alt="{{ photo.title|default('tool photo') }}">
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="{{ tool_link }}">{{ tool.title }}</a> {{ availability_badge(tool) }}</h5>
-                        <p class="card-text">{{ tool.description|truncate(80) }}</p>
-                        <p class="card-text">{{ taxonomy_list(tool.taxonomies.all()) }}</p>
-                    </div>
-                </div>
+                {{ tool_details_card(tool, user, ['mb-4']) }}
                 {% else %}
                 <div class="card text-white bg-warning">
                     <div class="card-body">
@@ -33,21 +23,10 @@
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4 order-lg-2 order-1">
                 <h2>Borrowed Tools</h2>
                 {% for tool in borrowed_tools[:SHORT_PAGINATE_BY] %}
-                {% set classes = classlist(['card', ToolVisibility(tool.visibility).card_class, 'mb-4'] ) %}
-                {% set tool_link = tool.get_absolute_url() %}
-                <div {{ classes }}>
-                    {% if tool.photos.exists() %}
-                        {% set photo = tool.photos.latest() %}
-                        <img class="card-img-top" src="{{ photo.file.file }}" alt="{{ photo.title|default('tool photo') }}">
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="{{ tool_link }}">{{ tool.title }}</a> {{ availability_badge(tool) }}</h5>
-                        <p class="card-text">{{ tool.description|truncate(80) }}</p>
-                        <p class="card-text">{{ object_link(tool.user, "profile-link") }}</p>
-                        <p class="card-text">{{ taxonomy_list(tool.taxonomies.all()) }}</p>
-                        <p class="card-text">{{ return_button(tool) }}</p>
-                    </div>
-                </div>
+                {% call tool_details_card(tool, user, ['mb-4']) %}
+                    <p class="card-text">{{ object_link(tool.user, "profile-link") }}</p>
+                    {{ return_button(tool) }}
+                {% endcall %}
                 {% else %}
                 <div class="card text-white bg-warning">
                     <div class="card-body">
@@ -60,20 +39,9 @@
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4 order-lg-3 order-2">
                 <h2>Recently Added Tools</h2>
                 {% for tool in new_tools[:SHORT_PAGINATE_BY] %}
-                {% set classes = classlist(['card', ToolVisibility(tool.visibility).card_class, 'mb-4'] ) %}
-                {% set tool_link = tool.get_absolute_url() %}
-                <div {{ classes }}>
-                    {% if tool.photos.exists() %}
-                        {% set photo = tool.photos.latest() %}
-                        <img class="card-img-top" src="{{ photo.file.file }}" alt="{{ photo.title|default('tool photo') }}">
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="{{ tool_link }}">{{ tool.title }}</a> {{ availability_badge(tool) }}</h5>
-                        <p class="card-text">{{ tool.description|truncate(80) }}</p>
-                        <p class="card-text">{{ object_link(tool.user, "profile-link") }}</p>
-                        <p class="card-text">{{ taxonomy_list(tool.taxonomies.all()) }}</p>
-                    </div>
-                </div>
+                {% call tool_details_card(tool, user, ['mb-4']) %}
+                    <p class="card-text">{{ object_link(tool.user, "profile-link") }}</p>
+                {% endcall %}
                 {% else %}
                 <div class="card text-white bg-warning">
                     <div class="card-body">

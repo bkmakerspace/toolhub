@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 from markdownx.models import MarkdownxField
+from memoize import memoize, delete_memoized
 
 
 class UserManager(BaseUserManager):
@@ -67,6 +68,13 @@ class User(AbstractUser):
         # Create the user profile when a user is created
         if created:
             UserProfile.objects.create(user=self)
+
+    @memoize(timeout=2)
+    def has_clearance(self, tool):
+        return self.tool_permissions.filter(tool=tool).exists()
+
+    def __del__(self):
+        delete_memoized(self.has_clearance)
 
 
 class UserProfile(TimeStampedModel):

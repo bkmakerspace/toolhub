@@ -1,6 +1,6 @@
 {% extends "layouts/sub_header_base.jinja" %}
-{% from "partials/badges.jinja" import taxonomy_list, availability_badge %}
-{% from "partials/links.jinja" import object_link %}
+{% from "macros/badges.jinja" import taxonomy_list, availability_badge %}
+{% from "macros/links.jinja" import object_link %}
 
 {% block head_title %}{{ tool }}{% endblock %}
 
@@ -105,7 +105,7 @@
             {% endfor %}
                 {% if tool.user_can_grant_clearance(user) %}
                     <a href="{{ url('tools:clear', pk=tool.pk) }}" class="list-group-item list-group-item-action list-group-item-success">{{ _('Modify Clearances') }}</a>
-                {% endif %} 
+                {% endif %}
             </div>
         {% endif %}
         </div>

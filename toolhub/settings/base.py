@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "colorful",
     "debug_toolbar",
     "qr_code",
+    "memoize",
     "toolhub",
     "toolhub_auth.apps.ToolhubAuthConfig",
     "tools.apps.ToolsConfig",

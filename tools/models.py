@@ -88,9 +88,9 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
 
     class Visibility(Catalog):
         _attrs = "value", "label", "card_class"
-        private = 0, _("Private"), "border-warning"
-        cleared = 1, _("Cleared Users"), "border-success"
-        public = 2, _("Public"), None
+        private = 0, _("Private"), "tool-private border-danger"
+        cleared = 1, _("Cleared Users"), "tool-cleared border-success"
+        public = 2, _("Public"), "tool-public"
 
     class Clearance(Catalog):
         _attrs = "value", "label"
@@ -175,6 +175,13 @@ class UserTool(StateMachineMixin, TitleDescriptionModel, TimeStampedModel):
         # Is this needed?
         if not self.is_available():
             raise ToolAvailabilityException()
+
+    @property
+    def cover_photo(self):
+        try:
+            return self.photos.latest()
+        except ToolPhoto.DoesNotExist:
+            return None
 
 
 class ToolHistory(TimeStampedModel):

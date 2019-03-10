@@ -1,6 +1,6 @@
 {% extends "layouts/sub_header_base.jinja" %}
-{% from "partials/badges.jinja" import taxonomy_list, availability_badge %}
-{% from "partials/links.jinja" import object_link %}
+{% from "macros/badges.jinja" import taxonomy_list, availability_badge %}
+{% from "macros/links.jinja" import object_link %}
 {% from "partials/pagination.jinja" import pagination %}
 
 {% block head_title %}{{ _("Filter Tools") }}{% endblock %}

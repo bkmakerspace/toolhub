@@ -18,6 +18,13 @@
     {% set type = state.badge_type %}
     {% if label %}
     <span class="badge badge-{{ type }} {{ extra_classes }}">
+        {% if state == ToolStates.available -%}
+            <i class="fas fa-wrench"></i>
+        {% elif state == ToolStates.in_use -%}
+            <i class="far fa-wrench"></i>
+        {% elif state == ToolStates.disabled -%}
+            <i class="far fa-minus-circle"></i>
+        {% endif %}
         {{ label }}
     </span>
     {% endif %}
