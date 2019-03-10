@@ -16,6 +16,10 @@ class ToolhubLoginView(LoginView):
     template_name = "auth/login.jinja"
     redirect_authenticated_user = True
 
+    def form_invalid(self, form):
+        """If the form is invalid, render the invalid form and set return status to 401"""
+        return self.render_to_response(self.get_context_data(form=form), status=401)
+
 
 class SignupView(CreateView):
     form_class = SignupForm
