@@ -24,7 +24,7 @@
                 <h2>{{ _("Borrowed Tools") }}</h2>
                 {% for tool in borrowed_tools[:SHORT_PAGINATE_BY] %}
                 {% call tool_details_card(tool, user, ['mb-4']) %}
-                    <p class="card-text">{{ object_link(tool.user, "profile-link") }}</p>
+                    <p class="card-text"><small class="text-uppercase">owner:</small> {{ object_link(tool.user, "profile-link") }}</p>
                     {{ return_button(tool) }}
                 {% endcall %}
                 {% else %}
@@ -40,7 +40,7 @@
                 <h2>{{ _("Recently Added Tools") }}</h2>
                 {% for tool in new_tools[:SHORT_PAGINATE_BY] %}
                 {% call tool_details_card(tool, user, ['mb-4']) %}
-                    <p class="card-text">{{ object_link(tool.user, "profile-link") }}</p>
+                    <p class="card-text"><small class="text-uppercase">owner:</small> {{ object_link(tool.user, "profile-link") }}</p>
                 {% endcall %}
                 {% else %}
                 <div class="card text-white bg-warning">
