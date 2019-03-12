@@ -1,9 +1,30 @@
+{% from "macros/links.jinja" import object_link -%}
 {% extends "layouts/sub_header_base.jinja" %}
 
 {% block head_title %}{{ flatpage.title }}{% endblock %}
 
 {% block sub_header %}{{ flatpage.title }}{% endblock %}
 
+{% block sub_actions %}
+    {%- set pages = get_flatpages(starts_with=flatpage.url, user=user) %}
+    {% if pages.count() > 0 %}
+        <div class="navbar-text text-muted">
+            {{ _("Sub Pages:") }}&nbsp;
+        </div>
+    {% endif %}
+    <ul class="navbar-nav">
+    {%- for page in pages %}
+        <li class="nav-item">
+        {%- call object_link(page, "page-link", ["nav-link"]) -%}
+            {{ page.title }}
+        {%- endcall -%}
+        </li>
+    {% endfor -%}
+    </ul>
+{% endblock %}
+
 {% block content %}
+<div class="content">
 {{ markdown(flatpage.content) }}
+</div>
 {% endblock %}

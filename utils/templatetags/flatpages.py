@@ -15,7 +15,7 @@ def get_flatpages(context, starts_with=None, user=None):
     flatpages = FlatPage.objects.filter(sites__id=site_pk)
     # If a prefix was specified, add a filter
     if starts_with:
-        flatpages = flatpages.filter(url__startswith=starts_with)
+        flatpages = flatpages.filter(url__startswith=starts_with).exclude(url=starts_with)
 
     # If the provided user is not authenticated, or no user
     # was provided, filter the list to only public flatpages.

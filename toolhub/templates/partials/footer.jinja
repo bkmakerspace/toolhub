@@ -11,12 +11,12 @@
                 </div>
                 <div>
                     {% block footer_container %}
-                        {%- set pages = get_flatpages() %}
+                        {%- set pages = get_flatpages(user=user) %}
                         {%- for page in pages %}
                             {%- call object_link(page, "page-link", ["text-white"]) -%}
                                 {{ page.title }}
-                                <br>
                             {%- endcall -%}
+                            <br>
                         {% endfor -%}
                     {% endblock %}
                 </div>
