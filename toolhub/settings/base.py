@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "qr_code",
     "memoize",
     "tagulous",
+    "imagekit",
     # Toolhub
     "borrowing.apps.BorrowingConfig",
     "toolhub",
@@ -169,3 +170,5 @@ MARKDOWNX_MARKDOWN_EXTENSIONS = [
     "markdown.extensions.toc",
     "markdown.extensions.wikilinks",
 ]
+
+MARKDOWNX_UPLOAD_CONTENT_TYPES = ("image/jpeg", "image/png")

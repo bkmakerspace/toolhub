@@ -39,12 +39,15 @@ class CrispyFormMixin(object):
         if layout_args:
             self.helper.layout = Layout(*layout_args)
         super(CrispyFormMixin, self).__init__(*args, **kwargs)
+        self.post_super_init()
+
+    def post_super_init(self):
         form_action = self.get_form_action()
         if form_action:
             self.helper.form_action = form_action
 
     def get_form_action(self):
-        if self.pk_field and self.form_action and self.instance:
+        if self.pk_field and self.form_action and hasattr(self, "instance"):
             return reverse(self.form_action, kwargs={self.pk_field: self.instance.pk})
         if self.form_action:
             return reverse(self.form_action)

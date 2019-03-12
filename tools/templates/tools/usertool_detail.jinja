@@ -16,14 +16,14 @@
 {% endblock %}
 
 {% block sub_actions %}
-<small class="text-muted">{{ url('tool_short', pk=tool.pk) }}</small>
+<small class="text-muted mr-2">{{ url('tool_short', pk=tool.pk) }}</small>
 <div class="btn-toolbar" role="toolbar" aria-label="{{ _('Tool actions') }}">
     {# TODO: only show this group to owner for now #}
     <div class="btn-group mr-2">
         <a href="{{ url('tools:edit', pk=tool.pk) }}" class="btn btn-warning">{{ _('Edit') }}</a>
         <a href="{{ url('tools:delete', pk=tool.pk) }}" class="btn btn-danger">{{ _('Delete') }}</a>
     </div>
-    <div class="btn-group mr-2">
+    <div class="btn-group">
         <a class="btn btn-info disabled" disabled aria-disabled="true">{{ _('Print Label') }}</a>
         <a href="{{ url('tools:label', pk=tool.pk) }}?orientation=landscape" target="_blank" class="btn btn-info" title="{{ _('Landscape') }}">
             <i class="far fa-rectangle-landscape"></i>
@@ -57,6 +57,13 @@
                 </div>
             </div>
         </div>
+        <div class="photos row my-3">
+            {% for photo in tool.photos.all() %}
+            <a href="{{ photo.file.url }}" target="_blank" class="d-block col-md-2 col-sm-4 col-4 overflow-hidden">
+                <img src="{{ photo.gallery_thumbnail.url }}" alt="{{ photo.title }}" class="d-block w-100 mw-100 rounded border border-secondary"/>
+            </a>
+            {% endfor %}
+        </div>
         <div class="row my-3">
             <div class="col flex-grow-0">
                 {% if tool.user_can_borrow(user) and not tool.is_in_use() %}
@@ -67,7 +74,7 @@
                 {% endif %}
             </div>
         </div>
-        <section class="my-3">
+        <section class="content my-3">
             {{ markdown(tool.description) }}
         </section>
     </div>
@@ -103,9 +110,9 @@
                     <p class="list-group-item list-group-item-action list-group-item-primary"><a  href={{ url('tools:cleared', pk=tool.pk) }}>{{_('View all cleared People')}}</a></p>
                 {% endif %}
             {% endfor %}
-                {% if tool.user_can_grant_clearance(user) %}
-                    <a href="{{ url('tools:clear', pk=tool.pk) }}" class="list-group-item list-group-item-action list-group-item-success">{{ _('Modify Clearances') }}</a>
-                {% endif %}
+            {% if tool.user_can_grant_clearance(user) %}
+                <a href="{{ url('tools:clear', pk=tool.pk) }}" class="list-group-item list-group-item-action list-group-item-success">{{ _('Modify Clearances') }}</a>
+            {% endif %}
             </div>
         {% endif %}
         </div>

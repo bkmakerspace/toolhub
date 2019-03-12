@@ -12,7 +12,9 @@
 <div {{ classes }}>
     {% set photo = tool.cover_photo %}
     {% if photo %}
-        <img class="card-img-top" src="{{ photo.file.file }}" alt="{{ photo.title|default('tool photo') }}">
+        <div class="card-img-top card-tool-img">
+            <img src="{{ photo.card_thumbnail.url }}" alt="{{ photo.title|default('tool photo') }}">
+        </div>
     {% endif %}
     <div class="card-body">
         <h5 class="card-title"><a href="{{ tool_link }}">{{ tool.title }}</a> </h5>

@@ -15,13 +15,15 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django_extensions.db.models import TimeStampedModel, TitleDescriptionModel
+from imagekit import ImageSpec
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill, ResizeToFit
 from markdownx.models import MarkdownxField
 from tagulous.models import TagField, TagTreeModel
 
-from utils.models import StateMachineMixin
-
 from tools.exceptions import ToolAvailabilityException, ToolClearanceException
 from tools.querysets import ToolHistoryQuerySet, UserToolQuerySet
+from utils.models import StateMachineMixin
 
 
 class ToolTaxonomy(TagTreeModel):
@@ -228,14 +230,38 @@ class ClearancePermission(TimeStampedModel):
         return f"{self.cleared_by_user} cleared {self.cleared_user} ({self.tool})"
 
 
+class ToolCardThumbnailSpec(ImageSpec):
+    processors = [ResizeToFill(320, 160)]
+    format = "JPEG"
+    options = {"quality": 80}
+
+
+class ToolGalleryThumbnailSpec(ToolCardThumbnailSpec):
+    processors = [ResizeToFill(120, 120)]
+
+
+class ToolContentThumbnailSpec(ToolCardThumbnailSpec):
+    processors = [ResizeToFit(825, 620)]
+
+
 class ToolPhoto(TimeStampedModel):
-    tool = models.ForeignKey(UserTool, on_delete=models.CASCADE, related_name="photos")
+    tool = models.ForeignKey(
+        UserTool, on_delete=models.CASCADE, related_name="photos", blank=True, null=True
+    )
     uploading_user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="uploaded_photos"
     )
-    file = models.FileField()
+    file = models.ImageField(upload_to="%Y/%m/")
     title = models.CharField(max_length=255, blank=True)
+
+    # Thumbnails
+    card_thumbnail = ImageSpecField(source="file", spec=ToolCardThumbnailSpec)
+    gallery_thumbnail = ImageSpecField(source="file", spec=ToolGalleryThumbnailSpec)
+    content_thumbnail = ImageSpecField(source="file", spec=ToolContentThumbnailSpec)
 
     class Meta:
         ordering = ("-created",)
         get_latest_by = "created"
+
+    def __str__(self):
+        return f"{self.tool} - {self.title}"

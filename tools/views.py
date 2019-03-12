@@ -1,19 +1,28 @@
+from braces.views import UserFormKwargsMixin
+from django import forms
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db.transaction import atomic
-from django import forms
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy, reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, DetailView, DeleteView, ListView, UpdateView
+from django.views.generic.edit import BaseFormView
 from django_filters.views import FilterView
 
 from tools.filters import UserToolFilterSet
-from tools.forms import ClearancePermissionForm, UserToolCreateForm, UserToolUpdateForm
+from tools.forms import (
+    ClearancePermissionForm,
+    UploadToolPhotoForm,
+    UserToolCreateForm,
+    UserToolUpdateForm,
+)
 from tools.mixins import SingleToolObjectMixin, FilteredByToolObjectMixin
-from tools.models import ClearancePermission, ToolHistory, ToolTaxonomy, UserTool
+from tools.models import ClearancePermission, ToolHistory, ToolPhoto, ToolTaxonomy, UserTool
 from utils.mixins import RestrictToUserMixin, VisibleToUserMixin
+from utils.md import FindToolPhotos
 
 
 class UserToolBaseFilterView(FilterView):
@@ -32,9 +41,20 @@ class UserToolFilterView(VisibleToUserMixin, UserToolBaseFilterView):
     pass
 
 
-class UserToolCreateView(LoginRequiredMixin, CreateView):
+class FindPhotosMixin:
+    def find_photos(self, user):
+        photos = FindToolPhotos().look(self.object.description)
+        # If someone uploads a file with the same name, avoids conflicts
+        photos = photos.filter(uploading_user=user)
+        for photo in photos:
+            photo.tool = self.object
+            photo.save()
+
+
+class UserToolCreateView(FindPhotosMixin, LoginRequiredMixin, CreateView):
     """
-    Allows user to create a new user tool
+    Allows user to create a new user tool,
+    Hooks up uploaded tool photos to the tool after save
     """
 
     model = UserTool
@@ -47,15 +67,20 @@ class UserToolCreateView(LoginRequiredMixin, CreateView):
 
     @atomic
     def form_valid(self, form):
+        import ipdb
+
+        ipdb.set_trace()
         user = self.request.user
         self.object = form.save(commit=False)
         self.object.user = user
         response = super(UserToolCreateView, self).form_valid(form)
+        self.find_photos(user)
+        # Set tool as created
         self.object.create(user=user)
         return response
 
 
-class UserToolUpdateView(RestrictToUserMixin, UpdateView):
+class UserToolUpdateView(FindPhotosMixin, RestrictToUserMixin, UpdateView):
     model = UserTool
     form_class = UserToolUpdateForm
     template_name = "tools/usertool_update.jinja"
@@ -63,6 +88,12 @@ class UserToolUpdateView(RestrictToUserMixin, UpdateView):
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
+    @atomic
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.find_photos(self.request.user)
+        return response
 
 
 class UserToolDetailView(VisibleToUserMixin, DetailView):
@@ -200,3 +231,26 @@ class PrintLabelView(VisibleToUserMixin, DetailView):
             }
         )
         return context
+
+
+class UploadToolPhotoView(UserFormKwargsMixin, LoginRequiredMixin, BaseFormView):
+    """
+    Handle files uploaded to markdown
+    # TODO: make sure we only allow the user that owns a tool to upload images
+    associated with the tool
+    """
+
+    form_class = UploadToolPhotoForm
+    model = ToolPhoto
+
+    def form_invalid(self, form):
+        return JsonResponse(form.errors, status=400)
+
+    def form_valid(self, form):
+        self.object = form.save(commit=True)
+        if self.request.is_ajax():
+            image_path = str(self.object.content_thumbnail.url)
+            image_code = f"![{self.object.title}]({image_path})"
+            return JsonResponse({"image_code": image_code}, status=201)
+        else:
+            return HttpResponse("Photo Uploaded", content_type="text/plain", status=201)
