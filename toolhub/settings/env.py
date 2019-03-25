@@ -1,4 +1,4 @@
-from environ import Env
+from utils.env import Env
 
 from .base import *  # noqa: F401, F403
 
@@ -24,3 +24,19 @@ EMAIL_BACKEND = env.str("EMAIL_BACKEND", default="django.core.mail.backends.cons
 if env.bool("DEBUG_TOOLBAR_ENABLE", default=False):
     INSTALLED_APPS += ["debug_toolbar"]  # noqa: F405
     MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE  # noqa: F405
+
+TOOLHUB = env.eval("TOOLHUB", default={})
+
+if TOOLHUB.get('auth', {}).get('use_allauth', False):
+    AUTHENTICATION_BACKENDS += ('allauth.account.auth_backends.AuthenticationBackend',)
+    INSTALLED_APPS += [  # noqa: F405
+        'allauth',
+        'allauth.account',
+        'allauth.socialaccount',
+    ]
+    INSTALLED_APPS += [provider for provider in env.list('ALLAUTH_PROVIDERS')]
+    ACCOUNT_AUTHENTICATION_METHOD = 'email'
+    ACCOUNT_EMAIL_REQUIRED = True
+    ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+    ACCOUNT_USERNAME_REQUIRED = False
+    SOCIALACCOUNT_ADAPTER = 'utils.auth.ToolhubOAuth2Adapter'
