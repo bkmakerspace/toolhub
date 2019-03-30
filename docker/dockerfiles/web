@@ -9,7 +9,7 @@ RUN mkdir -p /srv/app /var/www/media /var/www/static \
     && chown toolhub.toolhub /srv/app /var/www/media /var/www/static
 WORKDIR /srv/app
 
-ENV DJANGO_SETTINGS_MODULE=toolhub.settings.env \
+ENV DJANGO_SETTINGS_MODULE=toolhub.settings.prod \
     DEBUG=false
 
 #RUN apt-get update && apt-get -y install \
@@ -27,6 +27,7 @@ RUN poetry install $POETRY_ARGS
 COPY --chown=toolhub:toolhub . .
 
 USER toolhub
-CMD ["/srv/app/manage.py","runserver_plus","0.0.0.0:8000"]
+RUN ./manage.py collectstatic
+CMD ["/usr/local/bin/gunicorn", "toolhub.wsgi", "--bind", "0.0.0.0:5000", "--workers=2", "--chdir=/srv/app"]
 
 # vim:set filetype=dockerfile:

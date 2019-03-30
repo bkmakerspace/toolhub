@@ -23,6 +23,8 @@ django-markdownx = "=2.0.28"
 django-braces = "^1.13"
 django-qr-code = "^1.0"
 django-memoize = "^2.2"
+gunicorn = "^19.9"
+whitenoise = "^4.1"
 
 [tool.poetry.dev-dependencies]
 ipdb = "^0.11.0"

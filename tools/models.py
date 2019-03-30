@@ -41,7 +41,7 @@ class ToolTaxonomy(TagTreeModel):
         _("State"), choices=State._zip("value", "label"), default=State.in_review.value
     )
 
-    color = RGBColorField(null=True)
+    color = RGBColorField(null=True, blank=True)
 
     class Meta:
         verbose_name = _("Tool Taxonomy")
