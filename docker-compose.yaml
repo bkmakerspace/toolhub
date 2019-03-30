@@ -22,6 +22,7 @@ services:
             DATABASE_URL: postgres://postgres:postgres@toolhub-db/toolhub
             MEDIA_ROOT: /var/www/media/
             STATIC_ROOT: /var/www/static/
+            DEBUG_TOOLBAR_ENABLE: 'true'
             PYTHONUNBUFFERED: 1
         depends_on:
             - db
@@ -31,7 +32,7 @@ services:
                 aliases:
                     - toolhub-web
     db:
-        image: postgres:latest
+        image: postgres:11.0
         ports:
             - "${DB_PORT-0}:5432"
         environment:
