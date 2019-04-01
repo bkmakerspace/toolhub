@@ -27,7 +27,7 @@ whitenoise = "^4.1"
 
 [tool.poetry.dev-dependencies]
 ipdb = "^0.11.0"
-Werkzeug = "=0.14.1"
+Werkzeug = "=0.15.1"
 ipython = "^7.4"
 isort = "^4.3"
 flake8 = "^3.7"
