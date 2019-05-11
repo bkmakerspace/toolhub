@@ -9,6 +9,7 @@ SECRET_KEY = "wataboutthechildren"
 SITE_ID = 1
 
 INSTALLED_APPS = [
+     # Django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -17,20 +18,24 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django.contrib.flatpages",
-    "toolhub.contrib.toolhub_flatpages",
     "django.forms",
-    "django_extensions",
-    "django_jinja.contrib._humanize",
-    "tagulous",
-    "crispy_forms",
-    "django_filters",
+
+    # Third-party
     "colorful",
+    "crispy_forms",
+    "django_extensions",
+    "django_filters",
+    "django_jinja.contrib._humanize",
     "qr_code",
+    "tagulous",
+
+    # Toolhub
+    "borrowing.apps.BorrowingConfig",
     "toolhub",
+    "toolhub.contrib.toolhub_flatpages",
     "toolhub_auth.apps.ToolhubAuthConfig",
     "tools.apps.ToolsConfig",
-    "borrowing.apps.BorrowingConfig",
-    "utils",
+
     "markdownx",  # placed below all so templates can be overwritten
 ]
 
