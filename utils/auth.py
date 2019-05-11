@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from toolhub import toolhub_settings
 
 
-class ToolhubOAuth2Adapter(DefaultSocialAccountAdapter):
+class ToolhubSocialAccountAdapter(DefaultSocialAccountAdapter):
     groups_url = 'https://slack.com/api/groups.list'
 
     def pre_social_login(self, request, sociallogin):
@@ -25,6 +25,6 @@ class ToolhubOAuth2Adapter(DefaultSocialAccountAdapter):
                 raise OAuth2Error()
 
             group_names = [g['name'] for g in resp['groups']]
-            if 'members' not in group_names:
-                messages.error(request, _(toolhub_settings['messages'][ 'non_member' ]))
+            if toolhub_settings['auth']['slack']['required_group'] not in group_names:
+                messages.error(request, _(toolhub_settings['messages']['non_member']))
                 raise ImmediateHttpResponse(HttpResponseRedirect(reverse('account_login')))

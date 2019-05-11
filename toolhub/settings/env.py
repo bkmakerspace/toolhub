@@ -39,4 +39,4 @@ if TOOLHUB.get('auth', {}).get('use_allauth', False):
     ACCOUNT_EMAIL_REQUIRED = True
     ACCOUNT_USER_MODEL_USERNAME_FIELD = None
     ACCOUNT_USERNAME_REQUIRED = False
-    SOCIALACCOUNT_ADAPTER = 'utils.auth.ToolhubOAuth2Adapter'
+    SOCIALACCOUNT_ADAPTER = 'utils.auth.ToolhubSocialAccountAdapter'
