@@ -8,18 +8,14 @@ default_app_config = "toolhub.apps.ToolhubConfig"
 
 def get_settings():
     defaults = {
-        'auth': {
-            'use_allauth': False,
-            'use_password_auth': True,
-            'slack': {
-                'required_group': None,
-            },
+        "auth": {
+            "use_allauth": False,
+            "use_password_auth": True,
+            "slack": {"required_group": None},
         },
-        'messages': {
-            'non_member': 'You must be a member of the space to access Toolhub',
-        },
+        "messages": {"non_member": "You must be a member of the space to access Toolhub"},
     }
-    return deep_update(defaults, getattr(settings, 'TOOLHUB', {}))
+    return deep_update(defaults, getattr(settings, "TOOLHUB", {}))
 
 
 toolhub_settings = get_settings()

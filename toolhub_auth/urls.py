@@ -20,17 +20,9 @@ urlpatterns = [
     path("login/", ToolhubLoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("password/change/", PasswordChangeView.as_view(), name="password_change"),
-    path(
-        "password/change/done/",
-        PasswordChangeDoneView.as_view(),
-        name="password_change_done"
-    ),
+    path("password/change/done/", PasswordChangeDoneView.as_view(), name="password_change_done"),
     path("password/reset/", PasswordResetView.as_view(), name="password_reset"),
-    path(
-        "password/reset/done/",
-        PasswordResetDoneView.as_view(),
-        name="password_reset_done"
-    ),
+    path("password/reset/done/", PasswordResetDoneView.as_view(), name="password_reset_done"),
     path(
         "password/reset/confirm/<uidb64>/<token>/",
         PasswordResetConfirmView.as_view(),
@@ -45,13 +37,14 @@ urlpatterns = [
     path("profile/update/", EditProfileView.as_view(), name="update_profile"),
 ]
 
-if toolhub_settings['auth']['use_allauth']:
+if toolhub_settings["auth"]["use_allauth"]:
     from allauth.socialaccount import providers
+
     for provider in providers.registry.get_list():
         try:
-            prov_mod = import_module(provider.get_package() + '.urls')
+            prov_mod = import_module(provider.get_package() + ".urls")
         except ImportError:
             continue
-        prov_urlpatterns = getattr(prov_mod, 'urlpatterns', None)
+        prov_urlpatterns = getattr(prov_mod, "urlpatterns", None)
         if prov_urlpatterns:
             urlpatterns += prov_urlpatterns

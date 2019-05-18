@@ -72,29 +72,29 @@ class User(AbstractUser):
             UserProfile.objects.create(user=self)
 
     def get_avatar_url(self, size):
-        if not hasattr(self, '_social_account'):
+        if not hasattr(self, "_social_account"):
             try:
-                self._social_account = self.socialaccount_set.latest('id')
+                self._social_account = self.socialaccount_set.latest("id")
             except SocialAccount.DoesNotExist:
                 self._social_account = None
         if self._social_account:
             img_urls = {
                 k: v
-                for k, v in self._social_account.extra_data.get('user', {}).items()
-                if k.startswith('image_')
+                for k, v in self._social_account.extra_data.get("user", {}).items()
+                if k.startswith("image_")
             }
             if img_urls:
                 return self._select_image_url(size, img_urls)
         return gravatar_url(self.email, size)
 
     def _select_image_url(self, target_size, urls):
-        sizes = sorted([int(u.split('_')[1]) for u in urls.keys()], reverse=True)
+        sizes = sorted([int(u.split("_")[1]) for u in urls.keys()], reverse=True)
         selected_size = sizes[0]
         for size in sizes:
             if size < target_size:
                 break
             selected_size = size
-        return urls['image_{}'.format(selected_size)]
+        return urls["image_{}".format(selected_size)]
 
 
 class UserProfile(TimeStampedModel):

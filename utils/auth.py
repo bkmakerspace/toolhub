@@ -11,20 +11,19 @@ from toolhub import toolhub_settings
 
 
 class ToolhubSocialAccountAdapter(DefaultSocialAccountAdapter):
-    groups_url = 'https://slack.com/api/groups.list'
+    groups_url = "https://slack.com/api/groups.list"
 
     def pre_social_login(self, request, sociallogin):
-        if (sociallogin.account.provider == 'slack' and
-                toolhub_settings['auth']['slack']['required_group']):
-            resp = requests.get(
-                self.groups_url,
-                params={'token': sociallogin.token}
-            )
+        if (
+            sociallogin.account.provider == "slack"
+            and toolhub_settings["auth"]["slack"]["required_group"]
+        ):
+            resp = requests.get(self.groups_url, params={"token": sociallogin.token})
             resp = resp.json()
-            if not resp.get('ok'):
+            if not resp.get("ok"):
                 raise OAuth2Error()
 
-            group_names = [g['name'] for g in resp['groups']]
-            if toolhub_settings['auth']['slack']['required_group'] not in group_names:
-                messages.error(request, _(toolhub_settings['messages']['non_member']))
-                raise ImmediateHttpResponse(HttpResponseRedirect(reverse('account_login')))
+            group_names = [g["name"] for g in resp["groups"]]
+            if toolhub_settings["auth"]["slack"]["required_group"] not in group_names:
+                messages.error(request, _(toolhub_settings["messages"]["non_member"]))
+                raise ImmediateHttpResponse(HttpResponseRedirect(reverse("account_login")))

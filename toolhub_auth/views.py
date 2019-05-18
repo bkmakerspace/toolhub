@@ -24,7 +24,7 @@ class ToolhubLoginView(LoginView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['use_password'] = toolhub_settings['auth']['use_password_auth']
+        ctx["use_password"] = toolhub_settings["auth"]["use_password_auth"]
         return ctx
 
 
