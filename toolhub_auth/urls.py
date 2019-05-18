@@ -9,17 +9,13 @@ from django.contrib.auth.views import (
     PasswordResetDoneView,
     PasswordResetView,
 )
-from django.urls import path, include
+from django.urls import path
 
 from toolhub import toolhub_settings
 from toolhub_auth.views import EditProfileView, ToolhubLoginView, SignupView, ProfileView
 
 
-# if toolhub_settings['auth']['use_allauth']:
-# urlpatterns = []
-# else:
 urlpatterns = [
-    # path("accounts/", include("allauth.urls")),
     path("signup/", SignupView.as_view(), name="signup"),
     path("login/", ToolhubLoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
