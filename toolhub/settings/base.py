@@ -19,8 +19,10 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.flatpages",
     "django.forms",
-
     # Third-party
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
     "colorful",
     "crispy_forms",
     "django_extensions",
@@ -28,7 +30,6 @@ INSTALLED_APPS = [
     "django_jinja.contrib._humanize",
     "qr_code",
     "tagulous",
-
     # Toolhub
     "borrowing.apps.BorrowingConfig",
     "toolhub",
@@ -36,8 +37,8 @@ INSTALLED_APPS = [
     "toolhub_auth.apps.ToolhubAuthConfig",
     "tools.apps.ToolsConfig",
     "utils",
-
-    "markdownx",  # placed below all so templates can be overwritten
+    # placed below all so templates can be overwritten
+    "markdownx",
 ]
 
 # MIGRATIONS

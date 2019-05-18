@@ -28,8 +28,9 @@ if env.bool("DEBUG_TOOLBAR_ENABLE", default=False):
 TOOLHUB = env.eval("TOOLHUB", default={})
 
 if TOOLHUB.get("auth", {}).get("use_allauth", False):
-    AUTHENTICATION_BACKENDS += ("allauth.account.auth_backends.AuthenticationBackend",)
-    INSTALLED_APPS += ["allauth", "allauth.account", "allauth.socialaccount"]  # noqa: F405
+    AUTHENTICATION_BACKENDS += (  # noqa: F405
+        "allauth.account.auth_backends.AuthenticationBackend",
+    )
     INSTALLED_APPS += [provider for provider in env.list("ALLAUTH_PROVIDERS")]
     ACCOUNT_AUTHENTICATION_METHOD = "email"
     ACCOUNT_EMAIL_REQUIRED = True
