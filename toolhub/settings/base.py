@@ -9,7 +9,7 @@ SECRET_KEY = "wataboutthechildren"
 SITE_ID = 1
 
 INSTALLED_APPS = [
-     # Django
+    # Django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "toolhub.contrib.toolhub_flatpages",
     "toolhub_auth.apps.ToolhubAuthConfig",
     "tools.apps.ToolsConfig",
+    "utils",
 
     "markdownx",  # placed below all so templates can be overwritten
 ]

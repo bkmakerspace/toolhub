@@ -37,6 +37,9 @@ if TOOLHUB.get('auth', {}).get('use_allauth', False):
     INSTALLED_APPS += [provider for provider in env.list('ALLAUTH_PROVIDERS')]
     ACCOUNT_AUTHENTICATION_METHOD = 'email'
     ACCOUNT_EMAIL_REQUIRED = True
+    ACCOUNT_EMAIL_VERIFICATION = 'none'
     ACCOUNT_USER_MODEL_USERNAME_FIELD = None
     ACCOUNT_USERNAME_REQUIRED = False
     SOCIALACCOUNT_ADAPTER = 'utils.auth.ToolhubSocialAccountAdapter'
+    ACCOUNT_LOGOUT_ON_GET = True
+    ACCOUNT_TEMPLATE_EXTENSION = 'jinja'

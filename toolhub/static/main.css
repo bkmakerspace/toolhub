@@ -3,3 +3,7 @@
 body, #main-wrapper {
   min-height: 100vh;
 }
+
+.socialaccount_provider {
+    font-size: 1.5rem;
+}
