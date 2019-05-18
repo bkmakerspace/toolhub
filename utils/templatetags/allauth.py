@@ -27,9 +27,9 @@ def provider_login_url(context, provider, **params):
     if is_undefined(auth_params):
         del params["auth_params"]
     if "next" not in params:
-        next = get_request_param(request, "next")
-        if next:
-            params["next"] = next
+        next_url = get_request_param(request, "next")
+        if next_url:
+            params["next"] = next_url
         elif process == "redirect":
             params["next"] = request.get_full_path()
     else:
