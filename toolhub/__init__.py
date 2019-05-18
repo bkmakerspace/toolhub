@@ -10,6 +10,7 @@ def get_settings():
     defaults = {
         'auth': {
             'use_allauth': False,
+            'use_password_auth': True,
             'slack': {
                 'required_group': None,
             },
