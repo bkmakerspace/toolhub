@@ -19,6 +19,7 @@ services:
         environment:
             DEBUG: 'true'
             ALLOWED_HOSTS: '*'
+            DJANGO_SETTINGS_MODULE: toolhub.settings.env
             DATABASE_URL: postgres://postgres:postgres@toolhub-db/toolhub
             MEDIA_ROOT: /var/www/media/
             STATIC_ROOT: /var/www/static/

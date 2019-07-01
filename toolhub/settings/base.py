@@ -9,6 +9,7 @@ SECRET_KEY = "wataboutthechildren"
 SITE_ID = 1
 
 INSTALLED_APPS = [
+    # Django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -17,22 +18,28 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django.contrib.flatpages",
-    "toolhub.contrib.toolhub_flatpages",
     "django.forms",
-    "django_extensions",
-    "django_jinja.contrib._humanize",
-    "tagulous",
-    "crispy_forms",
-    "django_filters",
+    # Third-party
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
     "colorful",
+    "crispy_forms",
+    "django_extensions",
+    "django_filters",
+    "django_jinja.contrib._humanize",
     "qr_code",
     "memoize",
+    "tagulous",
+    # Toolhub
+    "borrowing.apps.BorrowingConfig",
     "toolhub",
+    "toolhub.contrib.toolhub_flatpages",
     "toolhub_auth.apps.ToolhubAuthConfig",
     "tools.apps.ToolsConfig",
-    "borrowing.apps.BorrowingConfig",
     "utils",
-    "markdownx",  # placed below all so templates can be overwritten
+    # placed below all so templates can be overwritten
+    "markdownx",
 ]
 
 # MIGRATIONS
@@ -116,6 +123,7 @@ AUTH_USER_MODEL = "toolhub_auth.User"
 
 WSGI_APPLICATION = "toolhub.wsgi.application"
 
+AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},

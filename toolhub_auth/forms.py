@@ -14,7 +14,7 @@ class AuthenticationForm(CrispyFormMixin, DjangoAuthenticationForm):
 
     def layout_args(self, helper):
         return (
-            Fieldset(_("Login"), Field("username"), Field("password")),
+            Fieldset(None, Field("username"), Field("password")),
             Div(
                 Div(
                     Submit(None, "Login"),

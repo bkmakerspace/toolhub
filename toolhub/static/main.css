@@ -8,3 +8,7 @@ body, #main-wrapper {
 .card-text:empty {
     display: none;
 }
+
+.socialaccount_provider {
+    font-size: 1.5rem;
+}
