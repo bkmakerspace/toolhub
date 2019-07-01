@@ -1,3 +1,5 @@
+from importlib import import_module
+
 from django.contrib.auth.views import (
     LogoutView,
     PasswordChangeView,
@@ -9,6 +11,7 @@ from django.contrib.auth.views import (
 )
 from django.urls import path
 
+from toolhub import toolhub_settings
 from toolhub_auth.views import EditProfileView, ToolhubLoginView, SignupView, ProfileView
 
 
@@ -33,3 +36,15 @@ urlpatterns = [
     path("profile/<int:pk>", ProfileView.as_view(), name="profile"),
     path("profile/update/", EditProfileView.as_view(), name="update_profile"),
 ]
+
+if toolhub_settings["auth"]["use_allauth"]:
+    from allauth.socialaccount import providers
+
+    for provider in providers.registry.get_list():
+        try:
+            prov_mod = import_module(provider.get_package() + ".urls")
+        except ImportError:
+            continue
+        prov_urlpatterns = getattr(prov_mod, "urlpatterns", None)
+        if prov_urlpatterns:
+            urlpatterns += prov_urlpatterns

@@ -24,7 +24,7 @@
             </li>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="user-menu">
-                    {{ gravatar(user.email, size=24) }}
+                    <img src="{{user.get_avatar_url(24)}}" height="24" width="24" />
                     {{ user.get_full_name()|default(user.email, True) }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="user-menu">
@@ -39,9 +39,6 @@
                 </div>
             </li>
         {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url('signup') }}">{{ _("Sign Up") }}</a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('login') }}">{{ _("Login") }}</a>
             </li>

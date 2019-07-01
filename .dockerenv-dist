@@ -1,3 +1,7 @@
 DEBUG=True
 SECRET_KEY="<your secret key here>"
 TIME_ZONE=America/Chicago
+
+USE_ALLAUTH=true
+ALLAUTH_PROVIDERS=allauth.socialaccount.providers.slack
+TOOLHUB={'auth': {'use_allauth': True, 'use_password_auth': True, 'slack': {'required_group': 'members'}}}

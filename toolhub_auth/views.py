@@ -5,10 +5,12 @@ from django.contrib.auth import login as auth_login
 from django.views.generic import CreateView, DetailView, UpdateView
 from django.urls import reverse_lazy
 
-from .forms import AuthenticationForm, SignupForm, UserProfileUpdateForm
-from .models import User, UserProfile
+from toolhub import toolhub_settings
 from tools.models import UserTool
 from utils.mixins import RestrictToUserMixin
+
+from .forms import AuthenticationForm, SignupForm, UserProfileUpdateForm
+from .models import User, UserProfile
 
 
 class ToolhubLoginView(LoginView):
@@ -19,6 +21,11 @@ class ToolhubLoginView(LoginView):
     def form_invalid(self, form):
         """If the form is invalid, render the invalid form and set return status to 401"""
         return self.render_to_response(self.get_context_data(form=form), status=401)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["use_password"] = toolhub_settings["auth"]["use_password_auth"]
+        return ctx
 
 
 class SignupView(CreateView):
