@@ -236,6 +236,17 @@ pip = "*"
 
 [[package]]
 category = "main"
+description = "An implementation of memoization technique for Django."
+name = "django-memoize"
+optional = false
+python-versions = "*"
+version = "2.2.0"
+
+[package.dependencies]
+django = "*"
+
+[[package]]
+category = "main"
 description = "An application that provides tools for displaying QR codes on your Django site."
 name = "django-qr-code"
 optional = false
@@ -817,7 +828,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "0f0ecc3a8535bbb9e3022b2f9063f16ddfed4cde34ad02563d425b4dacbab61c"
+content-hash = "ad2c7d3a327e67a371f6997b262338992d70efbc800e76ae509ffb63b7db97ee"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -845,6 +856,7 @@ django-extensions = ["109004f80b6f45ad1f56addaa59debca91d94aa0dc1cb19678b9364b4f
 django-filter = ["3dafb7d2810790498895c22a1f31b2375795910680ac9c1432821cbedb1e176d", "a3014de317bef0cd43075a0f08dfa1d319a7ccc5733c3901fb860da70b0dda68"]
 django-jinja = ["8a49d73de616a12075eee14c6d3bbab936261a463457d40348d8b8e2995cfbed", "ceaa0eeebc4d91a5800967e50f4f087f0b6457503e3c2af85dc199bed8732a9a"]
 django-markdownx = ["285a40ab405830c0a049e05f3dafabb2c195146f577b824913555aa62512b90d", "d6e706c0b1329b23d6dcaa8754e5921fa2531711dc5afeec4ed3c73a8cb6a178"]
+django-memoize = ["32b1a14224f0a63cd73c02d369d076dc6433e39a36720ef99629f41dd840cec5", "f03f4cae91034ea35ff80355b143c97ab4dc52d93cc08a893cb56defddd8b819"]
 django-qr-code = ["23a8d871aaac5287b827cd9f75f38ca12602b576d527bf34722d97b00f9dbea0", "cd4eaf77b796f6addcc205a73b227ccfe24c1ff25eb72ea819c5c6cc937effda"]
 django-tagulous = ["d8dad2050c65e6e06d7cf5c7b0a21f60fc6dcd2175bc53370181382ad22219bd"]
 entrypoints = ["589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19", "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"]

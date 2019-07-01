@@ -1,0 +1,43 @@
+{% from "macros/badges.jinja" import taxonomy_list, availability_badge %}
+
+{% macro tool_card(tool, user, extra_classes=[]) %}
+{%- if user.has_clearance(tool) -%}
+    {% set extra_classes = extra_classes + ["tool-cleared"] %}
+    {% set cleared = True %}
+{% else %}
+    {% set cleared = False %}
+{% endif %}
+{% set classes = classlist(['card', 'shadow-sm', ToolVisibility(tool.visibility).card_class] + extra_classes) %}
+{% set tool_link = tool.get_absolute_url() %}
+<div {{ classes }}>
+    {% set photo = tool.cover_photo %}
+    {% if photo %}
+        <img class="card-img-top" src="{{ photo.file.file }}" alt="{{ photo.title|default('tool photo') }}">
+    {% endif %}
+    <div class="card-body">
+        <h5 class="card-title"><a href="{{ tool_link }}">{{ tool.title }}</a> </h5>
+        {% if caller %}
+            {{ caller() }}
+        {% endif %}
+    </div>
+    <div class="card-footer pt-2">
+        {% if cleared %}
+        <i class="far fa-check text-success align-middle"></i>
+        {% endif %}
+        {{ availability_badge(tool, extra_classes=["mr-2"]) }}
+        <i class="far fa-tag text-dark align-middle"></i>
+        {{ taxonomy_list(tool.taxonomies.all()) }}
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro tool_details_card(tool, user, extra_classes=[]) %}
+{% set detail_caller = caller %}
+{% call tool_card(tool, user, extra_classes) %}
+    <p class="card-text">{{ markdown(tool.description | truncate(120)) | striptags }}</p>
+    {% if detail_caller %}
+        {{ detail_caller() }}
+    {% endif %}
+{% endcall %}
+{% endmacro %}

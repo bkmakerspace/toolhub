@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "django_filters",
     "django_jinja.contrib._humanize",
     "qr_code",
+    "memoize",
     "tagulous",
     # Toolhub
     "borrowing.apps.BorrowingConfig",

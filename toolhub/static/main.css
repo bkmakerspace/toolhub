@@ -4,6 +4,11 @@ body, #main-wrapper {
   min-height: 100vh;
 }
 
+/* remove empty card text areas in cards */
+.card-text:empty {
+    display: none;
+}
+
 .socialaccount_provider {
     font-size: 1.5rem;
 }

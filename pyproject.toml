@@ -22,6 +22,7 @@ django-colorful = "^1.3"
 django-markdownx = "=2.0.28"
 django-braces = "^1.13"
 django-qr-code = "^1.0"
+django-memoize = "^2.2"
 gunicorn = "^19.9"
 whitenoise = "^4.1"
 django-allauth = { git = "https://github.com/pennersr/django-allauth.git", commit = "f70cb3d" }

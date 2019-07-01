@@ -1,6 +1,8 @@
 from typing import NamedTuple
-from jinja2.ext import Extension
+
 from django.contrib.humanize.templatetags.humanize import intcomma
+from jinja2.ext import Extension
+from memoize import memoize
 
 from tools.models import ToolHistory, UserTool
 from toolhub_auth.models import User
@@ -38,6 +40,7 @@ class StatTracker:
 
 
 class StatsExtension(Extension):
+    @memoize(timeout=120)
     def build_stats(self):
         return StatTracker()
 

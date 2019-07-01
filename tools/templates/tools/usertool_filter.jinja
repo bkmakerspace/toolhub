@@ -1,6 +1,7 @@
 {% extends "layouts/sub_header_base.jinja" %}
-{% from "partials/badges.jinja" import taxonomy_list, availability_badge %}
-{% from "partials/links.jinja" import object_link %}
+{% from "macros/badges.jinja" import taxonomy_list, availability_badge %}
+{% from "macros/links.jinja" import object_link %}
+{% from "macros/tool_card.jinja" import tool_details_card %}
 {% from "partials/pagination.jinja" import pagination %}
 
 {% block head_title %}{{ _("Filter Tools") }}{% endblock %}
@@ -25,21 +26,10 @@
     <div class="col-md-9">
         <div class="row">
         {% for tool in tools %}
-        {% set classes = classlist(['card', ToolVisibility(tool.visibility).card_class] ) %}
-        {% set tool_link = tool.get_absolute_url() %}
         <div class="col-sm-6 col-md-4 mb-4">
-            <div {{ classes }}>
-                {% if tool.photos.exists() %}
-                    {% set photo = tool.photos.latest() %}
-                    <img class="card-img-top" src="{{ photo.file.file }}" alt="{{ photo.title|default('tool photo') }}">
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title"><a href="{{ tool_link }}">{{ tool.title }}</a> {{ availability_badge(tool) }}</h5>
-                    <p class="card-text">{{ tool.description|truncate(80) }}</p>
-                    <p class="card-text">{{ object_link(tool.user, "profile-link") }}</p>
-                    <p class="card-text">{{ taxonomy_list(tool.taxonomies.all()) }}</p>
-                </div>
-            </div>
+        {% call tool_details_card(tool, user) %}
+            <p class="card-text"><small class="text-uppercase">owner:</small> {{ object_link(tool.user, "profile-link") }}</p>
+        {% endcall %}
         </div>
         {% else %}
         <div class="col-sm-12">
