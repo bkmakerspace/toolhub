@@ -23,8 +23,6 @@ class UserManager(BaseUserManager):
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
-        # create user profile to be edited by user later.
-        UserProfile.objects.create(user=user)
         return user
 
     def create_user(self, email=None, password=None, **extra_fields):
