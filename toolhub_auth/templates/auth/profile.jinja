@@ -11,11 +11,11 @@
             </div>
             <h2>{{ profile_user }}</h2>
             <div class="my-2">
-                <span class="badge badge-primary">
+                <a href="{{ url('tools:home') }}?user={{request.user.pk}}" class="badge badge-primary">
                     {% trans tool_count=profile_user.tools.visible_to_user(user).count() %}
                         {{ tool_count }} Tools
                     {% endtrans %}
-                </span>
+                </a>
             </div>
             <div class="my-2">
                 <h3>Borrowing <span class="badge badge-primary">{{ borrowing.count() }}</span></h3>
