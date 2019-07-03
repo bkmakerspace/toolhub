@@ -135,6 +135,22 @@ class UserToolQuerySetTests(TestCase):
             list(qs.all()), [self.user_tool1, self.others_tool1, self.others_tool_cleared_for_user]
         )
 
+    def test_borrowable_to_user_include_decommissioned_tools_false(self):
+        """
+        When a tool has been decommissioned, we don't want to see it in
+        the 'borrowable' query
+        """
+        decommissionedTool = self.make_tool(
+            title="Decommissioned tool", state=UserTool.States.disabled.value, user=self.user
+        )
+
+        qs = self.qs.order_by("id").borrowable_to_user(self.user)
+
+        # The decommissioned tool should not be borrowable to the user
+        self.assertSequenceEqual(
+            list(qs.all()), [self.user_tool1, self.user_tool2, self.user_tool3, self.others_tool1]
+        )
+
     def test_borrowing_by_user(self):
         borrowed = self.make_tool(title="A borrowed tool", state=UserTool.States.in_use.value)
 
@@ -182,3 +198,4 @@ class UserToolQuerySetTests(TestCase):
         # Test that we exclude out own tools when requested
         result = UserTool.objects.borrowing_by_user(self.user, exclude_own=True)
         self.assertSequenceEqual(list(result.all()), [borrowed])
+
