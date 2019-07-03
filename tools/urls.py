@@ -12,12 +12,15 @@ from tools.views import (
     UserToolUpdateView,
     TaxDetailView,
     TaxTreeView,
+    UploadToolPhotoView,
 )
 
 app_name = "tools"  # url namespace
 
 urlpatterns = [
     path("", UserToolFilterView.as_view(), name="home"),
+    path("image_upload/", UploadToolPhotoView.as_view(), name="upload_tool_photo"),
+    path("image_upload/<int:pk>/", UploadToolPhotoView.as_view(), name="upload_tool_photo"),
     path("<int:pk>/", UserToolDetailView.as_view(), name="detail"),
     path("<int:pk>/label", PrintLabelView.as_view(), name="label"),
     path("<int:pk>/history", UserToolHistoryView.as_view(), name="history"),
@@ -27,5 +30,6 @@ urlpatterns = [
     path("<int:pk>/delete", UserToolDeleteView.as_view(), name="delete"),
     path("create/", UserToolCreateView.as_view(), name="create"),
     path("tags/", TaxTreeView.as_view(), name="tags"),
+    # TaxDetailView must stay at end to act as catch-all
     path("<path:path>/", TaxDetailView.as_view(), name="taxonomy_detail"),
 ]

@@ -15,7 +15,7 @@ class HomeView(DetailView):
         ctx = super().get_context_data()
         if ctx["user"].is_authenticated:
             ctx["borrowed_tools"] = UserTool.objects.borrowing_by_user(ctx["user"])
-            ctx["new_tools"] = UserTool.objects.visible_to_user(ctx["user"]).order_by("created")
+            ctx["new_tools"] = UserTool.objects.visible_to_user(ctx["user"]).order_by("-created")
         return ctx
 
 

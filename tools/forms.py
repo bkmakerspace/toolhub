@@ -1,9 +1,11 @@
+from braces.forms import UserKwargModelFormMixin
 from crispy_forms.layout import Button, Div, Field, Fieldset, Reset, Submit
 from django import forms
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from toolhub_auth.models import User
-from tools.models import ClearancePermission, UserTool
+from tools.models import ClearancePermission, ToolPhoto, UserTool
 from utils.forms import CrispyFormMixin
 
 
@@ -19,7 +21,9 @@ class UserToolCreateForm(CrispyFormMixin, forms.ModelForm):
             Fieldset(
                 None,
                 Field("title"),
-                Field("description", css_class="h-100", label_class="", field_class=""),
+                # attempts
+                # css_class="h-100", label_class="", field_class="", help_text="test"
+                Field("description"),
                 Field("taxonomies"),
                 Field("visibility"),
                 Field("clearance"),
@@ -33,6 +37,24 @@ class UserToolCreateForm(CrispyFormMixin, forms.ModelForm):
     class Meta:
         fields = ("title", "description", "taxonomies", "visibility", "clearance")
         model = UserTool
+
+    def post_super_init(self):
+        super().post_super_init()
+        self.update_markdown_upload_path()
+
+    def update_markdown_upload_path(self):
+        if hasattr(self, "instance") and self.pk_field:
+            reverse_kwargs = {self.pk_field: self.instance.pk}
+        else:
+            reverse_kwargs = {}
+        attrs = self.fields["description"].widget.attrs
+        attrs.update(
+            {
+                "data-markdownx-upload-urls-path": reverse(
+                    "tools:upload_tool_photo", kwargs=reverse_kwargs
+                )
+            }
+        )
 
 
 class UserToolUpdateForm(UserToolCreateForm):
@@ -116,3 +138,27 @@ class ClearancePermissionForm(CrispyFormMixin, forms.Form):
         )
         removed_users = init_users - edited_users
         self.instance.permissions.filter(cleared_user_id__in=removed_users).delete()
+
+
+class UploadToolPhotoForm(UserKwargModelFormMixin, forms.ModelForm):
+    """
+    Optionally takes a tool to make association
+    Also set the `uploading_user`?
+    """
+
+    class Meta:
+        model = ToolPhoto
+        fields = ("file",)
+
+    def __init__(self, *args, **kwargs):
+        # move file uploaded to what the form expects
+        kwargs["files"]["file"] = kwargs["files"]["image"]
+        self.tool = kwargs.pop("tool", None)
+        return super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        # This will set the photo tool to null if none was passed
+        self.instance.tool = self.tool
+        self.instance.uploading_user = self.user
+        # NOTE: get title from file name temporarily
+        return super().save(commit=commit)
