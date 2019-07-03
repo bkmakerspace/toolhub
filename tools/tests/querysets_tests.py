@@ -198,4 +198,3 @@ class UserToolQuerySetTests(TestCase):
         # Test that we exclude out own tools when requested
         result = UserTool.objects.borrowing_by_user(self.user, exclude_own=True)
         self.assertSequenceEqual(list(result.all()), [borrowed])
-

@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-SECRET_KEY = "wataboutthechildren"
+SECRET_KEY = "<your secret key here>"
 SITE_ID = 1
 
 INSTALLED_APPS = [
