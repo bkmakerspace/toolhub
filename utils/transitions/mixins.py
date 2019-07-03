@@ -1,9 +1,11 @@
 from braces.views import MessageMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.db import transaction
+from django.http import HttpResponseRedirect
 from django.utils import six
 from django.utils.encoding import force_text
 from django.utils.functional import Promise
+from django.urls import reverse
 
 
 class TransitionActionMixin:
@@ -106,3 +108,19 @@ class TransitionMessageMixin(TransitionActionMixin, MessageMixin):
             )
 
         return force_text(self.transition_failed_message)
+
+
+class ActionViewMixin(TransitionMessageMixin):
+    def transition_success(self):
+        super().transition_success()
+        success_url = self.get_success_url()
+        return HttpResponseRedirect(success_url)
+
+    def transition_failure(self, e):
+        super().transition_failure(e)
+        success_url = self.get_success_url()
+        return HttpResponseRedirect(success_url)
+
+    def get_success_url(self):
+        return reverse("tools:detail", kwargs=dict(pk=self.tool.pk)) # TODO should this be made generic?
+        

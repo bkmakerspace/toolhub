@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "tagulous",
     # Toolhub
     "borrowing.apps.BorrowingConfig",
+    "decommissioning.apps.DecommissioningConfig",
     "toolhub",
     "toolhub.contrib.toolhub_flatpages",
     "toolhub_auth.apps.ToolhubAuthConfig",

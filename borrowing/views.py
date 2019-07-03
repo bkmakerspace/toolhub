@@ -15,29 +15,12 @@ they are given option to request a lend.
 Lended:
 """
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View
 
 from tools.mixins import SingleToolObjectMixin
 from tools.models import UserTool
-from utils.transitions.mixins import TransitionMessageMixin
-
-
-class ActionViewMixin(TransitionMessageMixin):
-    def transition_success(self):
-        super().transition_success()
-        success_url = self.get_success_url()
-        return HttpResponseRedirect(success_url)
-
-    def transition_failure(self, e):
-        super().transition_failure(e)
-        success_url = self.get_success_url()
-        return HttpResponseRedirect(success_url)
-
-    def get_success_url(self):
-        return reverse("tools:detail", kwargs=dict(pk=self.tool.pk))
+from utils.transitions.mixins import ActionViewMixin
 
 
 class BorrowView(ActionViewMixin, LoginRequiredMixin, SingleToolObjectMixin, View):
