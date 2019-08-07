@@ -7,7 +7,7 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.7"
-django = "=2.1.9"
+django = "=2.1.10"
 pycatalog = "=1.2.0"
 jinja2 = "=2.10.1"
 django-environ = "=0.4.5"
