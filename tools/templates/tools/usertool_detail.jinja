@@ -57,15 +57,27 @@
                 </div>
             </div>
         </div>
-        <div class="row my-3">
-            <div class="col flex-grow-0">
-                {% if tool.user_can_borrow(user) and not tool.is_in_use() %}
+        <div class="row justify-content-start my-3">
+            {% if tool.user_can_borrow(user) and not tool.is_in_use() %}
+                <div class="col col-sm-2">
                     {{ borrow_button(tool) }}
-                {% endif %}
-                {% if tool.is_in_use() %}
+                </div>
+                <div class="col col-sm-2">
+                    {{ decommission_button(tool) }}
+                </div>
+            {% endif %}
+
+            {% if tool.is_in_use() %}
+                <div class="col col-sm-2">
                     {{ return_button(tool) }}
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
+
+            {% if tool.is_disabled() %}
+                <div class="col col-sm-2">
+                    {{ reinstate_button(tool) }}
+                </div>
+            {% endif %}
         </div>
         <section class="my-3">
             {{ markdown(tool.description) }}

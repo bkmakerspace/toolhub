@@ -33,6 +33,14 @@ class UserToolQuerySet(QuerySet):
         """
         return Q(visibility=self.model.Visibility.public.value)
 
+    def _enabled_tools_query(self) -> Q:
+        """Query object of all tools that have not been decommissioned
+
+        Returns:
+            Q
+        """
+        return ~Q(state=self.model.States.disabled.value)
+
     def visible_to_user(self, user: User, include_users_tools=True) -> QuerySet:
         """Filter to the UserTools a user is allowed to view
 
@@ -71,7 +79,8 @@ class UserToolQuerySet(QuerySet):
         """
         all_users_tools = Q(user=user)
         return self.filter(
-            self._cleared_tools_query(user) | self._open_tools_query() | all_users_tools
+            self._enabled_tools_query()
+            & (self._cleared_tools_query(user) | self._open_tools_query() | all_users_tools)
         )
 
     def borrowing_by_user(self, user: User, exclude_own=False) -> QuerySet:

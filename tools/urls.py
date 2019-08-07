@@ -12,9 +12,14 @@ from tools.views import (
     UserToolUpdateView,
     TaxDetailView,
     TaxTreeView,
+    DecommissionView,
+    ReinstateView,
+    BorrowView,
+    ReturnView,
 )
 
 app_name = "tools"  # url namespace
+
 
 urlpatterns = [
     path("", UserToolFilterView.as_view(), name="home"),
@@ -25,6 +30,10 @@ urlpatterns = [
     path("<int:pk>/clear", ClearUserView.as_view(), name="clear"),
     path("<int:pk>/cleared", UserToolClearedView.as_view(), name="cleared"),
     path("<int:pk>/delete", UserToolDeleteView.as_view(), name="delete"),
+    path("<int:pk>/borrow/", BorrowView.as_view(), name="borrow"),
+    path("<int:pk>/return/", ReturnView.as_view(), name="return"),
+    path("<int:pk>/decommission/", DecommissionView.as_view(), name="decommission"),
+    path("<int:pk>/reinstate/", ReinstateView.as_view(), name="reinstate"),
     path("create/", UserToolCreateView.as_view(), name="create"),
     path("tags/", TaxTreeView.as_view(), name="tags"),
     path("<path:path>/", TaxDetailView.as_view(), name="taxonomy_detail"),

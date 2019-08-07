@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-SECRET_KEY = "wataboutthechildren"
+SECRET_KEY = "<your secret key here>"
 SITE_ID = 1
 
 INSTALLED_APPS = [
@@ -32,11 +32,10 @@ INSTALLED_APPS = [
     "memoize",
     "tagulous",
     # Toolhub
-    "borrowing.apps.BorrowingConfig",
     "toolhub",
     "toolhub.contrib.toolhub_flatpages",
-    "toolhub_auth.apps.ToolhubAuthConfig",
-    "tools.apps.ToolsConfig",
+    "toolhub_auth",
+    "tools",
     "utils",
     # placed below all so templates can be overwritten
     "markdownx",
