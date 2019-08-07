@@ -205,9 +205,7 @@ class PrintLabelView(VisibleToUserMixin, DetailView):
 
 class ToolActionView(ActionViewMixin, SingleToolObjectMixin, View):
     def get_success_url(self):
-        return reverse(
-            "tools:detail", kwargs=dict(pk=self.tool.pk)
-        )
+        return reverse("tools:detail", kwargs=dict(pk=self.tool.pk))
 
 
 class BorrowView(LoginRequiredMixin, ToolActionView):

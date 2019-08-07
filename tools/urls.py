@@ -15,7 +15,7 @@ from tools.views import (
     DecommissionView,
     ReinstateView,
     BorrowView,
-    ReturnView
+    ReturnView,
 )
 
 app_name = "tools"  # url namespace
