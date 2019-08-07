@@ -140,7 +140,7 @@ class UserToolQuerySetTests(TestCase):
         When a tool has been decommissioned, we don't want to see it in
         the 'borrowable' query
         """
-        decommissionedTool = self.make_tool(
+        self.make_tool(
             title="Decommissioned tool", state=UserTool.States.disabled.value, user=self.user
         )
 

@@ -5,7 +5,6 @@ from django.http import HttpResponseRedirect
 from django.utils import six
 from django.utils.encoding import force_text
 from django.utils.functional import Promise
-from django.urls import reverse
 
 
 class TransitionActionMixin:
