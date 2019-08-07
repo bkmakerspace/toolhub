@@ -32,12 +32,10 @@ INSTALLED_APPS = [
     "memoize",
     "tagulous",
     # Toolhub
-    "borrowing.apps.BorrowingConfig",
-    "decommissioning.apps.DecommissioningConfig",
     "toolhub",
     "toolhub.contrib.toolhub_flatpages",
-    "toolhub_auth.apps.ToolhubAuthConfig",
-    "tools.apps.ToolsConfig",
+    "toolhub_auth",
+    "tools",
     "utils",
     # placed below all so templates can be overwritten
     "markdownx",

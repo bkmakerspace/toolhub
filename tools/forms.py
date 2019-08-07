@@ -1,5 +1,6 @@
 from crispy_forms.layout import Button, Div, Field, Fieldset, Reset, Submit
 from django import forms
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from toolhub_auth.models import User
@@ -116,3 +117,41 @@ class ClearancePermissionForm(CrispyFormMixin, forms.Form):
         )
         removed_users = init_users - edited_users
         self.instance.permissions.filter(cleared_user_id__in=removed_users).delete()
+
+
+class BorrowForm(CrispyFormMixin, forms.Form):
+    def get_form_action(self):
+        tool = self.initial.get("tool")
+        return reverse("tools:borrow", kwargs=dict(pk=tool.pk))
+
+    def layout_args(self, helper):
+        return (Submit("borrow", _("Borrow Tool")),)
+
+
+class ReturnForm(CrispyFormMixin, forms.Form):
+    def get_form_action(self):
+        tool = self.initial.get("tool")
+        return reverse("tools:return", kwargs=dict(pk=tool.pk))
+
+    def layout_args(self, helper):
+        return (Submit("return", _("Return Tool")),)
+
+
+class DecommissionForm(CrispyFormMixin, forms.Form):
+    has_columns = False
+
+    def get_form_action(self):
+        tool = self.initial.get("tool")
+        return reverse("tools:decommission", kwargs=dict(pk=tool.pk))
+
+    def layout_args(self, helper):
+        return (Submit("decommission", _("Decommission Tool"), css_class="btn-danger"),)
+
+
+class ReinstateForm(CrispyFormMixin, forms.Form):
+    def get_form_action(self):
+        tool = self.initial.get("tool")
+        return reverse("tools:reinstate", kwargs=dict(pk=tool.pk))
+
+    def layout_args(self, helper):
+        return (Submit("reinstate", _("Reinstate Tool")),)

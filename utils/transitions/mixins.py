@@ -122,5 +122,4 @@ class ActionViewMixin(TransitionMessageMixin):
         return HttpResponseRedirect(success_url)
 
     def get_success_url(self):
-        return reverse("tools:detail", kwargs=dict(pk=self.tool.pk)) # FIXME should this be made generic?
-        
+        raise NotImplementedError

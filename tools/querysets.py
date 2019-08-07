@@ -79,7 +79,8 @@ class UserToolQuerySet(QuerySet):
         """
         all_users_tools = Q(user=user)
         return self.filter(
-            self._enabled_tools_query() & (self._cleared_tools_query(user) | self._open_tools_query() | all_users_tools)
+            self._enabled_tools_query()
+            & (self._cleared_tools_query(user) | self._open_tools_query() | all_users_tools)
         )
 
     def borrowing_by_user(self, user: User, exclude_own=False) -> QuerySet:

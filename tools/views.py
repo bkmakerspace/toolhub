@@ -6,7 +6,7 @@ from django.db.transaction import atomic
 from django import forms
 from django.urls import reverse_lazy, reverse
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView, DetailView, DeleteView, ListView, UpdateView
+from django.views.generic import CreateView, DetailView, DeleteView, ListView, UpdateView, View
 from django_filters.views import FilterView
 
 from tools.filters import UserToolFilterSet
@@ -14,6 +14,7 @@ from tools.forms import ClearancePermissionForm, UserToolCreateForm, UserToolUpd
 from tools.mixins import SingleToolObjectMixin, FilteredByToolObjectMixin
 from tools.models import ClearancePermission, ToolHistory, ToolTaxonomy, UserTool
 from utils.mixins import RestrictToUserMixin, VisibleToUserMixin
+from utils.transitions.mixins import ActionViewMixin
 
 
 class UserToolBaseFilterView(FilterView):
@@ -200,3 +201,58 @@ class PrintLabelView(VisibleToUserMixin, DetailView):
             }
         )
         return context
+
+
+class ToolActionView(ActionViewMixin, SingleToolObjectMixin, View):
+    def get_success_url(self):
+        return reverse(
+            "tools:detail", kwargs=dict(pk=self.tool.pk)
+        )
+
+
+class BorrowView(LoginRequiredMixin, ToolActionView):
+    """
+    Process a request to borrow a tool
+    """
+
+    tool_model = UserTool
+    transition_name = "borrow"
+    object_class_attribute = "tool"
+    transition_success_message = _("Borrowed tool")
+    transition_failed_message = _("Can't borrow tool")
+
+
+class ReturnView(LoginRequiredMixin, ToolActionView):
+    """
+    Process a request to return a tool
+    """
+
+    tool_model = UserTool
+    transition_name = "return_"
+    object_class_attribute = "tool"
+    transition_success_message = _("Returned tool")
+    transition_failed_message = _("Can't return tool")
+
+
+class DecommissionView(LoginRequiredMixin, ToolActionView):
+    """
+    Process a request to decommission a tool
+    """
+
+    tool_model = UserTool
+    transition_name = "decommission"
+    object_class_attribute = "tool"
+    transition_success_message = _("Decommissioned tool")
+    transition_failed_message = _("Can't decommission tool")
+
+
+class ReinstateView(LoginRequiredMixin, ToolActionView):
+    """
+    Process a request to reinstate a tool
+    """
+
+    tool_model = UserTool
+    transition_name = "reinstate"
+    object_class_attribute = "tool"
+    transition_success_message = _("Reinstated tool")
+    transition_failed_message = _("Can't reinstate tool")
