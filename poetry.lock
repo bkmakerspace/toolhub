@@ -116,10 +116,11 @@ description = "A high-level Python Web framework that encourages rapid developme
 name = "django"
 optional = false
 python-versions = ">=3.5"
-version = "2.1.11"
+version = "2.2.6"
 
 [package.dependencies]
 pytz = "*"
+sqlparse = "*"
 
 [[package]]
 category = "main"
@@ -739,7 +740,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*"
 version = "1.12.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Non-validating SQL parser"
 name = "sqlparse"
 optional = false
@@ -827,7 +828,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "fa1895cfa2eaa173406d420917bc3334b5508d76e6eb95ef0fe3e5ff00244155"
+content-hash = "8b36448c161fc5d4a0e901f224404fc8515b5dfd1faa5ef4942cee67d9b528bc"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -844,7 +845,7 @@ click = ["2335065e6395b9e67ca716de5f7526736bfa6ceead690adf616d925bdc622b13", "5b
 colorama = ["05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d", "f8ac84de7840f5b9c4e3347b3c1eaa50f7e49c2b07596221daec5edaabbd7c48"]
 decorator = ["86156361c50488b84a3f148056ea716ca587df2f0de1d34750d35c21312725de", "f069f3a01830ca754ba5258fde2278454a0b5b79e0d7f5c13b3b97e57d4acff6"]
 defusedxml = ["6687150770438374ab581bb7a1b327a847dd9c5749e396102de3fad4e8a3ef93", "f684034d135af4c6cbb949b8a4d2ed61634515257a67299e5f940fbaa34377f5"]
-django = ["1a41831eace203fd1939edf899e07d7abd12ce9bafc3d9a5a63a24a8d1d12bd5", "305b6c4fce9e03bb746e35780c2c4d52f29ea1669f15633cfd41bc8821c74c76"]
+django = ["4025317ca01f75fc79250ff7262a06d8ba97cd4f82e93394b2a0a6a4a925caeb", "a8ca1033acac9f33995eb2209a6bf18a4681c3e5269a878e9a7e0b7384ed1ca3"]
 django-allauth = []
 django-braces = ["a457d74ea29478123c0c4652272681b3cea0bf1232187fd9f9b6f1d97d32a890", "ba68e98b817c6f01d71d10849f359979617b3fe4cefb7f289adefddced092ddc"]
 django-colorful = ["49d3feefdabdf6a22931c12ce1ed0cbb4596e7754e66bd55c0f362c0a369e5cb", "fd246f2fb297ed074dc4349966d33a1c82d0308b7fb0d6ef6e2e76b90cefffb7"]
