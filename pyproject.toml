@@ -30,7 +30,7 @@ django-allauth = { git = "https://github.com/pennersr/django-allauth.git", commi
 
 [tool.poetry.dev-dependencies]
 ipdb = "^0.12"
-Werkzeug = "=0.15.4"
+Werkzeug = "=0.16.0"
 ipython = "^7.8"
 isort = "^4.3"
 flake8 = "^3.7"
