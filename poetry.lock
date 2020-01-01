@@ -816,8 +816,8 @@ category = "main"
 description = "Radically simplified static file serving for WSGI applications"
 name = "whitenoise"
 optional = false
-python-versions = "*"
-version = "4.1.2"
+python-versions = ">=3.5, <4"
+version = "5.0.1"
 
 [[package]]
 category = "dev"
@@ -828,7 +828,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "7399939212fffb5d8f88c7a1100aebd50d02755d6318fc980073a7b5749c1b89"
+content-hash = "0941da1d709a13be6b9424bcf53b87f7b3b3061c26290a87c729037b7bc10ed4"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -912,5 +912,5 @@ transitions = ["00bfa91b0cfe3f649731b2f28478c4314bb9e830c600b422973f1b3a704ac710
 urllib3 = ["b246607a25ac80bedac05c6f282e3cdaf3afb65420fd024ac94435cabe6e18d1", "dbe59173209418ae49d485b87d1681aefa36252ee85884c31346debd19463232"]
 wcwidth = ["3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e", "f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c"]
 werkzeug = ["865856ebb55c4dcd0630cdd8f3331a1847a819dda7e8c750d3db6f2aa6c0209c", "a0b915f0815982fb2a09161cb8f31708052d0951c3ba433ccc5e1aa276507ca6"]
-whitenoise = ["118ab3e5f815d380171b100b05b76de2a07612f422368a201a9ffdeefb2251c1", "42133ddd5229eeb6a0c9899496bdbe56c292394bf8666da77deeb27454c0456a"]
+whitenoise = ["0f9137f74bd95fa54329ace88d8dc695fbe895369a632e35f7a136e003e41d73", "62556265ec1011bd87113fb81b7516f52688887b7a010ee899ff1fd18fd22700"]
 zipp = ["8c1019c6aad13642199fbe458275ad6a84907634cc9f0989877ccc4a2840139d", "ca943a7e809cc12257001ccfb99e3563da9af99d52f261725e96dfe0f9275bc3"]
